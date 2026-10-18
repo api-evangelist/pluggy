@@ -1,0 +1,188 @@
+openapi: 3.2.0
+info:
+  title: Pluggy Payment Schedule API
+  description: Pluggy's main API to review data and execute connectors
+  license:
+    name: MIT
+  contact:
+    email: hello@pluggy.ai
+    name: Pluggy
+    url: https://pluggy.ai
+  version: 1.0.0
+servers:
+- url: https://api.pluggy.ai
+  description: Pluggy API
+tags:
+- name: Payment Schedule
+  description: Payment scheduling operations
+paths:
+  /payments/requests/{id}/schedules:
+    get:
+      operationId: payment-schedules-list
+      summary: List Schedules
+      description: Recovers all scheduled payments from a payment request
+      responses:
+        '200':
+          description: Retrieve a list of all scheduled payments
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  page:
+                    type: number
+                    format: double
+                    description: ''
+                  total:
+                    type: number
+                    format: double
+                    description: ''
+                  totalPages:
+                    type: number
+                    format: double
+                    description: ''
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/SchedulePayment'
+                    description: List of scheduled payments from a payment request
+              examples:
+                response:
+                  value:
+                    page: 1
+                    total: 2
+                    totalPages: 1
+                    results:
+                    - id: 05c693bf-c196-47ea-a28c-8251d6bb8a04
+                      scheduledDate: '2024-05-04'
+                      description: PAGAMENTO AGENDADO 1/3
+                      status: ERROR
+                      errorDetail:
+                        code: INSUFFICIENT_BALANCE
+                        description: The account doesn't have enough balance to perform the payment.
+                        detail: A conta selecionada não possui saldo suficiente para realizar o pagamento.
+                    - id: 05c693bf-c196-47ea-a28c-8251d6bb8a05
+                      scheduledDate: '2024-06-04'
+                      description: PAGAMENTO AGENDADO 2/3
+                      status: COMPLETED
+                      errorDetail: null
+                      endToEndId: E44471172202505141500U29c6ff88e3
+                    - id: 05c693bf-c196-47ea-a28c-8251d6bb8a06
+                      scheduledDate: '2024-07-04'
+                      description: PAGAMENTO AGENDADO 3/3
+                      status: SCHEDULED
+                      errorDetail: null
+      parameters:
+      - description: Payment request primary identifier
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+          format: uuid
+        example: d0e8a7f0-6d86-11ea-b77f-2e728ce88125
+      tags:
+      - Payment Schedule
+      security:
+      - default: []
+  /payments/requests/{id}/schedules/cancel:
+    post:
+      operationId: payment-schedules-cancel
+      summary: Cancel Payment Schedule Authorization
+      description: ''
+      responses:
+        '204':
+          description: No content
+      parameters:
+      - description: Payment request primary identifier
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+          format: uuid
+        example: d0e8a7f0-6d86-11ea-b77f-2e728ce88125
+      tags:
+      - Payment Schedule
+      security:
+      - default: []
+  /payments/requests/{id}/schedules/{scheduleId}/cancel:
+    post:
+      operationId: payment-schedules-cancel-specific
+      summary: Cancel Payment Schedule
+      description: ''
+      responses:
+        '204':
+          description: No content
+      parameters:
+      - description: Payment request primary identifier
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+          format: uuid
+        example: d0e8a7f0-6d86-11ea-b77f-2e728ce88125
+      - description: Payment schedule primary identifier
+        in: path
+        name: scheduleId
+        required: true
+        schema:
+          type: string
+          format: uuid
+        example: d0e8a7f0-6d86-11ea-b77f-2e728ce88125
+      tags:
+      - Payment Schedule
+      security:
+      - default: []
+components:
+  schemas:
+    SchedulePayment:
+      description: Information of a schedule payment
+      properties:
+        id:
+          type: string
+          format: uuid
+        description:
+          type: string
+          description: Scheduled payment description
+        status:
+          type: string
+          description: Scheduled payment status
+          enum:
+          - SCHEDULED
+          - COMPLETED
+          - ERROR
+        scheduledDate:
+          type: string
+          format: date
+          description: Date when the payment is scheduled
+        endToEndId:
+          type: string
+          description: Identifier for the payment, used to link the scheduled payment with the corresponding payment received
+        errorDetail:
+          type:
+          - object
+          - 'null'
+          description: Details about an error that occurred with the scheduled payment
+          properties:
+            code:
+              type: string
+              description: Error code
+            description:
+              type: string
+              description: Human-readable description of the error
+            detail:
+              type: string
+              description: Additional details about the error in the provider's language
+      type: object
+      required:
+      - id
+      - description
+      - status
+      - scheduledDate
+  securitySchemes:
+    default:
+      type: apiKey
+      name: X-API-KEY
+      in: header

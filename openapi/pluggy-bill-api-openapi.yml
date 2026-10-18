@@ -1,0 +1,346 @@
+openapi: 3.2.0
+info:
+  title: Pluggy Bill API
+  description: Pluggy's main API to review data and execute connectors
+  license:
+    name: MIT
+  contact:
+    email: hello@pluggy.ai
+    name: Pluggy
+    url: https://pluggy.ai
+  version: 1.0.0
+servers:
+- url: https://api.pluggy.ai
+  description: Pluggy API
+tags:
+- name: Bill
+  description: Credit card bill information
+paths:
+  /bills:
+    get:
+      operationId: bills-list
+      summary: List
+      description: Recovers all credit card bills collected for the account provided
+      responses:
+        '200':
+          description: Retrieve a list of all credit card bills
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  page:
+                    type: number
+                    format: double
+                    description: ''
+                  total:
+                    type: number
+                    format: double
+                    description: ''
+                  totalPages:
+                    type: number
+                    format: double
+                    description: ''
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Bill'
+                    description: List of credit card bills
+              examples:
+                response:
+                  value:
+                    page: 1
+                    total: 1
+                    totalPages: 1
+                    results:
+                    - id: 05c693bf-c196-47ea-a28c-8251d6bb8a06
+                      dueDate: '2023-07-20T00:00:00'
+                      billClosingDate: '2023-07-13T00:00:00'
+                      totalAmount: 50000
+                      totalAmountCurrencyCode: BRL
+                      minimumPaymentAmount: 50000
+                      allowsInstallments: true
+                      financeCharges:
+                      - id: 123456bf-c196-47ea-a28c-8251d6bb8777
+                        type: IOF
+                        amount: 20.51
+                        currencyCode: BRL
+                        additionalInfo: NA
+                      payments:
+                      - id: 9f1c7b2e-5d3a-4c8b-a1e2-6f7d8c9b0a1b
+                        valueType: FULL_PAYMENT
+                        paymentDate: '2023-07-20T00:00:00'
+                        paymentMode: DEBIT_ACCOUNT
+                        amount: 50000
+                        currencyCode: BRL
+      tags:
+      - Bill
+      security:
+      - default: []
+      parameters:
+      - description: Account's primary identifier
+        in: query
+        name: accountId
+        required: true
+        schema:
+          type: string
+          format: uuid
+        example: d0e8a7f0-6d86-11ea-b77f-2e728ce88125
+      - description: 'Page size for the paging request, default: 500'
+        in: query
+        name: pageSize
+        required: false
+        schema:
+          type: number
+          format: double
+          minimum: 1
+          maximum: 500
+        example: '50'
+      - description: 'Page number for the paging request, default: 1'
+        in: query
+        name: page
+        required: false
+        schema:
+          type: number
+          format: double
+        example: '1'
+  /bills/{id}:
+    get:
+      operationId: bills-retrieve
+      summary: Retrieve
+      responses:
+        '200':
+          description: Retrieve a credit card bill.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Bill'
+              examples:
+                response:
+                  value:
+                    id: 05c693bf-c196-47ea-a28c-8251d6bb8a06
+                    dueDate: '2023-07-20T00:00:00'
+                    billClosingDate: '2023-07-13T00:00:00'
+                    totalAmount: 50000
+                    totalAmountCurrencyCode: BRL
+                    minimumPaymentAmount: 50000
+                    allowsInstallments: true
+                    financeCharges:
+                    - id: 123456bf-c196-47ea-a28c-8251d6bb8777
+                      type: IOF
+                      amount: 20.51
+                      currencyCode: BRL
+                      additionalInfo: NA
+                    payments:
+                    - id: 9f1c7b2e-5d3a-4c8b-a1e2-6f7d8c9b0a1b
+                      valueType: FULL_PAYMENT
+                      paymentDate: '2023-07-20T00:00:00'
+                      paymentMode: DEBIT_ACCOUNT
+                      amount: 50000
+                      currencyCode: BRL
+        '404':
+          description: Bill not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+              example:
+                code: 404
+                codeDescription: CREDIT_CARD_BILL_NOT_FOUND
+                message: Bill not found
+      description: Recovers the bill resource by its id
+      tags:
+      - Bill
+      security:
+      - default: []
+      parameters:
+      - description: Bill primary identifier
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+          format: uuid
+        example: d0e8a7f0-6d86-11ea-b77f-2e728ce88125
+components:
+  schemas:
+    BillPayment:
+      description: Response with information related to a credit card bill payment
+      properties:
+        id:
+          type: string
+          description: Primary identifier
+        valueType:
+          enum:
+          - INSTALLMENT_PAYMENT
+          - FULL_PAYMENT
+          - OTHER_PAYMENT
+          type: string
+          description: Classifies the payment value type
+        paymentDate:
+          type: string
+          format: date-time
+          description: Date when the payment was made
+        paymentMode:
+          type:
+          - string
+          - 'null'
+          enum:
+          - DEBIT_ACCOUNT
+          - BANK_SLIP
+          - PAYROLL_DEDUCTION
+          - PIX
+          - null
+          description: Payment mode used
+        amount:
+          type: number
+          description: Payment amount
+        currencyCode:
+          type: string
+          example: BRL
+          description: Code referencing the currency of the payment
+      type: object
+      required:
+      - id
+      - valueType
+      - paymentDate
+      - amount
+      - currencyCode
+      example:
+        id: 9f8e7d6c-5b4a-4938-8271-6a5b4c3d2e1f
+        valueType: FULL_PAYMENT
+        paymentDate: '2024-03-10T00:00:00.000Z'
+        paymentMode: DEBIT_ACCOUNT
+        amount: 1180.9
+        currencyCode: BRL
+    GlobalErrorResponse:
+      title: Global Error Response Schema
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: number
+        message:
+          type: string
+        codeDescription:
+          type: string
+          description: Distinctive code description, useful to distinguish the error.
+        data:
+          type: object
+          description: Additional data related to the error, if any
+          properties: {}
+      example:
+        code: 500
+        codeDescription: INTERNAL_SERVER_ERROR
+        message: Internal Server Error
+    BillFinanceCharge:
+      description: Response with information related to a credit card bill finance charge
+      properties:
+        id:
+          type: string
+          description: Primary identifier
+        type:
+          enum:
+          - LATE_PAYMENT_REMUNERATIVE_INTEREST
+          - LATE_PAYMENT_FEE
+          - LATE_PAYMENT_INTEREST
+          - IOF
+          - OTHER
+          type: string
+          description: Denomination of the charges that apply to the postpaid payment account bill
+        amount:
+          type: number
+          description: Amount charged for the charge/fee
+        currencyCode:
+          type: string
+          example: BRL
+          description: Code referencing the currency of the charge
+        additionalInfo:
+          type: string
+          description: Free field, mandatory to fill if 'OTHER' type of charge is selected
+      type: object
+      required:
+      - id
+      - type
+      - amount
+      - currencyCode
+      example:
+        id: 0a1b2c3d-4e5f-4061-8283-a4b5c6d7e8f9
+        type: OTHER
+        amount: 25.9
+        currencyCode: BRL
+        additionalInfo: Tarifa de emissão de boleto
+    Bill:
+      description: Response with information related to a credit card bill
+      properties:
+        id:
+          type: string
+          description: Primary identifier
+        dueDate:
+          type: string
+          format: date-time
+          description: Due date of the bill, displayed for payment by the customer
+        billClosingDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: Date when the bill was closed
+        totalAmount:
+          type: number
+          description: Total bill amount
+        totalAmountCurrencyCode:
+          type: string
+          example: BRL
+          description: Code referencing the currency of the bill
+        minimumPaymentAmount:
+          type: number
+          description: Minimum payment amount of the bill
+        allowsInstallments:
+          type: boolean
+          description: Indicates whether the bill allows installment payments (true) or not (false)
+        financeCharges:
+          type: array
+          description: List of charges associated to the bill
+          items:
+            $ref: '#/components/schemas/BillFinanceCharge'
+        payments:
+          type: array
+          description: List of payments associated to the bill
+          items:
+            $ref: '#/components/schemas/BillPayment'
+      type: object
+      required:
+      - id
+      - dueDate
+      - totalAmount
+      - totalAmountCurrencyCode
+      - financeCharges
+      - payments
+      example:
+        id: 1f2e3d4c-5b6a-4798-8899-aabbccddeeff
+        dueDate: '2024-04-10T00:00:00.000Z'
+        billClosingDate: '2024-04-03T00:00:00.000Z'
+        totalAmount: 1250.35
+        totalAmountCurrencyCode: BRL
+        minimumPaymentAmount: 187.55
+        allowsInstallments: true
+        financeCharges:
+        - id: 0a1b2c3d-4e5f-4061-8283-a4b5c6d7e8f9
+          type: LATE_PAYMENT_FEE
+          amount: 25.9
+          currencyCode: BRL
+        payments:
+        - id: 9f8e7d6c-5b4a-4938-8271-6a5b4c3d2e1f
+          valueType: FULL_PAYMENT
+          paymentDate: '2024-03-10T00:00:00.000Z'
+          paymentMode: DEBIT_ACCOUNT
+          amount: 1180.9
+          currencyCode: BRL
+  securitySchemes:
+    default:
+      type: apiKey
+      name: X-API-KEY
+      in: header

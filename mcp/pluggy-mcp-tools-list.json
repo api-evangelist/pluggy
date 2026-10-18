@@ -1,0 +1,1921 @@
+[
+ {
+  "name": "query",
+  "title": "Query Pluggy Documentation",
+  "description": "Ask a natural-language question about the Pluggy API and get a generated answer with citations. Combines docs, changelog, recipes, and API reference. Responds in the user's question language.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "question": {
+     "type": "string",
+     "minLength": 1,
+     "description": "The user question, in any language"
+    },
+    "locale": {
+     "type": "string",
+     "enum": [
+      "en",
+      "pt",
+      "es"
+     ],
+     "description": "Preferred content language. Default: no filter (multilingual)."
+    },
+    "types": {
+     "type": "array",
+     "items": {
+      "type": "string",
+      "enum": [
+       "doc",
+       "changelog",
+       "recipe",
+       "api"
+      ]
+     },
+     "description": "Content types to consider. Default: all."
+    },
+    "includePrerelease": {
+     "type": "boolean",
+     "description": "Include RC/beta versions. Auto-detected from question if omitted."
+    }
+   },
+   "required": [
+    "question"
+   ],
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "annotations": {
+   "readOnlyHint": true,
+   "openWorldHint": false,
+   "destructiveHint": false,
+   "title": "Query Pluggy Documentation"
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  },
+  "outputSchema": {
+   "type": "object",
+   "properties": {
+    "result": {}
+   },
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  }
+ },
+ {
+  "name": "search_docs",
+  "title": "Search Pluggy Documentation Guides",
+  "description": "Search the Pluggy documentation guides (concepts, quickstart, integration). Returns reranked excerpts with relevance scores.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "query": {
+     "type": "string",
+     "minLength": 1,
+     "description": "The search query, in any language"
+    },
+    "locale": {
+     "type": "string",
+     "enum": [
+      "en",
+      "pt",
+      "es"
+     ],
+     "description": "Preferred content language. Default: no filter (multilingual)."
+    },
+    "limit": {
+     "type": "integer",
+     "minimum": 1,
+     "maximum": 20,
+     "default": 10,
+     "description": "Max number of results to return (1-20)."
+    }
+   },
+   "required": [
+    "query"
+   ],
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "annotations": {
+   "readOnlyHint": true,
+   "openWorldHint": false,
+   "destructiveHint": false,
+   "title": "Search Pluggy Documentation Guides"
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  },
+  "outputSchema": {
+   "type": "object",
+   "properties": {
+    "result": {}
+   },
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  }
+ },
+ {
+  "name": "search_changelog",
+  "title": "Search Pluggy Changelog",
+  "description": "Search the Pluggy changelog (release notes, breaking changes, migration notes). Returns reranked excerpts with the entry's publication date, language and the section heading the text came from, so results can be ordered by recency and cited precisely. Entries are published in English and Portuguese.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "query": {
+     "type": "string",
+     "minLength": 1,
+     "description": "The search query, in any language"
+    },
+    "locale": {
+     "type": "string",
+     "enum": [
+      "en",
+      "pt"
+     ],
+     "description": "Restrict to one language. Omit to search both \u2014 note that a month published in both languages then matches twice."
+    },
+    "since": {
+     "type": "string",
+     "pattern": "^\\d{4}-\\d{2}(-\\d{2})?$",
+     "description": "Only entries published on or after this date (YYYY-MM or YYYY-MM-DD). This narrows a ranked search; for an exhaustive answer to 'everything that changed since X', use list_changelog_changes instead."
+    },
+    "limit": {
+     "type": "integer",
+     "minimum": 1,
+     "maximum": 20,
+     "default": 10,
+     "description": "Max number of results to return (1-20)."
+    }
+   },
+   "required": [
+    "query"
+   ],
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "annotations": {
+   "readOnlyHint": true,
+   "openWorldHint": false,
+   "destructiveHint": false,
+   "title": "Search Pluggy Changelog"
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  },
+  "outputSchema": {
+   "type": "object",
+   "properties": {
+    "result": {}
+   },
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  }
+ },
+ {
+  "name": "list_changelog_changes",
+  "title": "List Pluggy Changelog Changes",
+  "description": "Enumerate individual changelog changes \u2014 not whole months \u2014 filtered by type, breaking status, category or date. Exhaustive and deterministic, so an empty result genuinely means nothing matched. Use this for 'what broke', 'what shipped since X' or 'what changed in payments'; use search_changelog when the question is about wording rather than a filter. Structured months cover February 2026 onwards; older entries are free prose and are not listed.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "since": {
+     "type": "string",
+     "pattern": "^\\d{4}-\\d{2}(-\\d{2})?$",
+     "description": "Only changes published on or after this date (YYYY-MM or YYYY-MM-DD)."
+    },
+    "until": {
+     "type": "string",
+     "pattern": "^\\d{4}-\\d{2}(-\\d{2})?$",
+     "description": "Only changes published on or before this date."
+    },
+    "breaking": {
+     "type": "boolean",
+     "description": "true returns only breaking changes and deprecations."
+    },
+    "type": {
+     "type": "string",
+     "enum": [
+      "added",
+      "changed",
+      "fixed",
+      "deprecated"
+     ],
+     "description": "Filter by kind of change."
+    },
+    "endpoint": {
+     "type": "string",
+     "description": "Only changes that touch this endpoint, e.g. 'GET /transactions' or just '/transactions'. Matched case-insensitively against the endpoints the entry declares \u2014 a month that declares none cannot match, and is counted in unstructuredMonthsSkipped."
+    },
+    "product": {
+     "type": "string",
+     "description": "Only changes tagged with this product area, e.g. 'open finance'."
+    },
+    "category": {
+     "type": "string",
+     "description": "Case-insensitive substring of the section heading, e.g. 'pagamentos', 'conectores', 'dashboard'."
+    },
+    "locale": {
+     "type": "string",
+     "enum": [
+      "en",
+      "pt"
+     ],
+     "default": "en",
+     "description": "Language of the entries to read. Months are published in both, but not always at the same time; the response reports any month that exists in the other language and not this one."
+    },
+    "limit": {
+     "type": "integer",
+     "minimum": 1,
+     "maximum": 200,
+     "default": 50,
+     "description": "Max number of changes to return (1-200)."
+    }
+   },
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "annotations": {
+   "readOnlyHint": true,
+   "openWorldHint": false,
+   "destructiveHint": false,
+   "title": "List Pluggy Changelog Changes"
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  },
+  "outputSchema": {
+   "type": "object",
+   "properties": {
+    "result": {}
+   },
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  }
+ },
+ {
+  "name": "search_recipes",
+  "title": "Search Pluggy Recipes",
+  "description": "Search the Pluggy recipes (cookbook, integration patterns, code examples). Returns reranked excerpts with relevance scores. Recipes are English-only.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "query": {
+     "type": "string",
+     "minLength": 1,
+     "description": "The search query, in any language"
+    },
+    "limit": {
+     "type": "integer",
+     "minimum": 1,
+     "maximum": 20,
+     "default": 10,
+     "description": "Max number of results to return (1-20)."
+    }
+   },
+   "required": [
+    "query"
+   ],
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "annotations": {
+   "readOnlyHint": true,
+   "openWorldHint": false,
+   "destructiveHint": false,
+   "title": "Search Pluggy Recipes"
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  },
+  "outputSchema": {
+   "type": "object",
+   "properties": {
+    "result": {}
+   },
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  }
+ },
+ {
+  "name": "search_qa",
+  "title": "Search Pluggy Curated Q&A",
+  "description": "Search the curated, human-verified Pluggy support Q&A (real questions answered by the team, mostly in Portuguese). This is the highest-trust source for 'how do I / why does X happen' support questions \u2014 prefer it over the docs guides when a question matches. Returns reranked question+answer excerpts with relevance scores.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "query": {
+     "type": "string",
+     "minLength": 1,
+     "description": "The search query, in any language"
+    },
+    "limit": {
+     "type": "integer",
+     "minimum": 1,
+     "maximum": 20,
+     "default": 8,
+     "description": "Max number of results to return (1-20)."
+    }
+   },
+   "required": [
+    "query"
+   ],
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "annotations": {
+   "readOnlyHint": true,
+   "openWorldHint": false,
+   "destructiveHint": false,
+   "title": "Search Pluggy Curated Q&A"
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  },
+  "outputSchema": {
+   "type": "object",
+   "properties": {
+    "result": {}
+   },
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  }
+ },
+ {
+  "name": "get_guide",
+  "title": "Get Pluggy Documentation Guide",
+  "description": "Retrieve the full content of a single Pluggy documentation guide by its slug and locale.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "slug": {
+     "type": "string",
+     "minLength": 1,
+     "description": "The doc slug (e.g., 'items', 'authentication')"
+    },
+    "locale": {
+     "type": "string",
+     "enum": [
+      "en",
+      "pt",
+      "es"
+     ],
+     "default": "en",
+     "description": "The doc locale. Default: 'en'."
+    }
+   },
+   "required": [
+    "slug"
+   ],
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "annotations": {
+   "readOnlyHint": true,
+   "openWorldHint": false,
+   "destructiveHint": false,
+   "title": "Get Pluggy Documentation Guide"
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  },
+  "outputSchema": {
+   "type": "object",
+   "properties": {
+    "result": {}
+   },
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  }
+ },
+ {
+  "name": "list_guides",
+  "title": "List Pluggy Documentation Guides",
+  "description": "List all available Pluggy documentation guides (slug, title, description, category) for a given locale. Optionally filter by category.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "locale": {
+     "type": "string",
+     "enum": [
+      "en",
+      "pt",
+      "es"
+     ],
+     "default": "en",
+     "description": "The locale to list guides for. Default: 'en'."
+    },
+    "category": {
+     "type": "string",
+     "description": "Optional category filter (e.g., 'concepts', 'guides')."
+    }
+   },
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "annotations": {
+   "readOnlyHint": true,
+   "openWorldHint": false,
+   "destructiveHint": false,
+   "title": "List Pluggy Documentation Guides"
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  },
+  "outputSchema": {
+   "type": "object",
+   "properties": {
+    "result": {}
+   },
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  }
+ },
+ {
+  "name": "get_api_endpoint",
+  "title": "Get Pluggy API Endpoint Details",
+  "description": "Retrieve full details about a specific Pluggy API endpoint by its operationId. Returns method, path, parameters, request body, and responses sourced from the OpenAPI spec. Defaults to the main Pluggy API; pass `spec` for another (e.g. 'enrichment-api').",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "operationId": {
+     "type": "string",
+     "minLength": 1,
+     "description": "The OpenAPI operationId (e.g., 'createItem', 'listAccounts', 'categorize')"
+    },
+    "spec": {
+     "type": "string",
+     "description": "Which OpenAPI spec, by id or title. Default 'pluggy-api'. Options: pluggy-api, status-api, enrichment-api."
+    }
+   },
+   "required": [
+    "operationId"
+   ],
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "annotations": {
+   "readOnlyHint": true,
+   "openWorldHint": false,
+   "destructiveHint": false,
+   "title": "Get Pluggy API Endpoint Details"
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  },
+  "outputSchema": {
+   "type": "object",
+   "properties": {
+    "result": {}
+   },
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  }
+ },
+ {
+  "name": "list_endpoints",
+  "title": "List Pluggy API Endpoints",
+  "description": "List all available Pluggy API endpoints from an OpenAPI spec. Defaults to the main Pluggy API; pass `spec` to target another (see list_specs \u2014 e.g. 'enrichment-api'). Optionally filter by tag (case-insensitive).",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "spec": {
+     "type": "string",
+     "description": "Which OpenAPI spec to list, by id or title. Default 'pluggy-api'. Options: pluggy-api, status-api, enrichment-api. Call list_specs for details."
+    },
+    "tag": {
+     "type": "string",
+     "description": "Optional tag to filter (e.g., 'Items', 'Accounts', 'Auth'). Case-insensitive."
+    }
+   },
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "annotations": {
+   "readOnlyHint": true,
+   "openWorldHint": false,
+   "destructiveHint": false,
+   "title": "List Pluggy API Endpoints"
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  },
+  "outputSchema": {
+   "type": "object",
+   "properties": {
+    "result": {}
+   },
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  }
+ },
+ {
+  "name": "list_specs",
+  "title": "List Pluggy OpenAPI Specs",
+  "description": "List the available Pluggy OpenAPI specs. Use a spec's id with list_endpoints / get_api_endpoint to browse that API. There are two: the main Pluggy API and the Enrichment API (categorize / behavior-analysis / recurring-payments).",
+  "inputSchema": {
+   "$schema": "http://json-schema.org/draft-07/schema#",
+   "type": "object",
+   "properties": {}
+  },
+  "annotations": {
+   "readOnlyHint": true,
+   "openWorldHint": false,
+   "destructiveHint": false,
+   "title": "List Pluggy OpenAPI Specs"
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  },
+  "outputSchema": {
+   "type": "object",
+   "properties": {
+    "result": {}
+   },
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  }
+ },
+ {
+  "name": "search_endpoints",
+  "title": "Search Pluggy API Endpoints",
+  "description": "Deep-search Pluggy API endpoints by keyword across path, operationId, summary, description, tags, and parameter names \u2014 to discover the right endpoint when you don't know its operationId. Searches every spec by default; pass `spec` to scope to one (see list_specs).",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "query": {
+     "type": "string",
+     "minLength": 1,
+     "description": "Keywords to match (e.g. 'create item', 'webhook', 'consent', 'categorize'). Case-insensitive; all words must match."
+    },
+    "spec": {
+     "type": "string",
+     "description": "Optional: restrict to one spec by id or title. Omit to search all specs."
+    },
+    "limit": {
+     "type": "integer",
+     "minimum": 1,
+     "maximum": 50,
+     "description": "Max results (default 20)."
+    }
+   },
+   "required": [
+    "query"
+   ],
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "annotations": {
+   "readOnlyHint": true,
+   "openWorldHint": false,
+   "destructiveHint": false,
+   "title": "Search Pluggy API Endpoints"
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  },
+  "outputSchema": {
+   "type": "object",
+   "properties": {
+    "result": {}
+   },
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  }
+ },
+ {
+  "name": "execute_request",
+  "title": "Execute a Pluggy API Request (GET)",
+  "description": "Read from the Pluggy API with a live GET call and return the response. Provide either a full `url` or a `path` (+ optional `spec` to resolve the base URL). Safe and side-effect free: this tool cannot POST, PUT, PATCH or DELETE \u2014 use create_request, update_request or delete_request for those. Target API: the **Pluggy API** (https://api.pluggy.ai) plus its siblings enrichment-api.pluggy.ai and status.pluggy.ai \u2014 no other host can be reached. Reference: https://docs.pluggy.ai/en/reference. Paths are freeform, so discover the right one with list_specs / search_endpoints / get_api_endpoint before calling instead of guessing. Authentication is NOT injected \u2014 pass your own credentials in `headers` (e.g. { \"X-API-KEY\": \"\u2026\" } for enrichment-api, or { \"Authorization\": \"Bearer <apiKey>\" } for the main API).",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "method": {
+     "type": "string",
+     "enum": [
+      "GET"
+     ],
+     "description": "Optional, and only GET is accepted \u2014 this tool performs nothing else. Use create_request (POST), update_request (PUT/PATCH) or delete_request (DELETE) for writes."
+    },
+    "url": {
+     "type": "string",
+     "description": "Full request URL (must be an https Pluggy API host)."
+    },
+    "path": {
+     "type": "string",
+     "description": "Path to call (e.g. '/items'), combined with the spec's server URL when `url` is omitted."
+    },
+    "spec": {
+     "type": "string",
+     "description": "Spec id/title used to resolve the base URL for `path` (default 'pluggy-api')."
+    },
+    "headers": {
+     "type": "object",
+     "additionalProperties": {
+      "type": "string"
+     },
+     "description": "Request headers, including your own auth (e.g. X-API-KEY or Authorization). No credentials are added for you."
+    },
+    "query": {
+     "type": "object",
+     "additionalProperties": {
+      "type": [
+       "string",
+       "number",
+       "boolean"
+      ]
+     },
+     "description": "Query-string parameters."
+    }
+   },
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "annotations": {
+   "title": "Execute a Pluggy API Request (GET)",
+   "readOnlyHint": true,
+   "openWorldHint": true,
+   "destructiveHint": false
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  },
+  "outputSchema": {
+   "type": "object",
+   "properties": {
+    "result": {}
+   },
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  }
+ },
+ {
+  "name": "create_request",
+  "title": "Create via a Pluggy API Request (POST)",
+  "description": "Make a live POST call to the Pluggy API \u2014 creating a resource or triggering an action (items, connect tokens, webhooks, enrichment runs). This WRITES to real data, so confirm the endpoint and the body with get_api_endpoint first. Reads go through execute_request; updates through update_request; deletions through delete_request. Target API: the **Pluggy API** (https://api.pluggy.ai) plus its siblings enrichment-api.pluggy.ai and status.pluggy.ai \u2014 no other host can be reached. Reference: https://docs.pluggy.ai/en/reference. Paths are freeform, so discover the right one with list_specs / search_endpoints / get_api_endpoint before calling instead of guessing. Authentication is NOT injected \u2014 pass your own credentials in `headers` (e.g. { \"X-API-KEY\": \"\u2026\" } for enrichment-api, or { \"Authorization\": \"Bearer <apiKey>\" } for the main API).",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "url": {
+     "type": "string",
+     "description": "Full request URL (must be an https Pluggy API host)."
+    },
+    "path": {
+     "type": "string",
+     "description": "Path to call (e.g. '/items'), combined with the spec's server URL when `url` is omitted."
+    },
+    "spec": {
+     "type": "string",
+     "description": "Spec id/title used to resolve the base URL for `path` (default 'pluggy-api')."
+    },
+    "headers": {
+     "type": "object",
+     "additionalProperties": {
+      "type": "string"
+     },
+     "description": "Request headers, including your own auth (e.g. X-API-KEY or Authorization). No credentials are added for you."
+    },
+    "query": {
+     "type": "object",
+     "additionalProperties": {
+      "type": [
+       "string",
+       "number",
+       "boolean"
+      ]
+     },
+     "description": "Query-string parameters."
+    },
+    "body": {
+     "description": "JSON request body (object/array); sent as application/json."
+    }
+   },
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "annotations": {
+   "title": "Create via a Pluggy API Request (POST)",
+   "readOnlyHint": false,
+   "openWorldHint": true,
+   "destructiveHint": true
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  },
+  "outputSchema": {
+   "type": "object",
+   "properties": {
+    "result": {}
+   },
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  }
+ },
+ {
+  "name": "update_request",
+  "title": "Update via a Pluggy API Request (PUT / PATCH)",
+  "description": "Make a live PUT or PATCH call to the Pluggy API to modify an existing resource (e.g. updating an item's credentials or a webhook). PUT replaces, PATCH merges \u2014 check get_api_endpoint for which one the endpoint expects. This WRITES to real data. Reads go through execute_request; creation through create_request; deletions through delete_request. Target API: the **Pluggy API** (https://api.pluggy.ai) plus its siblings enrichment-api.pluggy.ai and status.pluggy.ai \u2014 no other host can be reached. Reference: https://docs.pluggy.ai/en/reference. Paths are freeform, so discover the right one with list_specs / search_endpoints / get_api_endpoint before calling instead of guessing. Authentication is NOT injected \u2014 pass your own credentials in `headers` (e.g. { \"X-API-KEY\": \"\u2026\" } for enrichment-api, or { \"Authorization\": \"Bearer <apiKey>\" } for the main API).",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "method": {
+     "type": "string",
+     "enum": [
+      "PUT",
+      "PATCH"
+     ],
+     "description": "HTTP method \u2014 PUT / PATCH."
+    },
+    "url": {
+     "type": "string",
+     "description": "Full request URL (must be an https Pluggy API host)."
+    },
+    "path": {
+     "type": "string",
+     "description": "Path to call (e.g. '/items'), combined with the spec's server URL when `url` is omitted."
+    },
+    "spec": {
+     "type": "string",
+     "description": "Spec id/title used to resolve the base URL for `path` (default 'pluggy-api')."
+    },
+    "headers": {
+     "type": "object",
+     "additionalProperties": {
+      "type": "string"
+     },
+     "description": "Request headers, including your own auth (e.g. X-API-KEY or Authorization). No credentials are added for you."
+    },
+    "query": {
+     "type": "object",
+     "additionalProperties": {
+      "type": [
+       "string",
+       "number",
+       "boolean"
+      ]
+     },
+     "description": "Query-string parameters."
+    },
+    "body": {
+     "description": "JSON request body (object/array); sent as application/json."
+    }
+   },
+   "required": [
+    "method"
+   ],
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "annotations": {
+   "title": "Update via a Pluggy API Request (PUT / PATCH)",
+   "readOnlyHint": false,
+   "openWorldHint": true,
+   "destructiveHint": true
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  },
+  "outputSchema": {
+   "type": "object",
+   "properties": {
+    "result": {}
+   },
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  }
+ },
+ {
+  "name": "delete_request",
+  "title": "Delete via a Pluggy API Request (DELETE)",
+  "description": "Make a live DELETE call to the Pluggy API to remove an existing resource (e.g. an item or a webhook). This is IRREVERSIBLE and destroys real customer data \u2014 confirm the exact resource id before calling. Reads go through execute_request; creation through create_request; updates through update_request. Target API: the **Pluggy API** (https://api.pluggy.ai) plus its siblings enrichment-api.pluggy.ai and status.pluggy.ai \u2014 no other host can be reached. Reference: https://docs.pluggy.ai/en/reference. Paths are freeform, so discover the right one with list_specs / search_endpoints / get_api_endpoint before calling instead of guessing. Authentication is NOT injected \u2014 pass your own credentials in `headers` (e.g. { \"X-API-KEY\": \"\u2026\" } for enrichment-api, or { \"Authorization\": \"Bearer <apiKey>\" } for the main API).",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "url": {
+     "type": "string",
+     "description": "Full request URL (must be an https Pluggy API host)."
+    },
+    "path": {
+     "type": "string",
+     "description": "Path to call (e.g. '/items'), combined with the spec's server URL when `url` is omitted."
+    },
+    "spec": {
+     "type": "string",
+     "description": "Spec id/title used to resolve the base URL for `path` (default 'pluggy-api')."
+    },
+    "headers": {
+     "type": "object",
+     "additionalProperties": {
+      "type": "string"
+     },
+     "description": "Request headers, including your own auth (e.g. X-API-KEY or Authorization). No credentials are added for you."
+    },
+    "query": {
+     "type": "object",
+     "additionalProperties": {
+      "type": [
+       "string",
+       "number",
+       "boolean"
+      ]
+     },
+     "description": "Query-string parameters."
+    },
+    "body": {
+     "description": "JSON request body (object/array); sent as application/json."
+    }
+   },
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "annotations": {
+   "title": "Delete via a Pluggy API Request (DELETE)",
+   "readOnlyHint": false,
+   "openWorldHint": true,
+   "destructiveHint": true
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  },
+  "outputSchema": {
+   "type": "object",
+   "properties": {
+    "result": {}
+   },
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  }
+ },
+ {
+  "name": "list_teams",
+  "title": "List your Pluggy teams",
+  "description": "List the teams your Pluggy dashboard account belongs to. Start here: pick a team, then use its id as `teamId` in the other tools. You can switch teams anytime by using a different team's id.",
+  "inputSchema": {
+   "$schema": "http://json-schema.org/draft-07/schema#",
+   "type": "object",
+   "properties": {}
+  },
+  "annotations": {
+   "readOnlyHint": true,
+   "openWorldHint": false,
+   "destructiveHint": false,
+   "title": "List your Pluggy teams"
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  },
+  "_meta": {
+   "securitySchemes": [
+    {
+     "type": "noauth"
+    },
+    {
+     "type": "oauth2",
+     "scopes": [
+      "openid",
+      "profile",
+      "email",
+      "offline_access"
+     ]
+    }
+   ]
+  },
+  "outputSchema": {
+   "type": "object",
+   "properties": {
+    "result": {}
+   },
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  }
+ },
+ {
+  "name": "list_applications",
+  "title": "List a team's applications",
+  "description": "List the applications/environments under a team (from list_teams). Pick one and use its id as `applicationId` in data tools.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "teamId": {
+     "type": "string",
+     "minLength": 1,
+     "description": "The team id (from list_teams)."
+    }
+   },
+   "required": [
+    "teamId"
+   ],
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "annotations": {
+   "readOnlyHint": true,
+   "openWorldHint": false,
+   "destructiveHint": false,
+   "title": "List a team's applications"
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  },
+  "_meta": {
+   "securitySchemes": [
+    {
+     "type": "noauth"
+    },
+    {
+     "type": "oauth2",
+     "scopes": [
+      "openid",
+      "profile",
+      "email",
+      "offline_access"
+     ]
+    }
+   ]
+  },
+  "outputSchema": {
+   "type": "object",
+   "properties": {
+    "result": {}
+   },
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  }
+ },
+ {
+  "name": "select_application",
+  "title": "Select an application for this session",
+  "description": "Validate an application and confirm the team + application to use. Call this after list_applications; then pass the same `teamId` and `applicationId` to the data tools for the rest of the conversation (call it again to switch).",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "applicationId": {
+     "type": "string",
+     "minLength": 1,
+     "description": "The application id (from list_applications)."
+    }
+   },
+   "required": [
+    "applicationId"
+   ],
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "annotations": {
+   "readOnlyHint": true,
+   "openWorldHint": false,
+   "destructiveHint": false,
+   "title": "Select an application for this session"
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  },
+  "_meta": {
+   "securitySchemes": [
+    {
+     "type": "noauth"
+    },
+    {
+     "type": "oauth2",
+     "scopes": [
+      "openid",
+      "profile",
+      "email",
+      "offline_access"
+     ]
+    }
+   ]
+  },
+  "outputSchema": {
+   "type": "object",
+   "properties": {
+    "result": {}
+   },
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  }
+ },
+ {
+  "name": "get_application",
+  "title": "Get an application's configuration",
+  "description": "Read how one application is configured: its name, environment (sandbox or production), whether it is enabled, its clientId, allowed origins and Connect branding (title, logo, primary color). For webhooks use list_webhooks. Use this to answer questions like 'how is my app configured?' or 'is this app in production?'. Unlike list_applications (which lists a team's apps) and select_application (which only confirms the app to use for the session), this returns the full configuration of one app. The client secret is never included \u2014 it is only shown once, when it is generated in the dashboard.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "applicationId": {
+     "type": "string",
+     "minLength": 1,
+     "description": "The application id (from list_applications)."
+    }
+   },
+   "required": [
+    "applicationId"
+   ],
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "annotations": {
+   "readOnlyHint": true,
+   "openWorldHint": false,
+   "destructiveHint": false,
+   "title": "Get an application's configuration"
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  },
+  "_meta": {
+   "securitySchemes": [
+    {
+     "type": "noauth"
+    },
+    {
+     "type": "oauth2",
+     "scopes": [
+      "openid",
+      "profile",
+      "email",
+      "offline_access"
+     ]
+    }
+   ]
+  },
+  "outputSchema": {
+   "type": "object",
+   "properties": {
+    "result": {}
+   },
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  }
+ },
+ {
+  "name": "list_connectors",
+  "title": "List a team's connectors",
+  "description": "List the connectors available to a team's application.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "teamId": {
+     "type": "string",
+     "minLength": 1,
+     "description": "The team id (from list_teams)."
+    }
+   },
+   "required": [
+    "teamId"
+   ],
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "annotations": {
+   "readOnlyHint": true,
+   "openWorldHint": false,
+   "destructiveHint": false,
+   "title": "List a team's connectors"
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  },
+  "_meta": {
+   "securitySchemes": [
+    {
+     "type": "noauth"
+    },
+    {
+     "type": "oauth2",
+     "scopes": [
+      "openid",
+      "profile",
+      "email",
+      "offline_access"
+     ]
+    }
+   ]
+  },
+  "outputSchema": {
+   "type": "object",
+   "properties": {
+    "result": {}
+   },
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  }
+ },
+ {
+  "name": "get_stats",
+  "title": "Get a team's dashboard stats (for monitoring)",
+  "description": "The core monitoring tool: the same stats the Pluggy dashboard shows, over any date range and filters, so you can answer 'how are my connections doing', compare periods, and spot anomalies proactively. Kinds: `items` (item counts by execution status), `items-by-connector` (the same split per connector/institution \u2014 use it for 'which banks are erroring most'), `syncs` (sync volume/outcomes), `syncs-lag` (how stale connections are), `connectors` (connector availability), `payments` (payment volume and outcomes), `payments-by-connector` (the same per institution). Filters: date range (startDate/endDate, ISO), a connector, error statuses, sandbox, connectors' `fromDay`, and payments' `paymentType`. To compare periods, call twice with different date ranges.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "teamId": {
+     "type": "string",
+     "minLength": 1,
+     "description": "The team id (from list_teams)."
+    },
+    "kind": {
+     "type": "string",
+     "enum": [
+      "items",
+      "items-by-connector",
+      "syncs",
+      "syncs-lag",
+      "connectors",
+      "payments",
+      "payments-by-connector"
+     ],
+     "description": "Which stat to fetch."
+    },
+    "applicationId": {
+     "type": "string",
+     "description": "Optional application id to scope the stats (from list_applications)."
+    },
+    "startDate": {
+     "type": "string",
+     "description": "Range start (ISO date, e.g. 2026-07-01). items/items-by-connector/syncs/payments."
+    },
+    "endDate": {
+     "type": "string",
+     "description": "Range end (ISO date). Same kinds as startDate."
+    },
+    "connectorId": {
+     "type": "string",
+     "description": "Filter to one connector/institution (items / items-by-connector)."
+    },
+    "connectorIds": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     },
+     "description": "Filter to specific connectors (syncs / syncs-lag)."
+    },
+    "executionStatuses": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     },
+     "description": "Filter by item execution status, e.g. ERROR, CONNECTION_ERROR, CREATE_ERROR, MERGE_ERROR, LOGIN_ERROR (items / items-by-connector)."
+    },
+    "sandbox": {
+     "type": "boolean",
+     "description": "Include sandbox items (default: production)."
+    },
+    "fromDay": {
+     "type": "string",
+     "enum": [
+      "1",
+      "24"
+     ],
+     "description": "For kind=connectors: window in hours (1 or 24)."
+    },
+    "paymentType": {
+     "type": "string",
+     "enum": [
+      "AUTOMATIC_PIX",
+      "SCHEDULED_PIX",
+      "SIMPLE_PIX",
+      "SMART_TRANSFER"
+     ],
+     "description": "For kind=payments / payments-by-connector: only this payment type."
+    }
+   },
+   "required": [
+    "teamId",
+    "kind"
+   ],
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "annotations": {
+   "readOnlyHint": true,
+   "openWorldHint": false,
+   "destructiveHint": false,
+   "title": "Get a team's dashboard stats (for monitoring)"
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  },
+  "_meta": {
+   "securitySchemes": [
+    {
+     "type": "noauth"
+    },
+    {
+     "type": "oauth2",
+     "scopes": [
+      "openid",
+      "profile",
+      "email",
+      "offline_access"
+     ]
+    }
+   ]
+  },
+  "outputSchema": {
+   "type": "object",
+   "properties": {
+    "result": {}
+   },
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  }
+ },
+ {
+  "name": "get_item",
+  "title": "Get one item",
+  "description": "Get a single connected item (status + executions) by its id, scoped to a team.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "itemId": {
+     "type": "string",
+     "minLength": 1,
+     "description": "The item id (UUID)."
+    },
+    "teamId": {
+     "type": "string",
+     "minLength": 1,
+     "description": "The team id the item belongs to (from list_teams)."
+    }
+   },
+   "required": [
+    "itemId",
+    "teamId"
+   ],
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "annotations": {
+   "readOnlyHint": true,
+   "openWorldHint": false,
+   "destructiveHint": false,
+   "title": "Get one item"
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  },
+  "_meta": {
+   "securitySchemes": [
+    {
+     "type": "noauth"
+    },
+    {
+     "type": "oauth2",
+     "scopes": [
+      "openid",
+      "profile",
+      "email",
+      "offline_access"
+     ]
+    }
+   ]
+  },
+  "outputSchema": {
+   "type": "object",
+   "properties": {
+    "result": {}
+   },
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  }
+ },
+ {
+  "name": "debug_item",
+  "title": "Diagnose a failing item",
+  "description": "Diagnose why a connected item is failing. Fetches the item's current status and its recent executions (sync attempts, error codes, timestamps) plus any open incident on its institution, so you can explain the root cause and the next step for the end user \u2014 e.g. expired credentials \u2192 reconnect / update the connection; consent expired or a resource not granted \u2192 re-authorize; MFA/user-input needed; or a provider-side/known-incident issue. Read the `status`, the latest execution's error, and the connector, then give a short plain-language diagnosis + suggested fix. When the item looks healthy but a PRODUCT came back empty, this tool cannot tell you whether the institution ever shared it: that lives in `GET /items/{id}/resources` on api.pluggy.ai (Open Finance items only), which you can read with execute_request using the caller's own API key \u2014 a resource reported `PENDING_AUTHORISATION` is the end user's to authorise at their bank, `UNAVAILABLE` is the institution's call, and `AVAILABLE` with no data on our side is the only case that is ours. See https://v2.docs.pluggy.ai/en/docs/connections/resources. To see what each recent sync actually brought \u2014 products with data or empty, entities returned, transactions created by date \u2014 use get_execution_reports. Do NOT expose internal ids or logs to the end customer.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "itemId": {
+     "type": "string",
+     "minLength": 1,
+     "description": "The item id (UUID) to diagnose."
+    },
+    "teamId": {
+     "type": "string",
+     "minLength": 1,
+     "description": "The team the item belongs to (from list_teams)."
+    }
+   },
+   "required": [
+    "itemId",
+    "teamId"
+   ],
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "annotations": {
+   "readOnlyHint": true,
+   "openWorldHint": false,
+   "destructiveHint": false,
+   "title": "Diagnose a failing item"
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  },
+  "_meta": {
+   "securitySchemes": [
+    {
+     "type": "noauth"
+    },
+    {
+     "type": "oauth2",
+     "scopes": [
+      "openid",
+      "profile",
+      "email",
+      "offline_access"
+     ]
+    }
+   ]
+  },
+  "outputSchema": {
+   "type": "object",
+   "properties": {
+    "result": {}
+   },
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  }
+ },
+ {
+  "name": "get_execution_reports",
+  "title": "See what an item's syncs brought",
+  "description": "Per-execution breakdown of what a connected item's recent syncs actually brought. Use it when an item looks healthy (debug_item shows no error) but the user says data is missing. For each execution, newest first: its status, and a `report` with the products that came back with data, empty, or failed (`products`), how many entities the institution returned per product (`returned`: accounts by type, credit cards, bills, investments, loans, identity, and transactions per account type), and how many transactions were created, updated and deleted, with the created ones split by transaction date relative to the sync \u2014 today, yesterday, two or more days ago, future (`transactions.*.createdByDate`, Brazil time). `report: null` means the execution did not get as far as saving data, or its report is still being processed (it lands shortly after the sync ends). `products: null` or a `null` counter in `returned` means not measured (older executions), never zero. Pass `executionId` (from get_item / debug_item) for one execution; otherwise the `limit` most recent (default 10, max 50). Not the same as get_reports, which is the team's aggregate ingestion over a date range.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "itemId": {
+     "type": "string",
+     "minLength": 1,
+     "description": "The item id (UUID)."
+    },
+    "teamId": {
+     "type": "string",
+     "minLength": 1,
+     "description": "The team the item belongs to (from list_teams)."
+    },
+    "executionId": {
+     "type": "string",
+     "description": "One execution of the item (from get_item / debug_item). Omit for the most recent ones."
+    },
+    "limit": {
+     "type": "integer",
+     "minimum": 1,
+     "maximum": 50,
+     "description": "How many recent executions to include (default 10, max 50). Ignored with executionId."
+    }
+   },
+   "required": [
+    "itemId",
+    "teamId"
+   ],
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "annotations": {
+   "readOnlyHint": true,
+   "openWorldHint": false,
+   "destructiveHint": false,
+   "title": "See what an item's syncs brought"
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  },
+  "_meta": {
+   "securitySchemes": [
+    {
+     "type": "noauth"
+    },
+    {
+     "type": "oauth2",
+     "scopes": [
+      "openid",
+      "profile",
+      "email",
+      "offline_access"
+     ]
+    }
+   ]
+  },
+  "outputSchema": {
+   "type": "object",
+   "properties": {
+    "result": {}
+   },
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  }
+ },
+ {
+  "name": "check_incidents",
+  "title": "Check Status Page incidents",
+  "description": "List Pluggy's current (and recently-resolved) Status Page incidents and maintenances \u2014 the same source as status.pluggy.ai. Use it to tell a customer whether a problem is a known provider-side outage. Optionally filter by a connector id (the Pluggy institution/connector) to see only incidents affecting that bank, or by infra component (api | webhooks | connect). Pairs with debug_item: if an item is failing and its institution has an open incident, the fix is 'wait for the incident to resolve', not a reconnect.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "connectorId": {
+     "type": "string",
+     "description": "Filter to incidents affecting this Pluggy connector/institution id."
+    },
+    "component": {
+     "type": "string",
+     "enum": [
+      "api",
+      "webhooks",
+      "connect"
+     ],
+     "description": "Filter to infra incidents on this component."
+    },
+    "includeResolved": {
+     "type": "boolean",
+     "description": "Include recently-resolved incidents too (default: only active)."
+    }
+   },
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "annotations": {
+   "readOnlyHint": true,
+   "openWorldHint": false,
+   "destructiveHint": false,
+   "title": "Check Status Page incidents"
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  },
+  "_meta": {
+   "securitySchemes": [
+    {
+     "type": "noauth"
+    },
+    {
+     "type": "oauth2",
+     "scopes": [
+      "openid",
+      "profile",
+      "email",
+      "offline_access"
+     ]
+    }
+   ]
+  },
+  "outputSchema": {
+   "type": "object",
+   "properties": {
+    "result": {}
+   },
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  }
+ },
+ {
+  "name": "get_billing_url",
+  "title": "Get the team's billing dashboard",
+  "description": "Get a link to the team's usage and billing dashboard, with consumption and cost.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "teamId": {
+     "type": "string",
+     "minLength": 1,
+     "description": "The team id (from list_teams)."
+    }
+   },
+   "required": [
+    "teamId"
+   ],
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "annotations": {
+   "readOnlyHint": true,
+   "openWorldHint": false,
+   "destructiveHint": false,
+   "title": "Get the team's billing dashboard"
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  },
+  "_meta": {
+   "securitySchemes": [
+    {
+     "type": "noauth"
+    },
+    {
+     "type": "oauth2",
+     "scopes": [
+      "openid",
+      "profile",
+      "email",
+      "offline_access"
+     ]
+    }
+   ]
+  },
+  "outputSchema": {
+   "type": "object",
+   "properties": {
+    "result": {}
+   },
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  }
+ },
+ {
+  "name": "get_reports",
+  "title": "Get transaction-ingestion reports",
+  "description": "Get the team's transaction-ingestion report \u2014 a daily time series or a summary \u2014 over a date range, to understand data volume and ingestion health over time (and compare periods).",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "teamId": {
+     "type": "string",
+     "minLength": 1,
+     "description": "The team id (from list_teams)."
+    },
+    "kind": {
+     "type": "string",
+     "enum": [
+      "daily",
+      "summary"
+     ],
+     "description": "`daily` = per-day time series; `summary` = aggregate."
+    },
+    "applicationId": {
+     "type": "string",
+     "description": "Optional application id to scope."
+    },
+    "startDate": {
+     "type": "string",
+     "description": "Range start (ISO date)."
+    },
+    "endDate": {
+     "type": "string",
+     "description": "Range end (ISO date)."
+    },
+    "connectorIds": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     },
+     "description": "Filter to specific connectors."
+    },
+    "sandbox": {
+     "type": "boolean",
+     "description": "Include sandbox (default: production)."
+    }
+   },
+   "required": [
+    "teamId",
+    "kind"
+   ],
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "annotations": {
+   "readOnlyHint": true,
+   "openWorldHint": false,
+   "destructiveHint": false,
+   "title": "Get transaction-ingestion reports"
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  },
+  "_meta": {
+   "securitySchemes": [
+    {
+     "type": "noauth"
+    },
+    {
+     "type": "oauth2",
+     "scopes": [
+      "openid",
+      "profile",
+      "email",
+      "offline_access"
+     ]
+    }
+   ]
+  },
+  "outputSchema": {
+   "type": "object",
+   "properties": {
+    "result": {}
+   },
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  }
+ },
+ {
+  "name": "list_webhooks",
+  "title": "List an application's webhooks",
+  "description": "List the webhooks registered for an application (URLs + the events they fire on).",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "applicationId": {
+     "type": "string",
+     "minLength": 1,
+     "description": "The application id (from list_applications)."
+    }
+   },
+   "required": [
+    "applicationId"
+   ],
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "annotations": {
+   "readOnlyHint": true,
+   "openWorldHint": false,
+   "destructiveHint": false,
+   "title": "List an application's webhooks"
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  },
+  "_meta": {
+   "securitySchemes": [
+    {
+     "type": "noauth"
+    },
+    {
+     "type": "oauth2",
+     "scopes": [
+      "openid",
+      "profile",
+      "email",
+      "offline_access"
+     ]
+    }
+   ]
+  },
+  "outputSchema": {
+   "type": "object",
+   "properties": {
+    "result": {}
+   },
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  }
+ },
+ {
+  "name": "list_webhook_events",
+  "title": "List delivered webhook events",
+  "description": "List recent webhook delivery events for a team/application \u2014 useful to debug 'did my webhook fire / did it fail'. Optionally scope by application.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "teamId": {
+     "type": "string",
+     "minLength": 1,
+     "description": "The team id (from list_teams)."
+    },
+    "applicationId": {
+     "type": "string",
+     "description": "Optional application id to scope the events."
+    }
+   },
+   "required": [
+    "teamId"
+   ],
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "annotations": {
+   "readOnlyHint": true,
+   "openWorldHint": false,
+   "destructiveHint": false,
+   "title": "List delivered webhook events"
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  },
+  "_meta": {
+   "securitySchemes": [
+    {
+     "type": "noauth"
+    },
+    {
+     "type": "oauth2",
+     "scopes": [
+      "openid",
+      "profile",
+      "email",
+      "offline_access"
+     ]
+    }
+   ]
+  },
+  "outputSchema": {
+   "type": "object",
+   "properties": {
+    "result": {}
+   },
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  }
+ },
+ {
+  "name": "get_webhook_event",
+  "title": "Get one webhook event",
+  "description": "Get the full detail (payload, status, delivery attempts) of a single webhook event.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "eventId": {
+     "type": "string",
+     "minLength": 1,
+     "description": "The webhook event id (from list_webhook_events)."
+    }
+   },
+   "required": [
+    "eventId"
+   ],
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "annotations": {
+   "readOnlyHint": true,
+   "openWorldHint": false,
+   "destructiveHint": false,
+   "title": "Get one webhook event"
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  },
+  "_meta": {
+   "securitySchemes": [
+    {
+     "type": "noauth"
+    },
+    {
+     "type": "oauth2",
+     "scopes": [
+      "openid",
+      "profile",
+      "email",
+      "offline_access"
+     ]
+    }
+   ]
+  },
+  "outputSchema": {
+   "type": "object",
+   "properties": {
+    "result": {}
+   },
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  }
+ },
+ {
+  "name": "dev_portal_tools_introduction",
+  "title": "How to use the Pluggy dev-portal tools",
+  "description": "Guidance for these authenticated tools: what they do and the recommended order. Call this when unsure how to answer a question about the user's Pluggy integration.",
+  "inputSchema": {
+   "$schema": "http://json-schema.org/draft-07/schema#",
+   "type": "object",
+   "properties": {}
+  },
+  "annotations": {
+   "readOnlyHint": true,
+   "openWorldHint": false,
+   "destructiveHint": false,
+   "title": "How to use the Pluggy dev-portal tools"
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  },
+  "_meta": {
+   "securitySchemes": [
+    {
+     "type": "noauth"
+    },
+    {
+     "type": "oauth2",
+     "scopes": [
+      "openid",
+      "profile",
+      "email",
+      "offline_access"
+     ]
+    }
+   ]
+  },
+  "outputSchema": {
+   "type": "object",
+   "properties": {
+    "result": {}
+   },
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  }
+ },
+ {
+  "name": "create_support_ticket",
+  "title": "Open a Pluggy support ticket",
+  "description": "Open a support ticket for a connector/data problem on one of your teams. Only enabled for teams with the partner ticket integration turned on. Use it for a REPRODUCIBLE problem on a specific item \u2014 one ticket per problem, not per affected end user. Always pass externalId (your own issue id) so retries don't create duplicates. Pass dryRun: true first to validate the payload without filing anything.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "teamId": {
+     "type": "string",
+     "minLength": 1,
+     "description": "The team id (from list_teams)."
+    },
+    "summary": {
+     "type": "string",
+     "minLength": 1,
+     "description": "Short title of the problem."
+    },
+    "description": {
+     "type": "string",
+     "minLength": 1,
+     "description": "What is wrong, since when, how many users are affected, how to reproduce."
+    },
+    "itemId": {
+     "type": "string",
+     "minLength": 1,
+     "description": "A Pluggy item id (UUID) where the problem reproduces. Must belong to the team; its connector determines the institution, so you don't pass one."
+    },
+    "product": {
+     "type": "string",
+     "minLength": 1,
+     "description": "Affected product. One of: Identity, Accounts, Transactions, Credit Card, Investments, Authentication, Investment Transactions, Consent, Loans, Outro."
+    },
+    "problemType": {
+     "type": "string",
+     "minLength": 1,
+     "description": "Closest problem type. One of: Transa\u00e7\u00e3o da conta corrente n\u00e3o sendo retornada, Balan\u00e7o da conta corrente sendo retornada incorretamente, Data da transa\u00e7\u00e3o da conta corrente sendo retornada incorretamente, Campo recebedor e pagador n\u00e3o est\u00e1 sendo retornados (paymentdata), Transa\u00e7\u00e3o da conta corrente sendo retornada duplicada, Transa\u00e7\u00e3o do cart\u00e3o de credito n\u00e3o sendo retornada, Compras parceladas sendo retornadas incorretamente, Conex\u00e3o n\u00e3o esta sendo atualizada automaticamente, Transa\u00e7\u00e3o do cart\u00e3o de cr\u00e9dito sendo retornada duplicada, Transa\u00e7\u00e3o do investimento n\u00e3o sendo retornada, CNPJ do investimento n\u00e3o sendo retornada, Balan\u00e7o do investimento sendo retornado incorretamente, Investimentos sendo retornados com um status incorreto, Investimento sendo retornado sem o campo value, Investimento sendo retornado sem o campo quantity, Investimentos sendo retornados com dados incorretos, Identity n\u00e3o sendo retornada, Erro no consentimento, Conex\u00e3o retornada com o status de PARTIAL_SUCCESS, Conta corrente n\u00e3o sendo retornada, Cart\u00e3o de credito n\u00e3o sendo retornado, Investimento n\u00e3o retornado, Outro."
+    },
+    "accountType": {
+     "type": "string",
+     "description": "Pessoa F\u00edsica | Pessoa Jur\u00eddica | Corretora | Outra"
+    },
+    "accountId": {
+     "type": "string"
+    },
+    "investmentId": {
+     "type": "string"
+    },
+    "externalId": {
+     "type": "string",
+     "description": "Your own issue id \u2014 idempotency key."
+    },
+    "priority": {
+     "type": "string",
+     "description": "P0 \u2014 Cr\u00edtico | P1 \u2014 Alto | P2 \u2014 M\u00e9dio | P3 \u2014 Baixo"
+    },
+    "dryRun": {
+     "type": "boolean",
+     "description": "Validate only; do not create the ticket."
+    }
+   },
+   "required": [
+    "teamId",
+    "summary",
+    "description",
+    "itemId",
+    "product",
+    "problemType"
+   ],
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "annotations": {
+   "readOnlyHint": false,
+   "openWorldHint": false,
+   "destructiveHint": true,
+   "title": "Open a Pluggy support ticket"
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  },
+  "_meta": {
+   "securitySchemes": [
+    {
+     "type": "noauth"
+    },
+    {
+     "type": "oauth2",
+     "scopes": [
+      "openid",
+      "profile",
+      "email",
+      "offline_access"
+     ]
+    }
+   ]
+  },
+  "outputSchema": {
+   "type": "object",
+   "properties": {
+    "result": {}
+   },
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  }
+ }
+]

@@ -1,0 +1,56 @@
+generated: '2026-10-18'
+method: searched
+generator: extract-docs-artifacts.py (deepseek)
+source: https://www.pluggy.ai/en/pricing
+sources:
+- https://www.pluggy.ai/en/pricing
+name: Pluggy pricing
+plans:
+- name: Data
+  price_text: R$ 2,500 /month
+  price: 2500
+  description: Connect to and read data from any bank in Brazil. Your customers' real accounts Open Finance plus direct access. Onboarding happens
+    inside your product. Webhooks and enrichment Automatic notifications on changes, plus categorization, merchants and recurrence. Identity,
+    investments and KYC Identity, loans and investment positions through the same API. Technical support by ticket A dedicated channel with the
+    team that built the API. Useful answers, not a script.
+  features:
+  - Open Finance + direct access
+  - Statements, balances, cards and investments
+  - Identity and KYC
+  - Update webhooks
+  - Data enrichment
+  - Transaction categorization
+  - Merchants and recurrence
+  - Full sandbox
+  - 15-day free trial (production)
+  - Support by ticket
+  - Discord community
+  billing_period: month
+- name: Payments
+  price_text: R$ 500 /month
+  price: 500
+  description: Collect and move money via Pix. No boleto, no cards, no card fees. Pix initiation Pix charges with instant confirmation and same-day
+    settlement. One-off charges Dynamic QR Code and payment link, with no acquirer. Pix Automático Recurring payments authorized once and collected
+    on their own, with no involuntary churn. Cash management Sweeping, top-up and scheduled transfers between accounts via API.
+  features:
+  - Payments via Pix
+  - Pix initiation
+  - One-off charges (QR and link)
+  - Pix Automático
+  - Cash management
+  - Full sandbox
+  - 15-day free trial (production)
+  - Support by ticket
+  - Discord community
+  billing_period: month
+audience: business-product
+pricing_basis: per-seat
+currency: R$
+delivery:
+  delivery: managed
+  evidence: SaaS platform with hosted API access
+  free_edition: 15-day free trial
+  managed_tier: Data and Payments plans
+note: The page shows two separate products (Data and Payments) that can be contracted separately, each with monthly minimum pricing and volume-based
+  overage billing above the included amounts. Both have 15-day free trials.
+docs: https://www.pluggy.ai/en/pricing

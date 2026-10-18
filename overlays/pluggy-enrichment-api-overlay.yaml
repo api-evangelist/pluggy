@@ -1,0 +1,23 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist agent-surfaces overlay for Pluggy Enrichment API
+  version: 1.0.0
+extends: openapi/pluggy-enrichment-api-openapi.yml
+x-generated: '2026-10-18'
+x-method: generated
+x-source: openapi/pluggy-enrichment-api-openapi.yml
+x-rationale: Links the Enrichment API to the MCP server, llms.txt and agent skills without mutating the original.
+actions:
+- target: $.info
+  description: Link agent surfaces. The MCP list_specs tool exposes this spec as a second browsable spec, and the request
+    proxy tools can call it.
+  update:
+    x-mcp-server:
+      url: https://mcp.pluggy.ai/mcp
+      manifest: mcp/pluggy-mcp.yml
+      crosswalk: mcp/pluggy-tool-crosswalk.yml
+    x-llms-txt: https://docs.pluggy.ai/llms.txt
+    x-agent-skills:
+      official: https://github.com/pluggyai/agent-skills
+      install: npx skills add pluggyai/agent-skills
+      index: skills/_index.yml

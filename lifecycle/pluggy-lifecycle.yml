@@ -1,0 +1,13 @@
+generated: '2026-10-18'
+method: searched
+source: https://docs.pluggy.ai/en/changelog/feed.xml
+sources:
+- https://docs.pluggy.ai/en/changelog/feed.xml
+- https://docs.pluggy.ai/en/changelog
+versioning: Additive evolution without explicit versioning; new fields added to responses, nothing removed or renamed
+deprecation: Direct connectors for individuals (PF) being discontinued as announced in July 2026 changelog
+status_page: https://status.pluggy.ai/
+note: API evolves without version numbers by adding fields to responses. Breaking changes announced in changelog with advance notice. Status page provides real-time health information for all connectors and infrastructure components.
+docs:
+- https://docs.pluggy.ai/en/changelog
+- https://docs.pluggy.ai/en/changelog/feed.xml

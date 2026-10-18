@@ -1,0 +1,670 @@
+openapi: 3.2.0
+info:
+  title: Pluggy Connector API
+  description: Pluggy's main API to review data and execute connectors
+  license:
+    name: MIT
+  contact:
+    email: hello@pluggy.ai
+    name: Pluggy
+    url: https://pluggy.ai
+  version: 1.0.0
+servers:
+- url: https://api.pluggy.ai
+  description: Pluggy API
+tags:
+- name: Connector
+  description: Financial institution connector management
+paths:
+  /connectors:
+    get:
+      operationId: connectors-list
+      summary: List
+      description: This endpoint retrieves all available connectors.
+      responses:
+        '200':
+          description: Retrieve a list of all connectors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectorListResponse'
+      tags:
+      - Connector
+      security:
+      - default: []
+      parameters:
+      - description: A list of countries of connectors to filter.
+        example: "[\n  \"BR\"\n]"
+        in: query
+        name: countries
+        required: false
+        style: form
+        explode: false
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - BR
+      - description: A list of types of connectors to filter.
+        example: "[\n  \"PERSONAL_BANK\",\n  \"BUSINESS_BANK\",\n  \"INVESTMENT\",\n  \"INVOICE\",\n  \"TELECOMMUNICATION\",\n  \"OTHER\"\n]"
+        in: query
+        name: types
+        required: false
+        style: form
+        explode: false
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - PERSONAL_BANK
+            - BUSINESS_BANK
+            - INVESTMENT
+            - INVOICE
+            - TELECOMMUNICATION
+            - OTHER
+      - description: Name alike look up of the connector
+        in: query
+        name: name
+        required: false
+        schema:
+          type: string
+      - description: 'Include sandbox connectors if set to true (default: false).'
+        in: query
+        name: sandbox
+        required: false
+        schema:
+          type: boolean
+      - description: Include health details about latest connections and percentage of errors (connection rate)
+        in: query
+        name: healthDetails
+        required: false
+        schema:
+          type: boolean
+      - description: Filter connectors by the `isOpenFinance` attribute. If not sent, it won't filter.
+        in: query
+        name: isOpenFinance
+        required: false
+        schema:
+          type: boolean
+      - description: Filter connectors by the `supportsPaymentInitiation` attribute. If not sent, it won't filter.
+        in: query
+        name: supportsPaymentInitiation
+        required: false
+        schema:
+          type: boolean
+      - description: Filter connectors by the `supportsSmartTransfers` attribute. If not sent, it won't filter.
+        in: query
+        name: supportsSmartTransfers
+        required: false
+        schema:
+          type: boolean
+      - description: Filter connectors by the `supportsAutomaticPix` attribute. If not sent, it won't filter.
+        in: query
+        name: supportsAutomaticPix
+        required: false
+        schema:
+          type: boolean
+      x-readme:
+        code-samples:
+        - language: node
+          code: "const pluggy = require('pluggy-sdk');\nconst client = new pluggy.PluggyClient({\n  clientId: 'YOUR_CLIENT_ID',\n  clientSecret: 'YOUR_CLIENT_SECRET',\n});\n\nclient\n  .fetchConnectors()\n  .then(({ results: connectors }) => {\n    console.log(connectors);\n  });"
+        - language: java
+          code: "PluggyClient pluggyClient = PluggyClient.builder()\n  .clientIdAndSecret(\"your_client_id\", \"your_secret\")\n  .baseUrl(\"https://api.pluggy.ai\")\n  .build();\nResponse<ConnectorsResponse> connectorsResponse = pluggyClient.service().getConnectors().execute();"
+        - language: csharp
+          code: 'PluggyClient pluggyClient = new PluggyClient("YOUR_PLUGGY_API_KEY");
+
+            List<Connector> connectors = await pluggyClient.FetchConnectors();'
+  /connectors/{id}:
+    get:
+      operationId: connector-retrieve
+      summary: Retrieve
+      responses:
+        '200':
+          description: Retrieve a connector.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Connector'
+        '404':
+          description: Connector not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+              example:
+                code: 404
+                codeDescription: CONNECTOR_NOT_FOUND
+                message: connector not found
+      description: This endpoint retrieves a specific connector.
+      tags:
+      - Connector
+      security:
+      - default: []
+      parameters:
+      - description: Connector primary identifier
+        in: path
+        name: id
+        example: 201
+        required: true
+        schema:
+          type: number
+      - description: Include health details about latest connections and percentage of errors (connection rate)
+        in: query
+        name: healthDetails
+        required: false
+        schema:
+          type: boolean
+      x-readme:
+        code-samples:
+        - language: node
+          code: "const pluggy = require('pluggy-sdk');\nconst client = new pluggy.PluggyClient({\n  clientId: 'YOUR_CLIENT_ID',\n  clientSecret: 'YOUR_CLIENT_SECRET',\n});\n\nclient\n  .fetchConnector(201)\n  .then((connector) => {\n    console.log(connector);\n  });"
+        - language: java
+          code: "PluggyClient pluggyClient = PluggyClient.builder()\n  .clientIdAndSecret(\"your_client_id\", \"your_secret\")\n  .baseUrl(\"https://api.pluggy.ai\")\n  .build();\nResponse<ConnectorResponse> connectorResponse = pluggyClient.service().getConnector(201).execute();"
+        - language: csharp
+          code: 'PluggyClient pluggyClient = new PluggyClient("YOUR_PLUGGY_API_KEY");
+
+            Connector connector = await pluggyClient.FetchConnector(201);'
+  /connectors/{id}/validate:
+    post:
+      operationId: connectors-validate
+      summary: Validate
+      description: Validates a connector parameters usign the connector validation
+      responses:
+        '200':
+          description: Connector validation response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ParameterValidationResponse'
+      tags:
+      - Connector
+      security:
+      - default: []
+      parameters:
+      - description: Connector's primary identifier
+        in: path
+        name: id
+        required: true
+        schema:
+          type: number
+          format: double
+        example: 2
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ItemParameter'
+        description: Connector's input credentials in a key-value object.
+        required: true
+      x-readme:
+        code-samples:
+        - language: node
+          code: "const pluggy = require('pluggy-sdk');\nconst client = new pluggy.PluggyClient({\n  clientId: 'YOUR_CLIENT_ID',\n  clientSecret: 'YOUR_CLIENT_SECRET',\n});\n\nclient\n  .validateParameters(201, { user: 'my-user' })\n  .then((validationResult) => {\n    console.log(validationResult);\n  });"
+        - language: csharp
+          code: 'PluggyClient pluggyClient = new PluggyClient("YOUR_PLUGGY_API_KEY");
+
+            ValidationResult validationResult = await pluggyClient.ValidateCredentials(201, parameters);'
+components:
+  schemas:
+    ConnectorIncident:
+      description: 'An incident affecting a connector right now, as published on the Pluggy status page. Only incidents active at this moment are listed: a scheduled maintenance appears once its window opens, not when it is announced, and disappears when the window closes.'
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Status page identifier of the incident
+        title:
+          type: string
+          description: Short, customer-facing summary, for example 'XP Banking - Compras parceladas não sendo retornadas'
+        description:
+          type:
+          - string
+          - 'null'
+          description: Longer explanation, when there is one
+        type:
+          enum:
+          - CONNECTOR_UNAVAILABLE
+          - CONNECTOR_DEGRADED
+          - INSTITUTION_OUTAGE
+          - SCHEDULED_MAINTENANCE
+          - CONSENT_ERROR
+          - CONNECTION_NOT_UPDATING
+          - PARTIAL_SUCCESS
+          - ACCOUNTS_MISSING
+          - BALANCE_INCORRECT
+          - TRANSACTIONS_MISSING
+          - TRANSACTIONS_INCORRECT
+          - TRANSACTIONS_INSTALLMENTS_ISSUE
+          - INVESTMENTS_MISSING
+          - INVESTMENTS_INCORRECT
+          - IDENTITY_MISSING
+          - HISTORICAL_DATA_MISSING
+          - WEBHOOK_DELAY
+          - PAYMENT_FAILURE
+          - OTHER
+          type: string
+          description: 'What is broken, as opposed to how badly (severity) or how far along we are (state). Use it to group the same problem across institutions, and to decide which incidents are worth showing your own users: a SCHEDULED_MAINTENANCE and a TRANSACTIONS_MISSING both read as ''degraded'' otherwise. OTHER means Pluggy has not classified it, not that nothing is wrong'
+        product:
+          enum:
+          - dados
+          - pis
+          - pis-agendado
+          - pixauto
+          - smart
+          - infra
+          type: string
+          description: Which Pluggy product line the incident affects
+        kind:
+          enum:
+          - INCIDENT
+          - MAINTENANCE
+          type: string
+          description: Whether this is an unplanned incident or a planned maintenance window
+        severity:
+          enum:
+          - DEGRADED
+          - PARTIAL_OUTAGE
+          - MAJOR_OUTAGE
+          - MAINTENANCE
+          type: string
+          description: How badly the institution is affected
+        state:
+          enum:
+          - INVESTIGATING
+          - IDENTIFIED
+          - MONITORING
+          - SCHEDULED
+          type: string
+          description: Where the incident is in its lifecycle. Resolved incidents are not listed
+        startedAt:
+          type: string
+          format: date-time
+          description: When the incident began
+        updatedAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: When the incident was last updated
+        url:
+          type: string
+          description: Permalink to the incident on the status page, with its full timeline and postmortem. Safe to show to your own users
+      type: object
+      required:
+      - id
+      - title
+      - type
+      - product
+      - kind
+      - severity
+      - state
+      - startedAt
+      - url
+    ConnectorListResponse:
+      description: Connector List Response
+      type: object
+      properties:
+        page:
+          type: number
+          format: double
+          description: ''
+        total:
+          type: number
+          format: double
+          description: ''
+        totalPages:
+          type: number
+          format: double
+          description: ''
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Connector'
+          description: ''
+      example:
+        page: 1
+        total: 1
+        totalPages: 1
+        results:
+        - id: 601
+          name: Itaú
+          primaryColor: EC7000
+          institutionUrl: https://www.itau.com.br/assets/dam/publisher/07_itau_empresas/13_open_banking/logos_regulatorio_bacen/opb_log_reg_bac_itau_img_01.svg
+          country: BR
+          type: PERSONAL_BANK
+          credentials:
+          - validation: ^\d{3}\.?\d{3}\.?\d{3}-?\d{2}$
+            validationMessage: CPF deve ter 11 números.
+            label: CPF
+            name: cpf
+            type: number
+            placeholder: ''
+            optional: false
+          imageUrl: https://cdn.pluggy.ai/assets/connector-icons/201.svg
+          hasMFA: false
+          oauth: true
+          health:
+            status: ONLINE
+            stage: null
+          products:
+          - ACCOUNTS
+          - TRANSACTIONS
+          - IDENTITY
+          - CREDIT_CARDS
+          - PAYMENT_DATA
+          - LOANS
+          - INVESTMENTS
+          createdAt: '2023-09-01T18:05:09.145Z'
+          isSandbox: false
+          isOpenFinance: true
+          updatedAt: '2024-07-16T15:34:08.028Z'
+          supportsPaymentInitiation: true
+          supportsScheduledPayments: true
+          supportsSmartTransfers: true
+          supportsBoletoManagement: true
+    ParameterValidationError:
+      description: ''
+      properties:
+        code:
+          type: string
+          description: ''
+        message:
+          type: string
+          description: ''
+        parameter:
+          type: string
+          description: ''
+      type: object
+      required:
+      - code
+      - message
+      - parameter
+    ItemParameter:
+      description: Key-Value credentials neccesary to create an item
+      properties: {}
+      additionalProperties:
+        type: string
+      type: object
+      example:
+        user: my-user
+        password: my-password
+    GlobalErrorResponse:
+      title: Global Error Response Schema
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: number
+        message:
+          type: string
+        codeDescription:
+          type: string
+          description: Distinctive code description, useful to distinguish the error.
+        data:
+          type: object
+          description: Additional data related to the error, if any
+          properties: {}
+      example:
+        code: 500
+        codeDescription: INTERNAL_SERVER_ERROR
+        message: Internal Server Error
+    ConnectorHealth:
+      description: Connector health status
+      properties:
+        status:
+          type: string
+          description: '''ONLINE'' | ''OFFLINE'' | ''UNSTABLE'''
+        stage:
+          type:
+          - string
+          - 'null'
+        incidents:
+          type: array
+          description: 'Incidents currently affecting this connector, as published on https://status.pluggy.ai. Absent when the connector has none, so a healthy connector''s payload is unchanged. Ordered worst-first, so the first entry is the one to show if you only show one. Note this is about the institution, not about your own connections: use it to warn a user before they pick a bank that is known to be failing right now.'
+          items:
+            $ref: '#/components/schemas/ConnectorIncident'
+        details:
+          type: object
+          description: Statistics about your recent connections on the connector and recent connection rate (percentage of healthy connections). This field is only present if you include the parameter healthDetails=true. This will be null if there was an error obtaining health details.
+          properties:
+            connectionRateLast6Hours:
+              type: number
+              description: 'A number from 0 to 100: the percentage of executions that succesfully connect to the institution: status of CONNECTION_ERROR,ERROR,SITE_NOT_AVAILABLE decrease the percentage. Any other status (like SUCCESS/LOGIN_ERROR) increase the percentage. The value will be null if there were no connections'
+            connectionsLast6Hours:
+              type: number
+              description: Amount of your connections for this connector during the last 6 hours. 0 if there were no connections
+    CredentialSelectOption:
+      description: Option for ConnectorCredential of type select
+      properties:
+        value:
+          type: string
+          description: Value for the option
+        label:
+          type: string
+          description: Label for the option
+      type: object
+      required:
+      - value
+      - label
+    ParameterValidationResponse:
+      description: Response to parameter's validations
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ParameterValidationError'
+          description: ''
+        parameters:
+          $ref: '#/components/schemas/ItemParameter'
+      type: object
+      example:
+        parameters:
+          user: my-user
+          password: '1234'
+        errors:
+        - code: '002'
+          message: A senha deve ter pelo menos 6 dígitos.
+          parameter: password
+          data:
+            min: 6
+    Connector:
+      description: Connector object
+      properties:
+        id:
+          type: number
+          format: integer
+          description: Primary identifier
+        name:
+          type: string
+          description: Name of the institution
+        institutionUrl:
+          type: string
+          description: Homepage of the institution
+        imageUrl:
+          type: string
+          description: Image of the logo hosted by Pluggy
+        primaryColor:
+          type: string
+          description: Primary color
+        type:
+          type: string
+          description: Type of institution
+        country:
+          type: string
+          description: Country located
+        credentials:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConnectorCredential'
+          description: Parameters required to start the connection
+        hasMFA:
+          type: boolean
+          description: Does the connector require an MFA to execute?
+        products:
+          type: array
+          items:
+            type: string
+            enum:
+            - ACCOUNTS
+            - CREDIT_CARDS
+            - TRANSACTIONS
+            - PAYMENT_DATA
+            - INVESTMENTS
+            - INVESTMENTS_TRANSACTIONS
+            - IDENTITY
+            - BROKERAGE_NOTE
+            - MOVE_SECURITY
+            - LOANS
+          description: Products supported by the connector
+        productCoverage:
+          type: array
+          items:
+            type: string
+          description: 'Which sub-products the institution serves, in the Open Finance directory''s own vocabulary (for example INVESTMENTS:TREASURE_TITLES, CREDIT_OPERATIONS:INVOICE_FINANCINGS). Where products says whether the connector serves investments at all, this says which ones: a connector listing INVESTMENTS may serve one of the five investment resources or all five. Absent for direct connectors, which have no Open Finance participant.'
+        oauth:
+          type: boolean
+          description: If 'true', the connector requires an Oauth flow to execute
+        oauthUrl:
+          type: string
+          description: URL to perform Oauth flow if needed
+        resetPasswordUrl:
+          type: string
+          description: URL to the financial institution to reset the password
+        health:
+          $ref: '#/components/schemas/ConnectorHealth'
+        isOpenFinance:
+          type: boolean
+          description: Indicates if the connector uses the regulated Open Finance APIs
+        isSandbox:
+          type: boolean
+          description: Indicates if the connector is a sandbox connector, meant for testing rather than a real institution
+        supportsPaymentInitiation:
+          type: boolean
+          description: Indicates if the connector supports the payment initiation API
+        supportsScheduledPayments:
+          type: boolean
+          description: Indicates if the connector supports scheduled payments
+        supportsSmartTransfers:
+          type: boolean
+          description: Indicates if the connector supports smart transfers
+        supportsBoletoManagement:
+          type: boolean
+          description: Indicates if the connector supports boleto management
+        supportsAutomaticPix:
+          type: boolean
+          description: Indicates if the connector supports automatic Pix
+        createdAt:
+          type: string
+          format: date-time
+          description: Date of creation
+        updatedAt:
+          type: string
+          format: date-time
+          description: Date of last modification
+      type: object
+      required:
+      - id
+      example:
+        id: 601
+        name: Itaú
+        primaryColor: EC7000
+        institutionUrl: https://www.itau.com.br
+        country: BR
+        type: PERSONAL_BANK
+        credentials:
+        - validation: ^\d{3}\.?\d{3}\.?\d{3}-?\d{2}$
+          validationMessage: CPF deve ter 11 números.
+          label: CPF
+          name: cpf
+          type: number
+          placeholder: ''
+          optional: false
+        imageUrl: https://cdn.pluggy.ai/assets/connector-icons/201.svg
+        hasMFA: false
+        oauth: true
+        health:
+          status: ONLINE
+          stage: null
+        products:
+        - ACCOUNTS
+        - TRANSACTIONS
+        - IDENTITY
+        - CREDIT_CARDS
+        - PAYMENT_DATA
+        - LOANS
+        - INVESTMENTS
+        createdAt: '2023-09-01T18:05:09.145Z'
+        isSandbox: false
+        isOpenFinance: true
+        updatedAt: '2024-07-16T15:34:08.028Z'
+        supportsPaymentInitiation: true
+        supportsScheduledPayments: true
+        supportsSmartTransfers: true
+        supportsBoletoManagement: true
+        supportsAutomaticPix: true
+    ConnectorCredential:
+      description: Credential details for a connector
+      properties:
+        name:
+          type: string
+          description: Name of the key
+        label:
+          type: string
+          description: Label for input
+        type:
+          enum:
+          - text
+          - password
+          - number
+          - image
+          - select
+          type: string
+          description: Type of credential required
+        assistiveText:
+          type: string
+          description: Text to help the user when completing the input
+        data:
+          type: string
+          description: Used to return base64 images
+        placeholder:
+          type: string
+          description: Placeholder text for the input
+        validation:
+          type: string
+          description: Regex validation for the user's input
+        validationMessage:
+          type: string
+          description: Validation message when input doesn't match the regex
+        mfa:
+          type: boolean
+          description: Credential is an MFA parameter and must be refreshed on each execution
+        options:
+          type: array
+          items:
+            $ref: '#/components/schemas/CredentialSelectOption'
+          description: List of possible values for the input
+        optional:
+          type: boolean
+          description: Whether the credential can be left empty. Always present; defaults to false
+        instructions:
+          type: string
+          description: Instructions to help the user obtain this credential
+        expiresAt:
+          type: string
+          format: date-time
+          description: Expiration date of the credential value, when the institution sets one
+      type: object
+      required:
+      - name
+      - label
+      - type
+      - optional
+  securitySchemes:
+    default:
+      type: apiKey
+      name: X-API-KEY
+      in: header

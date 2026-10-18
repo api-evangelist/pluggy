@@ -1,23 +1,735 @@
 aid: pluggy
+
 name: Pluggy
-description: 'Pluggy is a company surfaced via the API Evangelist harvest backlog (source: kin-score-markets)
-  and added to the network as a stub for full-pipeline profiling.'
+
+description: Pluggy is a Brazilian Open Finance infrastructure company (pluggy.ai) offering APIs to connect bank data, collect payments and move
+  money across Brazilian financial institutions. Its platform aggregates accounts, transactions, investments, credit card bills and identity data
+  through direct and regulated Open Finance connectors, with the Pluggy Connect drop-in widget, a sandbox environment, a developer dashboard and
+  an MCP server for developer tooling.
+
 url: https://raw.githubusercontent.com/api-evangelist/pluggy/refs/heads/main/apis.yml
+
 x-type: company
+
 x-source: harvest:kin-score-markets
-x-tier: stub
-x-tier-reason: harvest
+
+x-tier: profiled
+x-tier-reason: enrichment pass 2026-10-18 (modular-v1; was harvest)
+
 specificationVersion: '0.20'
+
 created: '2026-10-18'
+
 modified: '2026-10-18'
+
 tags:
 - Company
-apis: []
+- Open Finance
+- Banking
+- Financial Data
+- Payments
+- Brazil
+- Fintech
+
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
+
+image: https://www.pluggy.ai/opengraph-image
+
 common:
+- type: SecurityTxt
+  url: well-known/pluggy-mcp-security.txt
+- type: SecurityTxt
+  url: well-known/pluggy-docs-security.txt
+- type: AgenticAccess
+  url: agentic-access/pluggy-agentic-access.yml
+- type: RateLimits
+  url: rate-limits/pluggy-rate-limits.yml
+- type: Plans
+  url: plans/pluggy-plans-pricing.yml
+- type: Spectral
+  url: rules/pluggy-rules.yml
+- type: JSONLD
+  url: json-ld/pluggy-context.jsonld
+- type: Vocabulary
+  url: vocabulary/pluggy-vocabulary.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: Webhooks
+  url: asyncapi/pluggy-webhooks.yml
+- type: DataModel
+  url: data-model/pluggy-data-model.yml
+- type: Components
+  url: components/pluggy-components.yml
+- type: ChangeLog
+  url: changelog/pluggy-changelog.yml
+- type: Conventions
+  url: conventions/pluggy-conventions.yml
+- type: Sandbox
+  url: sandbox/pluggy-sandbox.yml
+- type: Compliance
+  url: https://www.pluggy.ai/legal
+- type: Authentication
+  url: authentication/pluggy-authentication.yml
+- type: Lifecycle
+  url: lifecycle/pluggy-lifecycle.yml
+- type: ErrorCatalog
+  url: errors/pluggy-problem-types.yml
+- type: Conformance
+  url: conformance/pluggy-conformance.yml
+- type: Overlay
+  url: overlays/pluggy-api-overlay.yaml
+- type: LLMsTxt
+  url: llms/pluggy-llms.txt
+- type: ToolCrosswalk
+  url: mcp/pluggy-tool-crosswalk.yml
+- type: MCPServer
+  url: mcp/pluggy-mcp.yml
+- type: WellKnown
+  url: well-known/pluggy-well-known.yml
+- type: Hosts
+  url: hosts/pluggy-hosts.yml
+- type: Vendors
+  url: vendors/pluggy-vendors.yml
+- type: SDKs
+  url: packages/pluggy-packages.yml
+- type: Packages
+  url: packages/pluggy-packages.yml
 - type: Website
-  url: https://pluggy.ai
+  url: https://www.pluggy.ai
+- type: TrustCenter
+  url: security/pluggy-trust-center.yml
+- type: DomainSecurity
+  url: security/pluggy-domain-security.yml
+- type: Documentation
+  url: https://docs.pluggy.ai/en
+- type: APIReference
+  url: https://docs.pluggy.ai/en/reference
+- type: GettingStarted
+  url: https://docs.pluggy.ai/en/docs/quickstart
+- type: Support
+  url: https://docs.pluggy.ai/en/docs/get-started/contact
+- type: Blog
+  url: https://www.pluggy.ai/blog
+- type: ChangeLog
+  url: https://docs.pluggy.ai/en/changelog
+- type: Pricing
+  url: https://www.pluggy.ai/en/pricing
+- type: Postman
+  url: https://docs.pluggy.ai/en/docs/developer-tools/postman
+- type: Sandbox
+  url: https://sandbox.pluggy.ai/
+- type: StatusPage
+  url: https://status.pluggy.ai/
+- type: GitHubOrganization
+  url: https://github.com/pluggyai
+- type: Login
+  url: https://dashboard.pluggy.ai/auth/login
+- type: TermsOfService
+  url: https://www.pluggy.ai/docs/termos-e-condicoes-de-uso.pdf
+- type: PrivacyPolicy
+  url: https://www.pluggy.ai/docs/politica-de-privacidade.pdf
+- type: Legal
+  url: https://www.pluggy.ai/legal
+- type: LinkedIn
+  url: https://www.linkedin.com/company/pluggyai
+
+apis:
+- aid: pluggy:enrichment-api
+  name: Pluggy Enrichment API
+  description: >-
+    Pluggy Enrichment API -- transaction categorization, behavior analysis, and recurring-payments detection.
+  humanURL: https://docs.pluggy.ai/en/reference
+  baseURL: https://enrichment-api.pluggy.ai
+  tags:
+  - Data Enrichment
+  - Transaction
+  tags_raw:
+  - Enrichment
+  - Transactions
+  properties:
+  - type: OpenAPI
+    url: openapi/pluggy-enrichment-api-openapi.yml
+  - type: OpenAPI
+    name: OpenAPI (provider-hosted)
+    url: https://docs.pluggy.ai/openapi/enrichment-api.json
+- aid: pluggy:status-api
+  name: Pluggy Status API
+  description: >-
+    Read the health of every Pluggy connector, product and infrastructure component plus open and past
+    incidents (the data behind status.pluggy.ai); no authentication required.
+  humanURL: https://docs.pluggy.ai/en/docs/developer-tools/status-page-api
+  baseURL: https://status.pluggy.ai
+  tags:
+  - Status
+  properties:
+  - type: OpenAPI
+    url: openapi/pluggy-status-api-openapi.yml
+  - type: OpenAPI
+    name: OpenAPI (provider-hosted)
+    url: https://docs.pluggy.ai/openapi/status-api.json
+  - type: JSONSchema
+    url: json-schema/pluggy-status-snapshot-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-status-summary-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-connector-incidents-schema.json
+- aid: pluggy:pluggy-account-api
+  name: Pluggy Account API
+  description: Bank account information and management
+  humanURL: https://docs.pluggy.ai/en/reference
+  baseURL: https://api.pluggy.ai
+  tags:
+  - Account
+  properties:
+  - type: OpenAPI
+    url: openapi/pluggy-account-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pluggy.ai/en
+  - type: JSONSchema
+    url: json-schema/pluggy-identity-response-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-investment-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-loan-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-transaction-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-item-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-payment-request-schema.json
+- aid: pluggy:pluggy-auth-api
+  name: Pluggy Auth API
+  description: Authentication endpoints for API key generation and connect tokens
+  humanURL: https://docs.pluggy.ai/en/reference
+  baseURL: https://api.pluggy.ai
+  tags:
+  - Auth
+  properties:
+  - type: OpenAPI
+    url: openapi/pluggy-auth-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pluggy.ai/en
+  - type: JSONSchema
+    url: json-schema/pluggy-identity-response-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-investment-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-loan-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-transaction-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-item-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-payment-request-schema.json
+- aid: pluggy:pluggy-automatic-pix-api
+  name: Pluggy Automatic PIX API
+  description: Automatic PIX payment scheduling and management
+  humanURL: https://docs.pluggy.ai/en/reference
+  baseURL: https://api.pluggy.ai
+  tags:
+  - Automatic PIX
+  properties:
+  - type: OpenAPI
+    url: openapi/pluggy-automatic-pix-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pluggy.ai/en
+  - type: JSONSchema
+    url: json-schema/pluggy-identity-response-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-investment-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-loan-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-transaction-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-item-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-payment-request-schema.json
+- aid: pluggy:pluggy-bill-api
+  name: Pluggy Bill API
+  description: Credit card bill information
+  humanURL: https://docs.pluggy.ai/en/reference
+  baseURL: https://api.pluggy.ai
+  tags:
+  - Bill
+  properties:
+  - type: OpenAPI
+    url: openapi/pluggy-bill-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pluggy.ai/en
+  - type: JSONSchema
+    url: json-schema/pluggy-identity-response-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-investment-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-loan-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-transaction-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-item-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-payment-request-schema.json
+- aid: pluggy:pluggy-boleto-management-api
+  name: Pluggy Boleto Management API
+  description: Boleto payment management
+  humanURL: https://docs.pluggy.ai/en/reference
+  baseURL: https://api.pluggy.ai
+  tags:
+  - Boleto Management
+  properties:
+  - type: OpenAPI
+    url: openapi/pluggy-boleto-management-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pluggy.ai/en
+  - type: JSONSchema
+    url: json-schema/pluggy-identity-response-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-investment-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-loan-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-transaction-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-item-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-payment-request-schema.json
+- aid: pluggy:pluggy-category-api
+  name: Pluggy Category API
+  description: Transaction categorization and rules
+  humanURL: https://docs.pluggy.ai/en/reference
+  baseURL: https://api.pluggy.ai
+  tags:
+  - Category
+  properties:
+  - type: OpenAPI
+    url: openapi/pluggy-category-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pluggy.ai/en
+  - type: JSONSchema
+    url: json-schema/pluggy-identity-response-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-investment-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-loan-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-transaction-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-item-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-payment-request-schema.json
+- aid: pluggy:pluggy-connector-api
+  name: Pluggy Connector API
+  description: Financial institution connector management
+  humanURL: https://docs.pluggy.ai/en/reference
+  baseURL: https://api.pluggy.ai
+  tags:
+  - Connector
+  properties:
+  - type: OpenAPI
+    url: openapi/pluggy-connector-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pluggy.ai/en
+  - type: JSONSchema
+    url: json-schema/pluggy-identity-response-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-investment-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-loan-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-transaction-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-item-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-payment-request-schema.json
+- aid: pluggy:pluggy-consent-api
+  name: Pluggy Consent API
+  description: User consent management for data access
+  humanURL: https://docs.pluggy.ai/en/reference
+  baseURL: https://api.pluggy.ai
+  tags:
+  - Consent
+  properties:
+  - type: OpenAPI
+    url: openapi/pluggy-consent-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pluggy.ai/en
+  - type: JSONSchema
+    url: json-schema/pluggy-identity-response-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-investment-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-loan-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-transaction-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-item-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-payment-request-schema.json
+- aid: pluggy:pluggy-identity-api
+  name: Pluggy Identity API
+  description: User identity verification and data
+  humanURL: https://docs.pluggy.ai/en/reference
+  baseURL: https://api.pluggy.ai
+  tags:
+  - Identity
+  properties:
+  - type: OpenAPI
+    url: openapi/pluggy-identity-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pluggy.ai/en
+  - type: JSONSchema
+    url: json-schema/pluggy-identity-response-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-investment-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-loan-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-transaction-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-item-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-payment-request-schema.json
+- aid: pluggy:pluggy-investment-api
+  name: Pluggy Investment API
+  description: Investment portfolio and asset management
+  humanURL: https://docs.pluggy.ai/en/reference
+  baseURL: https://api.pluggy.ai
+  tags:
+  - Investment
+  properties:
+  - type: OpenAPI
+    url: openapi/pluggy-investment-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pluggy.ai/en
+  - type: JSONSchema
+    url: json-schema/pluggy-identity-response-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-investment-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-loan-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-transaction-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-item-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-payment-request-schema.json
+- aid: pluggy:pluggy-items-api
+  name: Pluggy Items API
+  description: Item management for syncing financial data
+  humanURL: https://docs.pluggy.ai/en/reference
+  baseURL: https://api.pluggy.ai
+  tags:
+  - Items
+  properties:
+  - type: OpenAPI
+    url: openapi/pluggy-items-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pluggy.ai/en
+  - type: JSONSchema
+    url: json-schema/pluggy-identity-response-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-investment-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-loan-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-transaction-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-item-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-payment-request-schema.json
+- aid: pluggy:pluggy-loan-api
+  name: Pluggy Loan API
+  description: Loan information and management
+  humanURL: https://docs.pluggy.ai/en/reference
+  baseURL: https://api.pluggy.ai
+  tags:
+  - Loan
+  properties:
+  - type: OpenAPI
+    url: openapi/pluggy-loan-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pluggy.ai/en
+  - type: JSONSchema
+    url: json-schema/pluggy-identity-response-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-investment-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-loan-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-transaction-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-item-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-payment-request-schema.json
+- aid: pluggy:pluggy-merchant-api
+  name: Pluggy Merchant API
+  description: Merchant and company information by CNPJ
+  humanURL: https://docs.pluggy.ai/en/reference
+  baseURL: https://api.pluggy.ai
+  tags:
+  - Merchant
+  properties:
+  - type: OpenAPI
+    url: openapi/pluggy-merchant-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pluggy.ai/en
+  - type: JSONSchema
+    url: json-schema/pluggy-identity-response-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-investment-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-loan-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-transaction-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-item-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-payment-request-schema.json
+- aid: pluggy:pluggy-payment-customer-api
+  name: Pluggy Payment Customer API
+  description: Payment customer management
+  humanURL: https://docs.pluggy.ai/en/reference
+  baseURL: https://api.pluggy.ai
+  tags:
+  - Payment Customer
+  properties:
+  - type: OpenAPI
+    url: openapi/pluggy-payment-customer-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pluggy.ai/en
+  - type: JSONSchema
+    url: json-schema/pluggy-identity-response-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-investment-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-loan-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-transaction-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-item-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-payment-request-schema.json
+- aid: pluggy:pluggy-payment-intent-api
+  name: Pluggy Payment Intent API
+  description: Payment intent processing
+  humanURL: https://docs.pluggy.ai/en/reference
+  baseURL: https://api.pluggy.ai
+  tags:
+  - Payment Intent
+  properties:
+  - type: OpenAPI
+    url: openapi/pluggy-payment-intent-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pluggy.ai/en
+  - type: JSONSchema
+    url: json-schema/pluggy-identity-response-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-investment-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-loan-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-transaction-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-item-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-payment-request-schema.json
+- aid: pluggy:pluggy-payment-recipient-api
+  name: Pluggy Payment Recipient API
+  description: Payment recipient management
+  humanURL: https://docs.pluggy.ai/en/reference
+  baseURL: https://api.pluggy.ai
+  tags:
+  - Payment Recipient
+  properties:
+  - type: OpenAPI
+    url: openapi/pluggy-payment-recipient-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pluggy.ai/en
+  - type: JSONSchema
+    url: json-schema/pluggy-identity-response-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-investment-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-loan-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-transaction-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-item-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-payment-request-schema.json
+- aid: pluggy:pluggy-payment-request-api
+  name: Pluggy Payment Request API
+  description: Payment request creation and management
+  humanURL: https://docs.pluggy.ai/en/reference
+  baseURL: https://api.pluggy.ai
+  tags:
+  - Payment Request
+  properties:
+  - type: OpenAPI
+    url: openapi/pluggy-payment-request-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pluggy.ai/en
+  - type: JSONSchema
+    url: json-schema/pluggy-identity-response-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-investment-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-loan-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-transaction-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-item-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-payment-request-schema.json
+- aid: pluggy:pluggy-payment-schedule-api
+  name: Pluggy Payment Schedule API
+  description: Payment scheduling operations
+  humanURL: https://docs.pluggy.ai/en/reference
+  baseURL: https://api.pluggy.ai
+  tags:
+  - Payment Schedule
+  properties:
+  - type: OpenAPI
+    url: openapi/pluggy-payment-schedule-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pluggy.ai/en
+  - type: JSONSchema
+    url: json-schema/pluggy-identity-response-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-investment-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-loan-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-transaction-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-item-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-payment-request-schema.json
+- aid: pluggy:pluggy-scr-api
+  name: Pluggy SCR API
+  description: Bacen's credit information system, consulted through a connected Open Finance item
+  humanURL: https://docs.pluggy.ai/en/reference
+  baseURL: https://api.pluggy.ai
+  tags:
+  - SCR
+  properties:
+  - type: OpenAPI
+    url: openapi/pluggy-scr-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pluggy.ai/en
+  - type: JSONSchema
+    url: json-schema/pluggy-identity-response-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-investment-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-loan-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-transaction-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-item-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-payment-request-schema.json
+- aid: pluggy:pluggy-smart-transfer-api
+  name: Pluggy Smart Transfer API
+  description: Smart transfer functionality
+  humanURL: https://docs.pluggy.ai/en/reference
+  baseURL: https://api.pluggy.ai
+  tags:
+  - Smart Transfer
+  properties:
+  - type: OpenAPI
+    url: openapi/pluggy-smart-transfer-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pluggy.ai/en
+  - type: JSONSchema
+    url: json-schema/pluggy-identity-response-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-investment-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-loan-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-transaction-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-item-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-payment-request-schema.json
+- aid: pluggy:pluggy-transaction-api
+  name: Pluggy Transaction API
+  description: Financial transaction data and operations
+  humanURL: https://docs.pluggy.ai/en/reference
+  baseURL: https://api.pluggy.ai
+  tags:
+  - Transaction
+  properties:
+  - type: OpenAPI
+    url: openapi/pluggy-transaction-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pluggy.ai/en
+  - type: JSONSchema
+    url: json-schema/pluggy-identity-response-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-investment-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-loan-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-transaction-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-item-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-payment-request-schema.json
+- aid: pluggy:pluggy-webhook-api
+  name: Pluggy Webhook API
+  description: Webhook configuration and management
+  humanURL: https://docs.pluggy.ai/en/reference
+  baseURL: https://api.pluggy.ai
+  tags:
+  - Webhook
+  properties:
+  - type: OpenAPI
+    url: openapi/pluggy-webhook-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pluggy.ai/en
+  - type: JSONSchema
+    url: json-schema/pluggy-identity-response-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-investment-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-loan-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-transaction-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-item-schema.json
+  - type: JSONSchema
+    url: json-schema/pluggy-payment-request-schema.json
+x-coverage:
+  state: covered
+  reason: identity-verified
+  detail: Homepage title "Pluggy · Infraestrutura de Open Finance para o Brasil"; pointers from dossier site_links and homepage/legal/docs links,
+    each fetched.
+  evidence:
+  - url: https://www.pluggy.ai/en
+    status: 200
+  - url: https://www.pluggy.ai/legal
+    status: 200
+  - url: https://github.com/pluggyai
+    status: 200
+  - url: https://dashboard.pluggy.ai
+    status: 307
+  - url: https://www.pluggy.ai/docs/termos-e-condicoes-de-uso.pdf
+    status: 200
+  - url: https://www.pluggy.ai/docs/politica-de-privacidade.pdf
+    status: 200
+  - url: https://docs.pluggy.ai/en/docs/get-started/contact
+    status: 200
+  - url: https://www.pluggy.ai/opengraph-image
+    status: 200
+x-enrichment:
+  date: '2026-10-18'
+  status: enriched
+  artifacts_added: 69
+  pass: modular-v1
+  engine: identity=anthropic,contract=anthropic,surfaces=anthropic,docs=deepseek,regulatory=anthropic

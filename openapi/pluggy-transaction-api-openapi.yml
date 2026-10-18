@@ -1,0 +1,929 @@
+openapi: 3.2.0
+info:
+  title: Pluggy Transaction API
+  description: Pluggy's main API to review data and execute connectors
+  license:
+    name: MIT
+  contact:
+    email: hello@pluggy.ai
+    name: Pluggy
+    url: https://pluggy.ai
+  version: 1.0.0
+servers:
+- url: https://api.pluggy.ai
+  description: Pluggy API
+tags:
+- name: Transaction
+  description: Financial transaction data and operations
+paths:
+  /transactions:
+    get:
+      operationId: transactions-list
+      summary: List by Page (deprecated)
+      description: '**Deprecated**: this endpoint is deprecated and will be available only until **2026-12-31**, after which it will be removed. Please migrate to `GET /v2/transactions`, which uses cursor-based pagination.
+
+
+        Recovers all transactions collected for the acount provided.'
+      deprecated: true
+      responses:
+        '200':
+          description: Retrieve a list of all transactions for an account
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageResponseTransactions'
+              examples:
+                response:
+                  value:
+                    total: 8
+                    totalPages: 1
+                    page: 1
+                    results:
+                    - id: a8534c85-53ce-4f21-94d7-50e9d2ee4957
+                      createdAt: '2020-06-24T21:29:40.300Z'
+                      updatedAt: '2020-06-24T21:29:40.300Z'
+                      description: '* PROV * COMPRA TESOURO DIRETO CLIENTES'
+                      descriptionRaw: '* PROV * COMPRA TESOURO DIRETO CLIENTES'
+                      currencyCode: BRL
+                      amount: -212.45
+                      date: '2020-10-15T00:00:00.000Z'
+                      balance: 4439.4
+                      category: Fixed Income Investment
+                      accountId: 562b795d-1653-429f-be86-74ead9502813
+                      providerCode: null
+                      status: POSTED
+                      paymentData: null
+                      type: DEBIT
+                      providerId: null
+                    - id: 05c693bf-c196-47ea-a28c-8251d6bb8a06
+                      description: PAGO NETFLIX SERV
+                      descriptionRaw: PAGO NETFLIX SERV
+                      currencyCode: USD
+                      amount: -58
+                      amountInAccountCurrency: -298.19
+                      date: '2020-10-15T00:00:00.000Z'
+                      balance: 4651.85
+                      category: Video streaming
+                      accountId: 562b795d-1653-429f-be86-74ead9502813
+                      providerCode: null
+                      status: POSTED
+                      paymentData: null
+                      type: DEBIT
+                      providerId: null
+                      merchant:
+                        name: Netflix
+                        businessName: NETFLIX ENTRETENIMENTO BRASIL LTDA.
+                        cnpj: '11111111000111'
+                        category: Video streaming
+                        cnae: '5911100'
+                    - id: 97536285-cc22-4a5a-9d05-f5fe24410d0c
+                      description: '* PROV * DEVOLUÇÃO DE MARGEM'
+                      descriptionRaw: '* PROV * DEVOLUÇÃO DE MARGEM'
+                      currencyCode: BRL
+                      amount: 2482.26
+                      date: '2020-10-15T00:00:00.000Z'
+                      balance: 4950.04
+                      category: Margin Withdrawn
+                      accountId: 562b795d-1653-429f-be86-74ead9502813
+                      providerCode: null
+                      status: POSTED
+                      paymentData: null
+                      type: CREDIT
+                      providerId: null
+                    - id: 8caf328b-4528-4de6-b931-10639d0084c5
+                      description: LIQUIDO DAS OPERAÇÕES BMF PR. 14/10/2020 NC. 870947
+                      descriptionRaw: LIQUIDO DAS OPERAÇÕES BMF PR. 14/10/2020 NC. 870947
+                      currencyCode: BRL
+                      amount: -1.06
+                      date: '2020-10-14T00:00:00.000Z'
+                      balance: 2467.78
+                      category: Investment
+                      accountId: 562b795d-1653-429f-be86-74ead9502813
+                      providerCode: null
+                      status: POSTED
+                      paymentData: null
+                      type: DEBIT
+                      providerId: null
+                    - id: ff9ed929-edc4-408c-a959-d51f79ab1814
+                      description: MERCADOLIVRE*2PRODUTOS
+                      currencyCode: BRL
+                      amount: 159.2
+                      date: '2020-10-14T00:00:00.000Z'
+                      balance: 2468.84
+                      category: Investment
+                      accountId: 562b795d-1653-429f-be86-74ead9502813
+                      providerCode: null
+                      status: POSTED
+                      paymentData: null
+                      type: CREDIT
+                      creditCardMetadata:
+                        totalAmount: 320
+                        totalInstallments: 2
+                        installmentNumber: 2
+                        purchaseDate: '2020-09-14T00:00:00.000Z'
+                        payeeMCC: 1234
+                        cardNumber: 0597
+                        billId: abced929-edc4-408c-a959-d51f79ab1123
+                        billForecastDate: 2020-10
+                        paymentType: INSTALLMENT
+                        billPostDate: '2020-10-05'
+                        transactionDateTime: '2020-09-14T15:32:10.000Z'
+                      providerId: null
+                    - id: 093fc873-442a-4bd8-9171-51f17892fb09
+                      description: LIQUIDO DAS OPERAÇÕES BM&F PR. 14/10/2020 NC. 870947
+                      descriptionRaw: LIQUIDO DAS OPERAÇÕES BM&F PR. 14/10/2020 NC. 870947
+                      currencyCode: BRL
+                      amount: -10.3
+                      date: '2020-10-14T00:00:00.000Z'
+                      balance: 2309.64
+                      category: Investment
+                      accountId: 562b795d-1653-429f-be86-74ead9502813
+                      providerCode: null
+                      status: POSTED
+                      paymentData: null
+                      type: DEBIT
+                      providerId: null
+                    - id: 6ec156fe-e8ac-4d9a-a4b3-7770529ab01c
+                      description: TED Example
+                      descriptionRaw: null
+                      currencyCode: BRL
+                      amount: 1500
+                      date: '2020-10-14T00:00:00.000Z'
+                      balance: 3500
+                      category: Transfer
+                      accountId: 03cc0eff-4ec5-495c-adb3-1ef9611624fc
+                      providerCode: '123456'
+                      type: CREDIT
+                      status: POSTED
+                      operationType: TED
+                      paymentData:
+                        payer:
+                          name: Tiago Rodrigues Santos
+                          branchNumber: 090
+                          accountNumber: 1234-5
+                          routingNumber: '001'
+                          documentNumber:
+                            type: CPF
+                            value: 666.666.666-66
+                        reason: Taxa de serviço
+                        receiver:
+                          name: Pluggy
+                          branchNumber: '999'
+                          accountNumber: 9876-1
+                          routingNumber: '002'
+                          documentNumber:
+                            type: CNPJ
+                            value: 22.222.222/0001-22
+                        paymentMethod: TED
+                        referenceNumber: '123456789'
+                      providerId: null
+        '400':
+          description: Missing or invalid parameter
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+              examples:
+                missingAccountId:
+                  summary: Missing accountId
+                  value:
+                    message: accountId should not be null or undefined,accountId must be a UUID
+                    code: 400
+                idsExceedsMaxLength:
+                  summary: ids parameter exceeds max length
+                  value:
+                    message: The ids parameter cannot have more than 500 transaction ids
+                    code: 400
+                    codeDescription: IDS_PARAMETER_EXCEEDS_MAX_LENGTH
+        '500':
+          description: Server Internal Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+      tags:
+      - Transaction
+      security:
+      - default: []
+      parameters:
+      - description: Account primary identifier
+        in: query
+        name: accountId
+        required: true
+        schema:
+          type: string
+          format: uuid
+        example: 562b795d-1653-429f-be86-74ead9502813
+      - description: Array of transaction identifiers. If defined, 'from' and 'to' parameters will be discarded. Maximum of 500 ids per request.
+        in: query
+        name: ids
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+            format: uuid
+        example: a8534c85-53ce-4f21-94d7-50e9d2ee4957, 05c693bf-c196-47ea-a28c-8251d6bb8a06
+      - description: Filter greater than date. Format (yyyy-mm-dd)
+        in: query
+        name: from
+        required: false
+        schema:
+          type: string
+          format: date-time
+        example: '2020-10-13'
+      - description: Filter lower than date. Format (yyyy-mm-dd)
+        in: query
+        name: to
+        required: false
+        schema:
+          type: string
+          format: date-time
+        example: '2020-10-15'
+      - description: 'Page size for the paging request, default: 500'
+        in: query
+        name: pageSize
+        required: false
+        schema:
+          type: number
+          format: double
+          minimum: 1
+          maximum: 500
+        example: '50'
+      - description: 'Page number for the paging request, default: 1'
+        in: query
+        name: page
+        required: false
+        schema:
+          type: number
+          format: double
+        example: '1'
+      - description: Credit Card Bill's primary identifier, if account is a credit card.
+        in: query
+        name: billId
+        required: false
+        schema:
+          type: string
+          format: uuid
+        example: abced929-edc4-408c-a959-d51f79ab1123
+      - description: Filter greater than createdAt. Format (yyyy-mm-ddThh:mm:ss.000Z)
+        in: query
+        name: createdAtFrom
+        required: false
+        schema:
+          type: string
+          format: date-time
+        example: '2020-10-13T03:00:00.000Z'
+      x-readme:
+        code-samples:
+        - language: node
+          code: "const pluggy = require('pluggy-sdk');\nconst client = new pluggy.PluggyClient({\n  clientId: 'YOUR_CLIENT_ID',\n  clientSecret: 'YOUR_CLIENT_SECRET',\n});\n\nclient\n  .fetchTransactions('ACCOUNT_ID')\n  .then(({results: transactions}) => {\n    console.log(transactions);\n  });"
+        - language: java
+          code: "PluggyClient pluggyClient = PluggyClient.builder()\n  .clientIdAndSecret('YOUR_CLIENT_ID', 'YOUR_CLIENT_SECRET')\n  .baseUrl('https://api.pluggy.ai')\n  .build();\nResponse<TransactionsResponse> transactions = pluggyClient.service().getTransactions(\"ACCOUNT_ID\").execute();"
+        - language: csharp
+          code: 'PluggyClient pluggyClient = new PluggyClient(''YOUR_PLUGGY_API_KEY'');
+
+            PageResults<Transaction> transactions = await pluggyClient.FetchTransactions("ACCOUNT_ID");'
+  /v2/transactions:
+    get:
+      operationId: transactions-list-by-cursor
+      summary: List
+      description: Recovers all transactions for the account provided using cursor-based pagination.
+      responses:
+        '200':
+          description: Retrieve a list of transactions for an account using cursor-based pagination
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CursorPageResponseTransactions'
+              examples:
+                response:
+                  value:
+                    results:
+                    - id: a8534c85-53ce-4f21-94d7-50e9d2ee4957
+                      createdAt: '2020-06-24T21:29:40.300Z'
+                      updatedAt: '2020-06-24T21:29:40.300Z'
+                      description: '* PROV * COMPRA TESOURO DIRETO CLIENTES'
+                      descriptionRaw: '* PROV * COMPRA TESOURO DIRETO CLIENTES'
+                      currencyCode: BRL
+                      amount: -212.45
+                      date: '2020-10-15T00:00:00.000Z'
+                      balance: 4439.4
+                      category: Fixed Income Investment
+                      accountId: 562b795d-1653-429f-be86-74ead9502813
+                      providerCode: null
+                      status: POSTED
+                      paymentData: null
+                      type: DEBIT
+                      providerId: null
+                    next: ?accountId=562b795d-1653-429f-be86-74ead9502813&after=MjAyMC0xMC0xNVQwMDowMDowMC4wMDBafGE4NTM0Yzg1LTUzY2UtNGYyMS05NGQ3LTUwZTlkMmVlNDk1Nw==
+        '400':
+          description: Missing or invalid parameter
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+              examples:
+                missingAccountId:
+                  summary: Missing accountId
+                  value:
+                    message: accountId should not be null or undefined, accountId must be a UUID
+                    code: 400
+                invalidCursor:
+                  summary: Invalid cursor
+                  value:
+                    message: Invalid cursor
+                    code: 400
+                idsExceedsMaxLength:
+                  summary: ids parameter exceeds max length
+                  value:
+                    message: The ids parameter cannot have more than 500 transaction ids
+                    code: 400
+                    codeDescription: IDS_PARAMETER_EXCEEDS_MAX_LENGTH
+        '500':
+          description: Server Internal Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+      tags:
+      - Transaction
+      security:
+      - default: []
+      parameters:
+      - description: Account primary identifier
+        in: query
+        name: accountId
+        required: true
+        schema:
+          type: string
+          format: uuid
+        example: 562b795d-1653-429f-be86-74ead9502813
+      - description: Comma-separated list of transaction identifiers (UUIDs). Maximum of 500 ids per request.
+        in: query
+        name: ids
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+            format: uuid
+        example: a8534c85-53ce-4f21-94d7-50e9d2ee4957, 05c693bf-c196-47ea-a28c-8251d6bb8a06
+      - description: Filter transactions with date greater than or equal to the given date. Format (yyyy-mm-dd). Cannot be used together with createdAtFrom.
+        in: query
+        name: dateFrom
+        required: false
+        schema:
+          type: string
+          format: date-time
+        example: '2020-10-13'
+      - description: Filter transactions with date less than or equal to the given date. Format (yyyy-mm-dd).
+        in: query
+        name: dateTo
+        required: false
+        schema:
+          type: string
+          format: date-time
+        example: '2020-10-15'
+      - description: Filter transactions created at or after this date. Format (yyyy-mm-ddThh:mm:ss.000Z)
+        in: query
+        name: createdAtFrom
+        required: false
+        schema:
+          type: string
+          format: date-time
+        example: '2020-10-13T03:00:00.000Z'
+      - description: Cursor for the next page of results. To paginate, append the previous response's 'next' value to the endpoint path as the full query string (GET /v2/transactions{next}). If building the request manually, send here only the URL-decoded 'after' value contained in 'next' — never the whole 'next' string.
+        in: query
+        name: after
+        required: false
+        schema:
+          type: string
+        example: MjAyMC0xMC0xNVQwMDowMDowMC4wMDBafGE4NTM0Yzg1LTUzY2UtNGYyMS05NGQ3LTUwZTlkMmVlNDk1Nw==
+  /transactions/{id}:
+    get:
+      operationId: transactions-retrieve
+      summary: Retrieve
+      description: Recovers the transaction resource by it's id
+      responses:
+        '200':
+          description: Retrieve a transaction.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+        '404':
+          description: Transaction not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+              example:
+                code: 404
+                codeDescription: TRANSACTION_NOT_FOUND
+                message: Transaction not found
+        '500':
+          description: Server Internal Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+      tags:
+      - Transaction
+      security:
+      - default: []
+      parameters:
+      - description: transaction primary identifier
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+          format: uuid
+        example: 6ec156fe-e8ac-4d9a-a4b3-7770529ab01c
+      x-readme:
+        code-samples:
+        - language: node
+          code: "const pluggy = require('pluggy-sdk');\nconst client = new pluggy.PluggyClient({\n  clientId: 'YOUR_CLIENT_ID',\n  clientSecret: 'YOUR_CLIENT_SECRET',\n});\n\nclient\n  .fetchTransaction('ACCOUNT_ID')\n  .then((transaction) => {\n    console.log(transaction);\n  });"
+        - language: java
+          code: "PluggyClient pluggyClient = PluggyClient.builder()\n  .clientIdAndSecret('YOUR_CLIENT_ID', 'YOUR_CLIENT_SECRET')\n  .baseUrl('https://api.pluggy.ai')\n  .build();\nResponse<Transaction> transaction = pluggyClient.service().getTransaction(\"TRANSACTION_ID\").execute();"
+        - language: csharp
+          code: 'PluggyClient pluggyClient = new PluggyClient(''YOUR_PLUGGY_API_KEY'');
+
+            Transaction transaction = await pluggyClient.FetchTransactioNs("TRANSACTION_ID");'
+    patch:
+      operationId: transactions-Update
+      summary: Update
+      description: Update the transaction's category by it's id
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTransaction'
+        description: New category identifier
+        required: true
+      responses:
+        '200':
+          description: Retrieve an updated transaction.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+        '400':
+          description: Missing parameter
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+              example:
+                message: Transaction Id should not be null or undefined, transactionId must be a UUID
+                code: 400
+        '404':
+          description: Transaction not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+              example:
+                code: 404
+                message: Transaction not found
+        '500':
+          description: Server Internal Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+      tags:
+      - Transaction
+      security:
+      - default: []
+      parameters:
+      - description: transaction primary identifier
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+          format: uuid
+        example: 6ec156fe-e8ac-4d9a-a4b3-7770529ab01c
+      x-readme:
+        code-samples:
+        - language: node
+          code: "const pluggy = require('pluggy-sdk');\nconst client = new pluggy.PluggyClient({\n  clientId: 'YOUR_CLIENT_ID',\n  clientSecret: 'YOUR_CLIENT_SECRET',\n});\n\nclient\n  .updateTransactionCategory('TRANSACTION_ID','CATEGORY_ID')\n  .then((transaction) => {\n    console.log(transaction);\n  });"
+components:
+  schemas:
+    PaymentDataBoletoMetadata:
+      description: Information of the boleto associated with the payment
+      properties:
+        digitableLine:
+          type: string
+          description: Boleto identifier
+        barcode:
+          type: string
+          description: Boleto barcode number
+        baseAmount:
+          type: number
+          description: Boleto original amount without considering penalties / interests / discounts
+        interestAmount:
+          type: number
+          description: Boleto interest amount
+        penaltyAmount:
+          type: number
+          description: Boleto penalty amount
+        discountAmount:
+          type: number
+          description: Boleto discount amount
+    Merchant:
+      description: Merchant extracted from the transaction data
+      properties:
+        name:
+          type: string
+          description: Merchants name
+        businessName:
+          type: string
+          description: Merchant legal business name
+        cnpj:
+          type: string
+          description: Document number related to the merchant
+        cnae:
+          type: string
+          description: Economic activity classification number related to the merchant
+        category:
+          type: string
+          description: Category derived from the merchant's CNAE, when one can be resolved
+      type: object
+    CursorPageResponseTransactions:
+      description: Cursor-based paginated response for transactions
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Transaction'
+          description: List of transactions for the current page
+        next:
+          type:
+          - string
+          - 'null'
+          description: 'Ready-to-use query string for the next page: append it as-is to the endpoint path (GET /v2/transactions{next}). Null if there are no more results.'
+      type: object
+      required:
+      - results
+      - next
+    UpdateTransaction:
+      description: Update transaction category request body
+      properties:
+        categoryId:
+          type: string
+          description: Identifier of the category
+      type: object
+      required:
+      - categoryId
+      example:
+        categoryId: '07010000'
+    GlobalErrorResponse:
+      title: Global Error Response Schema
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: number
+        message:
+          type: string
+        codeDescription:
+          type: string
+          description: Distinctive code description, useful to distinguish the error.
+        data:
+          type: object
+          description: Additional data related to the error, if any
+          properties: {}
+      example:
+        code: 500
+        codeDescription: INTERNAL_SERVER_ERROR
+        message: Internal Server Error
+    Document:
+      description: Document object containing type & value
+      properties:
+        type:
+          type: string
+          description: Type of document
+          example: CPF
+          enum:
+          - CPF
+          - CNPJ
+        value:
+          type: string
+          description: Formatted value of the document
+          example: 333.333.333-33
+      type: object
+    PageResponseTransactions:
+      description: ''
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Transaction'
+          description: ''
+        page:
+          type: number
+          format: double
+          description: ''
+        total:
+          type: number
+          format: double
+          description: ''
+        totalPages:
+          type: number
+          format: double
+          description: ''
+      type: object
+      required:
+      - results
+      - page
+      - total
+      - totalPages
+    PaymentDataParticipant:
+      description: Participant of the payment data
+      properties:
+        documentNumber:
+          $ref: '#/components/schemas/Document'
+        name:
+          type: string
+          description: Fullname of the participant
+        accountNumber:
+          type: string
+          description: Account number on the branch
+        branchNumber:
+          type: string
+          description: Agency number
+        routingNumber:
+          type: string
+          description: COMPE Bank number
+        routingNumberISPB:
+          type: string
+          description: ISPB Bank number
+      type: object
+    PaymentData:
+      description: Payment or Transfer participant's data
+      properties:
+        payer:
+          $ref: '#/components/schemas/PaymentDataParticipant'
+        receiver:
+          $ref: '#/components/schemas/PaymentDataParticipant'
+        reason:
+          type: string
+          description: User's motive submitted while making the transfer
+        referenceNumber:
+          type: string
+          description: Reference number for the transfer/payment
+        receiverReferenceId:
+          type: string
+          description: String submitted by the receiver associated with the payment when generating the payment request.
+        authenticationCode:
+          type: string
+          description: Authentication code of the payment receipt, as printed by the institution on the proof of payment. It identifies the operation itself rather than the payment instrument, so it can be present for any payment method (PIX, TED, DOC, BOLETO).
+        paymentMethod:
+          type: string
+          description: 'Payment rail used for the transaction.
+
+            - `PIX`: instant transfer over the Brazilian Pix system.
+
+            - `TED`: Transferência Eletrônica Disponível (same-day inter-bank transfer).
+
+            - `DOC`: Documento de Ordem de Crédito (D+1 inter-bank transfer, deprecated by the Central Bank).
+
+            - `TEV`: Transferência Eletrônica de Valores (intra-bank transfer between accounts of the same institution).
+
+            - `BOLETO`: Brazilian bank slip payment.'
+        boletoMetadata:
+          $ref: '#/components/schemas/PaymentDataBoletoMetadata'
+      type: object
+    CreditCardMetadata:
+      description: Data of a transaction specific to credit card transactions
+      properties:
+        installmentNumber:
+          type: number
+          description: Number of the current installment of the purchase
+        totalInstallments:
+          type: number
+          description: Total number of installments of the purchase
+        totalAmount:
+          type: number
+          description: Total amount of the purchase. Only available on direct connectors; Open Finance connectors do not return this field
+        feeType:
+          enum:
+          - ANNUAL_FEE
+          - ATM_WITHDRAWAL_DOMESTIC
+          - ATM_WITHDRAWAL_INTERNATIONAL
+          - EMERGENCY_CREDIT_EVALUATION
+          - CARD_REISSUE
+          - BILL_PAYMENT_FEE
+          - SMS
+          - OTHER
+          type: string
+          description: Type of fee charged. Present when the operation is a fee (TARIFA)
+        feeTypeAdditionalInfo:
+          type: string
+          description: Free text describing the fee type when feeType is 'OTHER'
+        otherCreditsType:
+          enum:
+          - REVOLVING_CREDIT
+          - BILL_INSTALLMENT
+          - LOAN
+          - OTHER
+          type: string
+          description: Other type of credit contracted on the card. Present when the operation is a contracted credit operation
+        otherCreditsAdditionalInfo:
+          type: string
+          description: Free text describing the other credit type when otherCreditsType is 'OTHER'
+        purchaseDate:
+          type: string
+          format: date-time
+          description: Original Date of the purchase
+        payeeMCC:
+          type: integer
+          description: Merchant Category Code of the merchant
+        cardNumber:
+          type: string
+          description: Credit Card Number associated with transaction, can be different from the account if its done by an additional or virtual card.
+        billId:
+          type: string
+          description: Id of the bill associated to this transaction
+        billForecastDate:
+          type: string
+          description: Forecasted bill period (formatted as YYYY-MM) in which this transaction is expected to be charged. Unlike billId, it is provided for pending and future transactions too. Only returned for Open Finance connectors
+        paymentType:
+          enum:
+          - SINGLE
+          - INSTALLMENT
+          type: string
+          description: 'How the purchase is charged: ''SINGLE'' when it is charged in full on one bill, ''INSTALLMENT'' when it is split into installments. Only returned for Open Finance connectors. Populated from the release of this field onwards, not retroactively: transactions synced before it do not carry the key until they are synced again'
+        billPostDate:
+          type:
+          - string
+          - 'null'
+          format: date
+          description: 'Date (YYYY-MM-DD) the institution posted the transaction to a bill, exactly as the institution reports it. Unlike the transaction ''date'', it is never adjusted by Pluggy. null when the transaction is not posted to a bill yet or the institution does not report it. A missing key means the same as null: the field is populated from its release onwards, not retroactively. Only returned for Open Finance connectors'
+        transactionDateTime:
+          type: string
+          format: date-time
+          description: 'Date and time of the transaction as reported by the institution. Normalized to a valid ISO-8601 string: some institutions append a zone id suffix (e.g. ''2026-04-09T16:43:35.203Z[GMT]''), which Pluggy removes. Absent when the institution sends a placeholder. Only returned for Open Finance connectors. Populated from the release of this field onwards, not retroactively'
+      type: object
+    Transaction:
+      description: Transaction product
+      properties:
+        id:
+          type: string
+          description: Primary identifier of the transaction
+        description:
+          type: string
+          description: Clean description of the transaction
+        descriptionRaw:
+          type:
+          - string
+          - 'null'
+          description: Original transaction description as returned by the institution, before any cleanup or normalization. May be null when not provided by the institution.
+        currencyCode:
+          type: string
+          description: Currency ISO code
+        amount:
+          type: number
+          format: double
+          description: Transaction amount
+        amountInAccountCurrency:
+          type: number
+          format: double
+          description: Transaction amount in Account's Currency. Only present if the transaction is in a different currency than the account's currency
+        date:
+          type: string
+          format: date-time
+          description: Date when the transaction was made
+        type:
+          type: string
+          description: 'Direction of the movement from the account holder''s perspective.
+
+            - `CREDIT`: money entered the account (deposits, incoming transfers, refunds).
+
+            - `DEBIT`: money left the account (payments, withdrawals, outgoing transfers, credit-card purchases).
+
+
+            Note: for credit-card accounts the convention is inverted at the institution but Pluggy normalizes the value so purchases are always `DEBIT` and payments to the card statement are `CREDIT`.'
+          enum:
+          - DEBIT
+          - CREDIT
+        balance:
+          type: number
+          format: double
+          description: Account balance immediately after the transaction was posted. May be null when the institution does not return a running balance.
+        providerCode:
+          type:
+          - string
+          - 'null'
+          description: Institution-provided identifier or code for the transaction (e.g. NSU, transaction number on the bank statement). Format varies per institution.
+        status:
+          type: string
+          description: 'Settlement status of the movement.
+
+            - `POSTED`: the transaction is confirmed/settled at the institution.
+
+            - `PENDING`: the transaction is not settled yet. On credit cards, a purchase not yet included in a closed bill. On checking accounts, a transaction the institution is still processing or a scheduled payment: Open Finance institutions that expose scheduled payments (`LANCAMENTO_FUTURO`) return them as `PENDING` with a `date` in the future, up to the window each institution allows (90 days on Itaú). When the payment settles the transaction becomes `POSTED`; it keeps its `id` when the institution keeps the `providerId`, otherwise it is matched to the settled one by amount and date.'
+          enum:
+          - POSTED
+          - PENDING
+        category:
+          type: string
+          description: Category of the transaction (e.g. Restaurants, Education). See the Transaction Categorization section in our guides.
+        categoryId:
+          type: string
+          description: Id of the transaction category. Can be used to identify the category in the Categories endpoint
+        paymentData:
+          anyOf:
+          - $ref: '#/components/schemas/PaymentData'
+          - type: 'null'
+        creditCardMetadata:
+          $ref: '#/components/schemas/CreditCardMetadata'
+        merchant:
+          $ref: '#/components/schemas/Merchant'
+        operationType:
+          type:
+          - string
+          - 'null'
+          description: 'Type of operation classified by the institution. For bank account transactions it carries values such as ''PIX'' or ''TED''; for credit card transactions it carries the Open Finance transaction type (''PAGAMENTO'', ''PAGAMENTO_FATURA'' for a partial or full bill payment, ''TARIFA'', ''OPERACOES_CREDITO_CONTRATADAS_CARTAO'', ''ESTORNO'', ''CASHBACK'', ''OUTROS''). The one exception is the credit card bill payment Pluggy builds from the bill data when the institution does not report the payment as a transaction (described as ''Pagamento recebido''): it carries ''PAGAMENTO_FATURA'', set by Pluggy rather than by the institution. Only returned for Open Finance connectors.'
+        operationTypeAdditionalInfo:
+          type:
+          - string
+          - 'null'
+          description: Complementary, free-form information about the operation type, as provided by the institution. Varies by institution (a sub-type code or a description). For credit card transactions it carries the Open Finance 'transactionalAdditionalInfo'. Open Finance requires it when operationType is 'OUTROS', but not every institution fills it. Only returned for Open Finance connectors.
+        providerId:
+          type:
+          - string
+          - 'null'
+          description: Provider's identifier for the transaction. Only returned for Open Finance connectors.
+        accountId:
+          type: string
+          format: uuid
+          description: Identifier of the account this transaction belongs to.
+        order:
+          type: number
+          format: integer
+          description: Sequential position of the transaction within the same day, used to preserve ordering when multiple transactions share the same date.
+        createdAt:
+          type: string
+          format: date-time
+          description: Date when the transaction was first ingested by Pluggy.
+        updatedAt:
+          type: string
+          format: date-time
+          description: Date of the last update of the transaction data.
+      type: object
+      required:
+      - id
+      - description
+      - currencyCode
+      - amount
+      - date
+      - accountId
+      - createdAt
+      - updatedAt
+      example:
+        id: 6ec156fe-e8ac-4d9a-a4b3-7770529ab01c
+        description: TED Example
+        descriptionRaw: null
+        currencyCode: BRL
+        amount: 1500
+        date: '2020-10-14T00:00:00.000Z'
+        balance: 3500
+        category: Transfers
+        categoryId: '05000000'
+        accountId: 03cc0eff-4ec5-495c-adb3-1ef9611624fc
+        providerCode: '123456'
+        type: CREDIT
+        status: POSTED
+        paymentData:
+          payer:
+            name: Tiago Rodrigues Santos
+            branchNumber: 090
+            accountNumber: 1234-5
+            routingNumber: '001'
+            documentNumber:
+              type: CPF
+              value: 666.666.666-66
+          reason: Taxa de serviço
+          receiver:
+            name: Pluggy
+            branchNumber: '999'
+            accountNumber: 9876-1
+            routingNumber: '002'
+            documentNumber:
+              type: CNPJ
+              value: 22.222.222/0001-22
+          paymentMethod: TED
+          referenceNumber: '123456789'
+        merchant: null
+        providerId: null
+  securitySchemes:
+    default:
+      type: apiKey
+      name: X-API-KEY
+      in: header

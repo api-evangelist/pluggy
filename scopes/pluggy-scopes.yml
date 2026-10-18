@@ -1,0 +1,5 @@
+generated: '2026-10-18'
+method: none
+scopes: []
+note: The Pluggy API uses API keys for authentication, not OAuth. The OAuth documentation refers to OAuth flows required by financial institutions for user authentication, not for API access to Pluggy itself. No OAuth scopes are defined for the API.
+docs: https://docs.pluggy.ai/en/docs/connect-widget/oauth-support.md

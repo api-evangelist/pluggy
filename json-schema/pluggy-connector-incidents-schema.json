@@ -1,0 +1,125 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/pluggy/main/json-schema/pluggy-connector-incidents-schema.json",
+  "title": "ConnectorIncidents",
+  "x-generated": "2026-10-18",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/pluggy-status-api-openapi.yml#/components/schemas/ConnectorIncidents",
+  "type": "object",
+  "properties": {
+    "generatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "connectors": {
+      "type": "object",
+      "description": "Keyed by Pluggy connector id. Only connectors with at least one active incident appear, and each list is ordered worst-first.",
+      "additionalProperties": {
+        "type": "array",
+        "items": {
+          "$ref": "#/$defs/ConnectorIncident"
+        }
+      }
+    }
+  },
+  "$defs": {
+    "ConnectorIncident": {
+      "type": "object",
+      "description": "An incident affecting one connector right now.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "title": {
+          "type": "string",
+          "description": "Short, customer-facing summary, e.g. 'XP Banking - Compras parceladas não sendo retornadas'."
+        },
+        "description": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "CONNECTOR_UNAVAILABLE",
+            "CONNECTOR_DEGRADED",
+            "INSTITUTION_OUTAGE",
+            "SCHEDULED_MAINTENANCE",
+            "CONSENT_ERROR",
+            "CONNECTION_NOT_UPDATING",
+            "PARTIAL_SUCCESS",
+            "ACCOUNTS_MISSING",
+            "BALANCE_INCORRECT",
+            "TRANSACTIONS_MISSING",
+            "TRANSACTIONS_INCORRECT",
+            "TRANSACTIONS_INSTALLMENTS_ISSUE",
+            "INVESTMENTS_MISSING",
+            "INVESTMENTS_INCORRECT",
+            "IDENTITY_MISSING",
+            "HISTORICAL_DATA_MISSING",
+            "WEBHOOK_DELAY",
+            "PAYMENT_FAILURE",
+            "OTHER"
+          ],
+          "description": "What is broken — the axis severity and state do not cover. Use it to group the same problem across institutions, and to decide which incidents are worth showing a user: a SCHEDULED_MAINTENANCE and a TRANSACTIONS_MISSING both read as 'degraded' otherwise. OTHER means we have not classified it, not that nothing is wrong."
+        },
+        "product": {
+          "type": "string",
+          "enum": [
+            "dados",
+            "pis",
+            "pis-agendado",
+            "pixauto",
+            "smart",
+            "infra"
+          ],
+          "description": "Which Pluggy product line the incident affects."
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "INCIDENT",
+            "MAINTENANCE"
+          ]
+        },
+        "severity": {
+          "type": "string",
+          "enum": [
+            "DEGRADED",
+            "PARTIAL_OUTAGE",
+            "MAJOR_OUTAGE",
+            "MAINTENANCE"
+          ]
+        },
+        "state": {
+          "type": "string",
+          "enum": [
+            "INVESTIGATING",
+            "IDENTIFIED",
+            "MONITORING",
+            "SCHEDULED"
+          ]
+        },
+        "startedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "url": {
+          "type": "string",
+          "description": "Permalink to the incident on the status page, with its full timeline and postmortem."
+        }
+      }
+    }
+  }
+}

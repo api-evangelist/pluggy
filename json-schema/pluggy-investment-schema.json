@@ -1,0 +1,686 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/pluggy/main/json-schema/pluggy-investment-schema.json",
+  "title": "Investment",
+  "description": "Investment representing a specific asset",
+  "x-generated": "2026-10-18",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/pluggy-api-openapi.yml#/components/schemas/Investment",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Primary identifier"
+    },
+    "itemId": {
+      "type": "string",
+      "description": "Identifier of the item linked to the investment",
+      "format": "uuid"
+    },
+    "type": {
+      "enum": [
+        "COE",
+        "EQUITY",
+        "ETF",
+        "FIXED_INCOME",
+        "MUTUAL_FUND",
+        "SECURITY",
+        "OTHER"
+      ],
+      "type": "string",
+      "description": "Investment asset class.\n- `MUTUAL_FUND`: actively managed pooled investment funds (FIM, FIA, FIC).\n- `EQUITY`: stocks and equity-like assets traded on a stock exchange.\n- `ETF`: Exchange Traded Funds.\n- `FIXED_INCOME`: fixed income products such as CDB, LCI, LCA, debentures, Tesouro Direto.\n- `COE`: Certificado de Operações Estruturadas (structured notes).\n- `SECURITY`: private pension / previdência products (PGBL, VGBL).\n- `OTHER`: any asset not covered by the categories above."
+    },
+    "subtype": {
+      "enum": [
+        "STRUCTURED_NOTE",
+        "STOCK",
+        "ETF",
+        "REAL_ESTATE_FUND",
+        "BDR",
+        "DERIVATIVES",
+        "OPTION",
+        "TREASURY",
+        "LCI",
+        "LCA",
+        "LF",
+        "CDB",
+        "CRI",
+        "CRA",
+        "CORPORATE_DEBT",
+        "LC",
+        "DEBENTURES",
+        "INVESTMENT_FUND",
+        "MULTIMARKET_FUND",
+        "FIXED_INCOME_FUND",
+        "STOCK_FUND",
+        "ETF_FUND",
+        "OFFSHORE_FUND",
+        "FIP_FUND",
+        "EXCHANGE_FUND",
+        "FI_INFRA",
+        "FI_AGRO",
+        "RETIREMENT",
+        "OTHER",
+        null
+      ],
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Specific instrument within a `type`. Possible groupings:\n\n**EQUITY**: `STOCK` (ação), `BDR` (Brazilian Depositary Receipt), `REAL_ESTATE_FUND` (FII), `DERIVATIVES`, `OPTION`.\n\n**ETF**: `ETF`.\n\n**FIXED_INCOME**: `TREASURY` (Tesouro Direto), `CDB`, `LCI`, `LCA`, `LC`, `LF`, `CRI`, `CRA`, `DEBENTURES`, `CORPORATE_DEBT`.\n\n**MUTUAL_FUND**: `INVESTMENT_FUND`, `MULTIMARKET_FUND`, `FIXED_INCOME_FUND`, `STOCK_FUND`, `ETF_FUND`, `OFFSHORE_FUND`, `FIP_FUND`, `EXCHANGE_FUND`, `FI_INFRA`, `FI_AGRO`.\n\n**COE**: `STRUCTURED_NOTE`.\n\n**SECURITY**: `RETIREMENT` (PGBL/VGBL).\n\n**OTHER**: `OTHER`."
+    },
+    "number": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Reference number for this holder's asset"
+    },
+    "balance": {
+      "type": "number",
+      "format": "double",
+      "description": "The current net balance amount of the investment"
+    },
+    "name": {
+      "type": "string",
+      "description": "Name on the provider"
+    },
+    "lastMonthRate": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "format": "double",
+      "description": "The performance rate of the investment in the last month"
+    },
+    "lastTwelveMonthsRate": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "format": "double",
+      "description": "The performance rate of the investment in the last 12 months"
+    },
+    "annualRate": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "format": "double",
+      "description": "The performance rate of the investment in the last year"
+    },
+    "currencyCode": {
+      "type": "string",
+      "description": "Currency ISO code for the amounts"
+    },
+    "code": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Associated Code for the investment. For example, the code for a mutual fund is the CNPJ"
+    },
+    "isin": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "12-character ISIN, a globally unique identifier"
+    },
+    "value": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "format": "double",
+      "description": "Quota's current value at \"date\""
+    },
+    "quantity": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "format": "double",
+      "description": "Quantity of quota at disposal"
+    },
+    "amount": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "format": "double",
+      "description": "Gross amount of the investment"
+    },
+    "taxes": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "format": "double",
+      "description": "Income taxes applied to the investment"
+    },
+    "taxes2": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "format": "double",
+      "description": "Financial taxes applied to the investment"
+    },
+    "date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Value's quota date"
+    },
+    "owner": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Owner/beneficiary associated with the investment"
+    },
+    "amountProfit": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "format": "double",
+      "description": "Profit/Loss to date over the investment"
+    },
+    "amountWithdrawal": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "format": "double",
+      "description": "The amount available to withdraw"
+    },
+    "amountOriginal": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "format": "double",
+      "description": "Amount originally invested"
+    },
+    "metadata": {
+      "description": "Security Portability details",
+      "anyOf": [
+        {
+          "$ref": "#/$defs/InvestmentMetadata"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "dueDate": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time",
+      "description": "Expiration Date"
+    },
+    "issuer": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "The entity that issued the investment"
+    },
+    "issuerCNPJ": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "The entity CNPJ that issued the investment"
+    },
+    "issueDate": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time",
+      "description": "The date that the investment was issued"
+    },
+    "purchaseDate": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time",
+      "description": "The date that the investment was purchased"
+    },
+    "gracePeriodDate": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time",
+      "description": "The date when the grace period ends (fixed-income investments only)"
+    },
+    "rate": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "format": "double",
+      "description": "Fixed rate percentage applied to the investment"
+    },
+    "rateType": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Type of fixed-rate"
+    },
+    "fixedAnnualRate": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "format": "double",
+      "description": "Fixed income annual rate"
+    },
+    "taxExempt": {
+      "type": [
+        "boolean",
+        "null"
+      ],
+      "description": "Whether the product is tax-exempt (LCI, LCA, CRI, CRA, debêntures incentivadas)"
+    },
+    "ratePeriodicity": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Periodicity of the remuneration rate (DAILY, MONTHLY, SEMESTERLY, YEARLY)"
+    },
+    "indexerAdditionalInfo": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Free-text indexer description when the indexer is non-standard"
+    },
+    "priceFactor": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "format": "double",
+      "description": "B3 lot/price conversion factor (variable income)"
+    },
+    "debtor": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "description": "Underlying debtor of receivables-backed paper (CRI / CRA)",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name of the underlying debtor"
+        }
+      }
+    },
+    "couponPayment": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "description": "Coupon-payment schedule for coupon-bearing fixed income / Treasury bonds",
+      "properties": {
+        "hasCoupon": {
+          "type": "boolean",
+          "description": "Whether the paper pays periodic coupons"
+        },
+        "periodicity": {
+          "type": "string",
+          "description": "Frequency of coupon payments (MONTHLY, QUARTERLY, SEMESTERLY, YEARLY, IRREGULAR)"
+        },
+        "additionalInfo": {
+          "type": "string",
+          "description": "Free-text detail when periodicity is IRREGULAR"
+        }
+      }
+    },
+    "status": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Current lifecycle status of the investment.\n- `ACTIVE`: the investment is open and currently held by the owner.\n- `PENDING`: the operation has been requested but is not yet settled (e.g. a fund subscription within the settlement window).\n- `TOTAL_WITHDRAWAL`: the position has been fully redeemed/withdrawn; balance is zero.",
+      "enum": [
+        "ACTIVE",
+        "PENDING",
+        "TOTAL_WITHDRAWAL",
+        null
+      ]
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Date when the investment was first ingested by Pluggy."
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Date of the last update of the investment data."
+    },
+    "institution": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/InvestmentInstitution"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Financial institution holding the investment."
+    },
+    "transactions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/InvestmentTransaction"
+      },
+      "description": "Movements of the investment. Only present on endpoints that return transactions inline; use `GET /investments/{id}/transactions` otherwise."
+    }
+  },
+  "type": "object",
+  "required": [
+    "id",
+    "itemId",
+    "type",
+    "balance",
+    "name",
+    "currencyCode",
+    "date"
+  ],
+  "$defs": {
+    "Company": {
+      "description": "Company object that holds the company's information",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name of the company"
+        },
+        "cnpj": {
+          "type": "string",
+          "description": "CNPJ of the company"
+        }
+      },
+      "type": "object"
+    },
+    "InvestmentExpenses": {
+      "description": "Taxes and fees that applied to the transaction",
+      "properties": {
+        "serviceTax": {
+          "type": "number",
+          "format": "double",
+          "description": "(ISS) Service tax that varies according to state"
+        },
+        "brokerageFee": {
+          "type": "number",
+          "format": "double",
+          "description": "Commission charged by the brokerage for carrying out transactions on the stock market"
+        },
+        "incomeTax": {
+          "type": "number",
+          "format": "double",
+          "description": "(IRRF) Income Tax Withholding, amount paid to the Internal Revenue Service"
+        },
+        "tradingAssetsNoticeFee": {
+          "type": "number",
+          "format": "double",
+          "description": "(ANA) Fee of Notice of Trading in Assets"
+        },
+        "maintenanceFee": {
+          "type": "number",
+          "format": "double",
+          "description": "(termo/opções) Fees charged by BM&F Bovespa in negotiations"
+        },
+        "settlementFee": {
+          "type": "number",
+          "format": "double",
+          "description": "Liquidation fee for the settlement of a position on the expiration date or the financial settlement of physical delivery"
+        },
+        "clearingFee": {
+          "type": "number",
+          "format": "double",
+          "description": "Registration fee"
+        },
+        "stockExchangeFee": {
+          "type": "number",
+          "format": "double",
+          "description": "(Emolumentos) Fees charged by BM&F Bovespa as a source of operating income"
+        },
+        "custodyFee": {
+          "type": "number",
+          "format": "double",
+          "description": "Fee by brokers to keep recordsin their home broker systems or on the trading desk"
+        },
+        "operatingFee": {
+          "type": "number",
+          "format": "double",
+          "description": "Amount paid to the Operator for the intermediation service"
+        },
+        "other": {
+          "type": "number",
+          "format": "double",
+          "description": "Sum of other not defined expenses"
+        },
+        "iof": {
+          "type": "number",
+          "format": "double",
+          "description": "(IOF) Tax on financial operations charged on the transaction"
+        },
+        "iofProvision": {
+          "type": "number",
+          "format": "double",
+          "description": "Provisioned (accrued, not yet paid) IOF"
+        }
+      },
+      "type": "object"
+    },
+    "InvestmentInstitution": {
+      "description": "Financial institution holding the investment",
+      "properties": {
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Full name of the institution"
+        },
+        "number": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Identifier of the institution (CNPJ or other)"
+        }
+      },
+      "type": "object",
+      "required": [
+        "name",
+        "number"
+      ]
+    },
+    "InvestmentMetadata": {
+      "description": "Investment metadata for Previdencia migrations",
+      "properties": {
+        "taxRegime": {
+          "type": "string",
+          "description": "Description of the type of tax applied to previdencia"
+        },
+        "proposalNumber": {
+          "type": "string",
+          "description": "Previdencial proposal number"
+        },
+        "processNumber": {
+          "type": "string",
+          "description": "Number of the process of a previdencia"
+        },
+        "fundName": {
+          "type": "string",
+          "description": "Name of the fund associated with the previdencia."
+        },
+        "insurer": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/Company"
+            }
+          ],
+          "description": "Insurer of the Security Investment"
+        },
+        "anbimaClass": {
+          "type": "string",
+          "description": "Anbima class (CVM 175). Funds."
+        },
+        "anbimaSubclass": {
+          "type": "string",
+          "description": "Anbima subclass (CVM 175). Funds."
+        },
+        "anbimaCategory": {
+          "type": "string",
+          "description": "Legacy Anbima category (FIXED_INCOME, STOCK, MULTIMARKET, EXCHANGE). Funds."
+        }
+      },
+      "type": "object"
+    },
+    "InvestmentTransaction": {
+      "description": "Movement of the investment",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Primary investment transaction identifier"
+        },
+        "type": {
+          "type": "string",
+          "description": "Operation performed on the investment position.\n- `BUY`: subscription / purchase of new quotas.\n- `SELL`: redemption / sale of quotas.\n- `TRANSFER`: portability or internal transfer between accounts (the `amount` field may be null).\n- `TAX`: tax withholdings such as IR or IOF.\n- `INTEREST`: interest or yield credited to the position.\n- `AMORTIZATION`: principal repayment (typical of fixed-income amortizing bonds).",
+          "enum": [
+            "BUY",
+            "SELL",
+            "TAX",
+            "TRANSFER",
+            "INTEREST",
+            "AMORTIZATION"
+          ]
+        },
+        "movementType": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Cash-flow direction of the transaction from the holder's perspective.\n- `CREDIT`: money goes into the position (defaults for `BUY`).\n- `DEBIT`: money leaves the position (defaults for `SELL`, `TAX`, `TRANSFER`, `INTEREST`, `AMORTIZATION`).",
+          "enum": [
+            "CREDIT",
+            "DEBIT",
+            null
+          ]
+        },
+        "quantity": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "format": "double",
+          "description": "Quantity of the transaction"
+        },
+        "value": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "format": "double",
+          "description": "Value on the transaction's Date"
+        },
+        "amount": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "format": "double",
+          "description": "Gross amount of the operation. May be null only if type is TRANSFER"
+        },
+        "agreedRate": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "format": "double",
+          "description": "Agreed rate for treasury applications"
+        },
+        "indexerPercentage": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "format": "double",
+          "description": "Max percentage of the indexer agreed at contracting (e.g. 110% of CDI)"
+        },
+        "priceFactor": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "format": "double",
+          "description": "B3 lot/price conversion factor (variable income transactions)"
+        },
+        "date": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Date when the transaction was made"
+        },
+        "tradeDate": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time",
+          "description": "Date when the transaction was confirmed"
+        },
+        "expenses": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/InvestmentExpenses"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "description": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Description of the transaction as reported by the institution"
+        },
+        "netAmount": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "format": "double",
+          "description": "Amount of the operation after expenses and taxes"
+        },
+        "brokerageNumber": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Brokerage note number the transaction belongs to"
+        }
+      },
+      "type": "object",
+      "required": [
+        "id",
+        "type",
+        "date"
+      ]
+    }
+  }
+}

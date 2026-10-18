@@ -1,0 +1,1762 @@
+openapi: 3.2.0
+info:
+  title: Pluggy Automatic PIX API
+  description: Pluggy's main API to review data and execute connectors
+  license:
+    name: MIT
+  contact:
+    email: hello@pluggy.ai
+    name: Pluggy
+    url: https://pluggy.ai
+  version: 1.0.0
+servers:
+- url: https://api.pluggy.ai
+  description: Pluggy API
+tags:
+- name: Automatic PIX
+  description: Automatic PIX payment scheduling and management
+paths:
+  /payments/requests/automatic-pix:
+    post:
+      operationId: payment-request-create-automatic-pix
+      summary: Create Automatic PIX payment request
+      responses:
+        '200':
+          description: Create a Automatic PIX payment request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentRequest'
+              examples:
+                response:
+                  value:
+                    id: d7059555-eadc-4f63-bb8c-1fb367b8dac6
+                    description: Automatic PIX
+                    status: CREATED
+                    createdAt: '2025-06-10T17:50:12.919Z'
+                    updatedAt: '2025-06-10T17:50:12.919Z'
+                    callbackUrls: null
+                    paymentUrl: https://pay.pluggy.ai/d7059555-eadc-4f63-bb8c-1fb367b8dacd
+                    recipient:
+                      type: BANK_ACCOUNT
+                      id: 02a1fde6-5183-4571-85cc-1ada6d25839d
+                      name: My recipient
+                      taxNumber: '33333333000133'
+                      isDefault: false
+                      paymentInstitution:
+                        id: 6dc10a50-c8ef-4c10-a505-84e701c2cfbb
+                        name: Banco C6 S.A.
+                        tradeName: BCO C6 S.A.
+                        ispb: '31872495'
+                        compe: '336'
+                        createdAt: '2023-12-08T11:44:20.234Z'
+                        updatedAt: '2023-12-08T11:44:20.234Z'
+                      account:
+                        type: '*******'
+                        number: '******396'
+                        branch: '*001'
+                      pixKey: null
+                      createdAt: '2025-06-03T20:29:10.846Z'
+                      updatedAt: '2025-06-03T20:29:10.846Z'
+                    clientPaymentId: null
+                    customer: null
+                    fees: null
+                    pixQrCode: null
+                    boleto: null
+                    smartAccount: null
+                    schedule: null
+                    automaticPix:
+                      interval: WEEKLY
+                      expiresAt: '2025-06-16T23:59:59Z'
+                      startDate: '2025-06-11'
+                      fixedAmount: 0.01
+                      firstPayment:
+                        amount: 0.01
+                    errorDetail: null
+                    isSandbox: false
+      description: Creates a payment request where the payment is made using automatic PIX. Once consent is granted by the user, payments can be scheduled according to the rules defined in the request.
+      tags:
+      - Automatic PIX
+      security:
+      - default: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAutomaticPixPaymentRequest'
+            examples:
+              request:
+                value:
+                  fixedAmount: 100.5
+                  startDate: '2025-06-10'
+                  expiresAt: '2025-10-01'
+                  isRetryAccepted: true
+                  firstPayment:
+                    date: '2025-06-10'
+                    description: Primeiro pagamento
+                    amount: 100.5
+                  interval: WEEKLY
+                  callbackUrls: null
+                  recipientId: 05c693bf-c196-47ea-a28c-8251d6bb8a06
+                  isSandbox: false
+        required: true
+  /payments/requests/{id}/automatic-pix/schedule:
+    post:
+      operationId: payment-request-create-automatic-pix-schedule
+      summary: Schedule Automatic PIX payment
+      responses:
+        '200':
+          description: Schedule a Automatic PIX payment.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AutomaticPixPayment'
+              examples:
+                response:
+                  value:
+                    id: 66d503f1-0cfa-4d64-9f87-0782d959eba7
+                    recipientId: 3b8f2f2a-0f6e-4a6a-9d8f-7c2e1b4a5d6e
+                    status: SCHEDULED
+                    amount: 0.01
+                    description: Teste pagamento schedule
+                    endToEndId: null
+                    date: '2025-06-08'
+                    errorDetail: null
+                    clientPaymentId: external-ref-456
+                    isFirstPayment: false
+      description: Schedules an Automatic PIX payment
+      tags:
+      - Automatic PIX
+      security:
+      - default: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ScheduleAutomaticPixPaymentRequest'
+            examples:
+              request:
+                value:
+                  amount: 100.5
+                  date: '2025-06-10'
+                  description: Transferência
+                  clientPaymentId: external-ref-456
+        required: true
+      parameters:
+      - description: Payment request primary identifier
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+          format: uuid
+        example: d0e8a7f0-6d86-11ea-b77f-2e728ce88125
+  /payments/requests/{id}/automatic-pix/schedules:
+    get:
+      operationId: payment-request-get-automatic-pix-schedules
+      summary: List Automatic PIX scheduled payments
+      responses:
+        '200':
+          description: Recovers all automatic PIX payments from a payment request.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  page:
+                    type: number
+                    format: double
+                    description: ''
+                  total:
+                    type: number
+                    format: double
+                    description: ''
+                  totalPages:
+                    type: number
+                    format: double
+                    description: ''
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/AutomaticPixPayment'
+                    description: List of automatic PIX payments
+              examples:
+                response:
+                  value:
+                    page: 1
+                    total: 1
+                    totalPages: 1
+                    results:
+                    - id: 66d503f1-0cfa-4d64-9f87-0782d959eba7
+                      recipientId: 3b8f2f2a-0f6e-4a6a-9d8f-7c2e1b4a5d6e
+                      status: SCHEDULED
+                      amount: 0.01
+                      description: Teste pagamento schedule
+                      endToEndId: null
+                      date: '2025-06-08'
+                      errorDetail: null
+                      clientPaymentId: external-ref-456
+                      isFirstPayment: false
+      description: Lists all Automatic PIX payments from a payment request
+      tags:
+      - Automatic PIX
+      security:
+      - default: []
+      parameters:
+      - description: Payment request primary identifier
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+          format: uuid
+        example: d0e8a7f0-6d86-11ea-b77f-2e728ce88125
+  /payments/requests/{requestId}/automatic-pix/schedules/{paymentId}:
+    get:
+      operationId: payment-request-get-automatic-pix-schedule
+      summary: Get an automatic PIX scheduled payment
+      responses:
+        '200':
+          description: Recovers an automatic PIX scheduled payment by id
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/AutomaticPixPaymentDetail'
+              examples:
+                response:
+                  value:
+                    id: 66d503f1-0cfa-4d64-9f87-0782d959eba7
+                    status: SCHEDULED
+                    amount: 0.01
+                    description: Teste pagamento schedule
+                    endToEndId: null
+                    date: '2025-06-08'
+                    errorDetail: null
+                    clientPaymentId: external-ref-456
+                    isFirstPayment: false
+                    scheduledStatusReached: false
+      description: Recovers an automatic PIX scheduled payment by id
+      tags:
+      - Automatic PIX
+      security:
+      - default: []
+      parameters:
+      - description: Payment request primary identifier
+        in: path
+        name: requestId
+        required: true
+        schema:
+          type: string
+          format: uuid
+        example: d0e8a7f0-6d86-11ea-b77f-2e728ce88125
+      - description: Automatic PIX scheduled payment primary identifier
+        in: path
+        name: paymentId
+        required: true
+        schema:
+          type: string
+          format: uuid
+        example: d0e8a7f0-6d86-11ea-b77f-2e728ce88125
+  /payments/requests/{id}/automatic-pix/cancel:
+    post:
+      operationId: payment-request-cancel-automatic-pix-consent
+      summary: Cancel an automatic PIX consent
+      responses:
+        '204':
+          description: No content
+      description: Cancels an automatic PIX consent
+      tags:
+      - Automatic PIX
+      security:
+      - default: []
+      parameters:
+      - description: Payment request primary identifier
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+          format: uuid
+        example: d0e8a7f0-6d86-11ea-b77f-2e728ce88125
+  /payments/requests/{id}/automatic-pix/schedules/{scheduleId}/cancel:
+    post:
+      operationId: cancel-automatic-pix-schedule
+      summary: Cancel an Automatic PIX schedule
+      responses:
+        '204':
+          description: No content
+      description: Cancels an Automatic PIX schedule.
+      tags:
+      - Automatic PIX
+      security:
+      - default: []
+      parameters:
+      - description: Payment request primary identifier
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+          format: uuid
+        example: d0e8a7f0-6d86-11ea-b77f-2e728ce88125
+      - description: Automatic PIX schedule primary identifier
+        in: path
+        name: scheduleId
+        required: true
+        schema:
+          type: string
+          format: uuid
+        example: d0e8a7f0-6d86-11ea-b77f-2e728ce88125
+  /payments/requests/{id}/automatic-pix/schedules/{scheduleId}/retry:
+    post:
+      operationId: retry-automatic-pix-schedule
+      summary: Retry an Automatic PIX schedule
+      responses:
+        '204':
+          description: No content
+      description: Retries an Automatic PIX schedule, only if the authorization accepts retries. The system allows up to 3 retry attempts. Requests must be submitted by 10pm on the day before the scheduled payment date.
+      tags:
+      - Automatic PIX
+      security:
+      - default: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RetryAutomaticPixPaymentRequest'
+            examples:
+              request:
+                value:
+                  date: '2025-06-10'
+                  isSandbox: false
+        required: true
+      parameters:
+      - description: Payment request primary identifier
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+          format: uuid
+        example: d0e8a7f0-6d86-11ea-b77f-2e728ce88125
+      - description: Automatic PIX schedule primary identifier
+        in: path
+        name: scheduleId
+        required: true
+        schema:
+          type: string
+          format: uuid
+        example: d0e8a7f0-6d86-11ea-b77f-2e728ce88125
+components:
+  schemas:
+    PaymentRecipientAccount:
+      description: Payment receiver bank account information
+      properties:
+        branch:
+          type: string
+          description: Receiver bank account branch (agency)
+        number:
+          type: string
+          description: Receiver bank account number
+        type:
+          type: string
+          description: 'Receiver bank account type, could be: ''CHECKING_ACCOUNT'', ''SAVINGS_ACCOUNT'' or ''GUARANTEED_ACCOUNT'''
+      type: object
+      example:
+        branch: '0001'
+        number: '123456'
+        type: CHECKING_ACCOUNT
+      required:
+      - branch
+      - number
+      - type
+    AutomaticPixPaymentAttempt:
+      type: object
+      description: Payment attempt. It represents an attempt to complete this payment. Useful for tracking the payment history.
+      properties:
+        id:
+          type: string
+          description: Attempt primary identifier
+        status:
+          type: string
+          description: 'Attempt status. Each attempt has an independent lifecycle within the parent payment.
+
+            - `IN_PROGRESS`: the attempt was submitted and is awaiting confirmation.
+
+            - `COMPLETED`: the attempt was confirmed (the parent payment also becomes `COMPLETED`).
+
+            - `CANCELED`: the attempt was canceled.
+
+            - `ERROR`: the attempt failed (see `errorDetail`). The parent payment may be retried with a new attempt.'
+          enum:
+          - IN_PROGRESS
+          - COMPLETED
+          - CANCELED
+          - ERROR
+        endToEndId:
+          type: string
+          description: Attempt end to end identifier
+        date:
+          type: string
+          format: date
+          description: Attempt date
+        errorDetail:
+          $ref: '#/components/schemas/AutomaticPixPaymentErrorDetail'
+      required:
+      - id
+      - status
+      - date
+    PaymentRecipient:
+      description: Bank-account payment recipient. Returned by `/payments/recipients` endpoints and embedded inside payment requests when the request targets a registered recipient.
+      properties:
+        type:
+          type: string
+          enum:
+          - BANK_ACCOUNT
+          description: Recipient discriminator. Always `BANK_ACCOUNT` for this schema.
+        id:
+          type: string
+          description: Primary identifier
+        taxNumber:
+          type: string
+          description: Account owner tax number. Can be CPF or CNPJ (only numbers).
+        name:
+          type: string
+          description: Account owner name.
+        paymentInstitution:
+          allOf:
+          - $ref: '#/components/schemas/PaymentInstitution'
+          description: Institution that holds the recipient's bank account.
+        isDefault:
+          type: boolean
+          description: Indicates if the recipient is the default one
+        account:
+          $ref: '#/components/schemas/PaymentRecipientAccount'
+        pixKey:
+          type:
+          - string
+          - 'null'
+          description: Pix key associated with the payment recipient
+        createdAt:
+          type: string
+          format: date-time
+          description: Date when the payment recipient was created
+        updatedAt:
+          type: string
+          format: date-time
+          description: Date when the payment recipient was last updated
+      type: object
+      required:
+      - type
+      - id
+      - name
+      - taxNumber
+      - paymentInstitution
+      - isDefault
+      - account
+      - createdAt
+      - updatedAt
+      example:
+        type: BANK_ACCOUNT
+        id: 5e9f8f8f-f8f8-4f8f-8f8f-8f8f8f8f8f8f
+        name: Conta empresa
+        taxNumber: '22222222222'
+        paymentInstitution:
+          id: 00000000-0000-0000-0000-000000000000
+          name: Banco J. Safra S.A.
+          ispb: '03017677'
+          tradeName: Banco Safra
+          compe: '074'
+          createdAt: '2020-04-21T15:00:00.000Z'
+          updatedAt: '2020-04-21T15:00:00.000Z'
+        account:
+          branch: '0001'
+          number: '123456'
+          type: CHECKING_ACCOUNT
+        isDefault: false
+        pixKey: null
+        createdAt: '2024-01-15T10:30:00.000Z'
+        updatedAt: '2024-01-15T10:30:00.000Z'
+    ConnectorHealth:
+      description: Connector health status
+      properties:
+        status:
+          type: string
+          description: '''ONLINE'' | ''OFFLINE'' | ''UNSTABLE'''
+        stage:
+          type:
+          - string
+          - 'null'
+        incidents:
+          type: array
+          description: 'Incidents currently affecting this connector, as published on https://status.pluggy.ai. Absent when the connector has none, so a healthy connector''s payload is unchanged. Ordered worst-first, so the first entry is the one to show if you only show one. Note this is about the institution, not about your own connections: use it to warn a user before they pick a bank that is known to be failing right now.'
+          items:
+            $ref: '#/components/schemas/ConnectorIncident'
+        details:
+          type: object
+          description: Statistics about your recent connections on the connector and recent connection rate (percentage of healthy connections). This field is only present if you include the parameter healthDetails=true. This will be null if there was an error obtaining health details.
+          properties:
+            connectionRateLast6Hours:
+              type: number
+              description: 'A number from 0 to 100: the percentage of executions that succesfully connect to the institution: status of CONNECTION_ERROR,ERROR,SITE_NOT_AVAILABLE decrease the percentage. Any other status (like SUCCESS/LOGIN_ERROR) increase the percentage. The value will be null if there were no connections'
+            connectionsLast6Hours:
+              type: number
+              description: Amount of your connections for this connector during the last 6 hours. 0 if there were no connections
+    AutomaticPixPaymentErrorDetail:
+      type: object
+      description: Details about an error that occurred with the automatic PIX payment
+      properties:
+        code:
+          type: string
+          description: 'Error codes expected during payment processing:
+
+            - SALDO_INSUFICIENTE: The selected account does not have sufficient balance to make the payment.
+
+            - VALOR_ACIMA_LIMITE: Validates if the amount exceeds the limit established [by the institution (account or channel)/in the arrangement] to allow the client to perform transactions.
+
+            - VALOR_INVALIDO: The submitted amount is not valid.
+
+            - NAO_INFORMADO: Not reported/identified by the account-holding institution.
+
+            - PAGAMENTO_DIVERGENTE_CONSENTIMENTO: Payment data differs from consent data.
+
+            - PAGAMENTO_RECUSADO_DETENTORA: [description of the reason for refusal].
+
+            - PAGAMENTO_RECUSADO_SPI: [error code according to PACS.002 reason domain table].
+
+            - CONSENTIMENTO_INVALIDO: Invalid consent (in final status).
+
+            - FALHA_INFRAESTRUTURA_SPI: Indicates a failure in the Instant Payments System (SPI).
+
+            - FALHA_INFRAESTRUTURA_ICP: Indicates a failure in the Public Key Infrastructure (ICP).
+
+            - FALHA_INFRAESTRUTURA_PSP_RECEBEDOR: Indicates a failure in the infrastructure of the Payment Service Provider (PSP) that receives the payment.
+
+            - FALHA_INFRAESTRUTURA_DETENTORA: Indicates a failure in the infrastructure of the institution holding the information or resources.
+
+            - TITULARIDADE_INCONSISTENTE: Account currently not associated with the CPF/CNPJ of the long-term consent.
+
+            - LIMITE_PERIODO_VALOR_EXCEDIDO: The transaction cannot be performed because the amount parameterized in the consent has been exceeded.
+
+            - LIMITE_PERIODO_QUANTIDADE_EXCEDIDO: The transaction cannot be performed because the quantity parameterized in the consent has been exceeded.
+
+            - LIMITE_VALOR_TOTAL_CONSENTIMENTO_EXCEDIDO: The transaction amount exceeds the global consent limit.
+
+            - LIMITE_VALOR_TRANSACAO_CONSENTIMENTO_EXCEDIDO: The transaction amount exceeds the per-transaction limit set in the consent.
+
+            - LIMITE_TENTATIVAS_EXCEDIDO: The maximum number of settlement attempts allowed by the arrangement has been reached.
+
+            - CONSENTIMENTO_REVOGADO: The payment was associated with a consent that has been revoked.
+
+            - FORA_PRAZO_PERMITIDO: The request time or period does not allow scheduling by the holder.
+
+            - DETALHE_TENTATIVA_INVALIDO: The parameter(s) [field_name(s)] entered for the new payment attempt do not match the original failed payment and are not allowed in the new attempt.
+
+            - DETALHE_PAGAMENTO_INVALIDO: Validates if a given parameter provided complies with the business rules.'
+          enum:
+          - SALDO_INSUFICIENTE
+          - VALOR_ACIMA_LIMITE
+          - VALOR_INVALIDO
+          - NAO_INFORMADO
+          - PAGAMENTO_DIVERGENTE_CONSENTIMENTO
+          - PAGAMENTO_RECUSADO_DETENTORA
+          - PAGAMENTO_RECUSADO_SPI
+          - CONSENTIMENTO_INVALIDO
+          - FALHA_INFRAESTRUTURA_SPI
+          - FALHA_INFRAESTRUTURA_ICP
+          - FALHA_INFRAESTRUTURA_PSP_RECEBEDOR
+          - FALHA_INFRAESTRUTURA_DETENTORA
+          - TITULARIDADE_INCONSISTENTE
+          - LIMITE_PERIODO_VALOR_EXCEDIDO
+          - LIMITE_PERIODO_QUANTIDADE_EXCEDIDO
+          - LIMITE_VALOR_TOTAL_CONSENTIMENTO_EXCEDIDO
+          - LIMITE_VALOR_TRANSACAO_CONSENTIMENTO_EXCEDIDO
+          - LIMITE_TENTATIVAS_EXCEDIDO
+          - CONSENTIMENTO_REVOGADO
+          - FORA_PRAZO_PERMITIDO
+          - DETALHE_TENTATIVA_INVALIDO
+          - DETALHE_PAGAMENTO_INVALIDO
+        detail:
+          type: string
+          description: Additional details about the error
+      required:
+      - code
+      - detail
+    AutomaticPixFirstPayment:
+      description: Definitions for the first payment. It is considered as the user's enrollment payment for the service.
+      type: object
+      properties:
+        date:
+          type: string
+          format: date-time
+          description: 'Defines the target settlement date of the first payment. If not provided, it will be settled immediately. Date format must be YYYY-MM-DD (for example: 2025-06-16)'
+        description:
+          type: string
+          description: Description for the first payment. If not provided, the description will be the same as the description of the payment request
+        amount:
+          type: number
+          description: Amount for the first payment.
+      required:
+      - amount
+    WEEKLY:
+      title: Weekly option
+      description: Schedule attribute to generate weekly payments on a specific day of the week.
+      properties:
+        type:
+          type: string
+          description: Schedule discriminator. Always `WEEKLY` for this variant.
+          enum:
+          - WEEKLY
+          example: WEEKLY
+        startDate:
+          type: string
+          format: date
+          description: The start date of the validity of the scheduled payment authorization.
+          example: '2024-06-11'
+        dayOfWeek:
+          type: string
+          description: Day of the week on which each payment will occur. For instance, if set to `MONDAY`, the first payment will occur on the first Monday after `startDate` (or the same day, if it is already Monday), and every Monday after that.
+          enum:
+          - MONDAY
+          - TUESDAY
+          - WEDNESDAY
+          - THURSDAY
+          - FRIDAY
+          - SATURDAY
+          - SUNDAY
+          example: MONDAY
+        occurrences:
+          type: number
+          description: Under the specified schedule frequency, how many payments will be scheduled to occur.
+          format: integer
+          minimum: 3
+          example: 3
+          maximum: 59
+      type: object
+      required:
+      - type
+      - startDate
+      - dayOfWeek
+      - occurrences
+    SmartAccount:
+      type: object
+      description: Pluggy Smart Account (escrow account) attached to a payment request. Receives funds and lets the client orchestrate splits and withdrawals.
+      properties:
+        id:
+          type: string
+          format: uuid
+        agency:
+          type: string
+          description: Bank agency of the smart account
+        number:
+          type: string
+          description: Account number
+        verifyingDigit:
+          type: string
+          description: Account verifying digit
+        type:
+          type: string
+          enum:
+          - CHECKING_ACCOUNT
+          description: Smart accounts are always checking accounts
+        isSandbox:
+          type: boolean
+        owner:
+          type: string
+          description: Legal name of the smart account holder. Only returned in detailed views.
+        pixKey:
+          type: string
+          description: PIX key associated with the smart account
+      required:
+      - id
+      - agency
+      - number
+      - verifyingDigit
+      - type
+      - isSandbox
+    PaymentCustomer:
+      description: Response with information related to a payment customer
+      properties:
+        id:
+          type: string
+          description: Primary identifier
+        type:
+          $ref: '#/components/schemas/PaymentCustomerType'
+        name:
+          type: string
+          description: Customer name
+        email:
+          type: string
+          description: Customer email
+        cpf:
+          type: string
+          description: Customer CPF
+        cnpj:
+          type: string
+          description: Customer CNPJ, if type is `BUSINESS`
+        connector:
+          $ref: '#/components/schemas/Connector'
+          description: Default institution to be used in the Pluggy's payment initiation flow (https://pay.pluggy.ai) by the payer.
+        createdAt:
+          type: string
+          format: date-time
+          description: Date when the customer was created
+        updatedAt:
+          type: string
+          format: date-time
+          description: Date when the customer was last updated
+      type: object
+      required:
+      - id
+      - type
+      - name
+      - createdAt
+      - updatedAt
+      example:
+        id: 5e9f8f8f-f8f8-4f8f-8f8f-8f8f8f8f8f8f
+        type: INDIVIDUAL
+        name: Marco Silva
+        email: marco.silva@example.com
+        cpf: 222.222.222-22
+        cnpj: null
+        connector: null
+        createdAt: '2024-01-15T10:30:00.000Z'
+        updatedAt: '2024-01-15T10:30:00.000Z'
+    DAILY:
+      title: Daily option
+      description: Schedule attribute to generate daily payments starting from `startDate`.
+      properties:
+        type:
+          type: string
+          description: Schedule discriminator. Always `DAILY` for this variant.
+          enum:
+          - DAILY
+          example: DAILY
+        startDate:
+          type: string
+          format: date
+          description: The start date of the validity of the scheduled payment authorization.
+          example: '2024-06-11'
+        occurrences:
+          type: number
+          description: Under the specified schedule frequency, how many payments will be scheduled to occur.
+          format: integer
+          minimum: 3
+          example: 3
+          maximum: 59
+      type: object
+      required:
+      - type
+      - startDate
+      - occurrences
+    AutomaticPixSchedulerConfiguration:
+      description: Configuration for automatic scheduling of payments. When enabled, the system will schedule payments according to the consent interval and start date.
+      type: object
+      properties:
+        enabled:
+          type: boolean
+          description: When true, payments are automatically scheduled by the system.
+        description:
+          type: string
+          maxLength: 140
+          description: Optional description for the scheduled payment. Overrides the payment request description when set.
+        valueForVariableAmount:
+          type: number
+          minimum: 0.01
+          description: Required when the consent has variable amounts (minimumVariableAmount/maximumVariableAmount). Default amount to use when scheduling the payment.
+      required:
+      - enabled
+    PaymentRequest:
+      description: Response with information related to a payment request
+      properties:
+        id:
+          type: string
+          description: Primary identifier
+        amount:
+          type: number
+          description: Requested amount. For automatic pix it won't be returned
+        fees:
+          type:
+          - number
+          - 'null'
+          description: Fees charged for the payment request. This includes both Pluggy's fees and any customer-specific fees. Fees are calculated based on the payment method (PIX or Boleto) and the client's pricing configuration. For sandbox accounts, fees are set to 0.
+        description:
+          type: string
+          description: Payment description
+        status:
+          $ref: '#/components/schemas/PaymentRequestStatus'
+        clientPaymentId:
+          type:
+          - string
+          - 'null'
+          description: Client payment identifier
+        createdAt:
+          type: string
+          format: date-time
+          description: Date when the payment request was created
+        updatedAt:
+          type: string
+          format: date-time
+          description: Date when the payment request was updated
+        callbackUrls:
+          anyOf:
+          - $ref: '#/components/schemas/PaymentRequestCallbackUrls'
+          - type: 'null'
+        recipient:
+          description: Recipient of the payment. Shape depends on the recipient `type`.
+          anyOf:
+          - $ref: '#/components/schemas/PaymentRequestRecipient'
+          - type: 'null'
+        customer:
+          description: Customer associated with the payment request
+          anyOf:
+          - $ref: '#/components/schemas/PaymentCustomer'
+          - type: 'null'
+        smartAccount:
+          description: Smart account that receives the funds, when applicable
+          anyOf:
+          - $ref: '#/components/schemas/SmartAccount'
+          - type: 'null'
+        paymentUrl:
+          type: string
+          description: URL to begin the payment intent creation flow for this payment request
+        pixQrCode:
+          type:
+          - string
+          - 'null'
+          description: Pix QR code generated by the payment receiver
+        boleto:
+          anyOf:
+          - $ref: '#/components/schemas/Boleto'
+          - type: 'null'
+        automaticPix:
+          $ref: '#/components/schemas/AutomaticPix'
+        schedule:
+          oneOf:
+          - $ref: '#/components/schemas/SINGLE'
+          - $ref: '#/components/schemas/DAILY'
+          - $ref: '#/components/schemas/WEEKLY'
+          - $ref: '#/components/schemas/MONTHLY'
+          - $ref: '#/components/schemas/CUSTOM'
+          - type: 'null'
+          discriminator:
+            propertyName: type
+            mapping:
+              DAILY: '#/components/schemas/DAILY'
+              WEEKLY: '#/components/schemas/WEEKLY'
+              MONTHLY: '#/components/schemas/MONTHLY'
+              CUSTOM: '#/components/schemas/CUSTOM'
+        errorDetail:
+          type:
+          - object
+          - 'null'
+          description: Error details when payment request fails
+          properties:
+            code:
+              type: string
+              description: Error code
+            providerMessage:
+              type: string
+              description: Error message returned by the institution
+        isSandbox:
+          type: boolean
+          description: 'Indicates if this payment request is in sandbox mode. Default: false.'
+          default: false
+      type: object
+      required:
+      - id
+      - status
+      - createdAt
+      - updatedAt
+      - paymentUrl
+      example:
+        id: c2a6b7d9-3349-435d-8341-44021449ebbc
+        amount: 150.5
+        fees: 0.45
+        description: 'Order #4821'
+        status: CREATED
+        clientPaymentId: order-4821
+        createdAt: '2025-03-12T13:03:45.689Z'
+        updatedAt: '2025-03-12T13:03:45.689Z'
+        callbackUrls:
+          success: https://merchant.example.com/orders/4821/success
+          error: https://merchant.example.com/orders/4821/error
+        paymentUrl: https://pay.pluggy.ai/c2a6b7d9-3349-435d-8341-44021449ebbc
+        recipient:
+          type: BANK_ACCOUNT
+          id: 5e9f8f8f-f8f8-4f8f-8f8f-8f8f8f8f8f8f
+          name: Conta empresa
+          taxNumber: '22222222222'
+          isDefault: true
+          paymentInstitution:
+            id: 00000000-0000-0000-0000-000000000000
+            name: Banco J. Safra S.A.
+            ispb: '03017677'
+            tradeName: Banco Safra
+            compe: '074'
+            createdAt: '2020-04-21T15:00:00.000Z'
+            updatedAt: '2020-04-21T15:00:00.000Z'
+          account:
+            branch: '0001'
+            number: '123456'
+            type: CHECKING_ACCOUNT
+          pixKey: null
+          createdAt: '2024-01-15T10:30:00.000Z'
+          updatedAt: '2024-01-15T10:30:00.000Z'
+        customer: null
+        smartAccount: null
+        pixQrCode: null
+        boleto: null
+        automaticPix: null
+        schedule: null
+        errorDetail: null
+        isSandbox: false
+    ScheduleAutomaticPixPaymentRequest:
+      description: Request to schedule an Automatic PIX payment
+      type: object
+      properties:
+        amount:
+          type: number
+          description: Transaction value
+        description:
+          type: string
+          description: Transaction description
+        date:
+          type: string
+          format: date
+          description: 'The payment date, which must fall between D+2 and D+10. Date format must be YYYY-MM-DD (for example: 2025-06-16)'
+        clientPaymentId:
+          type: string
+          description: External identifier for the payment
+        recipientId:
+          type: string
+          format: uuid
+          description: Payment recipient identifier. It should be sent if you want to use a different recipient from the one consented in the payment request (it must have the same tax number as the consented recipient).
+      required:
+      - amount
+      - date
+    ConnectorIncident:
+      description: 'An incident affecting a connector right now, as published on the Pluggy status page. Only incidents active at this moment are listed: a scheduled maintenance appears once its window opens, not when it is announced, and disappears when the window closes.'
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Status page identifier of the incident
+        title:
+          type: string
+          description: Short, customer-facing summary, for example 'XP Banking - Compras parceladas não sendo retornadas'
+        description:
+          type:
+          - string
+          - 'null'
+          description: Longer explanation, when there is one
+        type:
+          enum:
+          - CONNECTOR_UNAVAILABLE
+          - CONNECTOR_DEGRADED
+          - INSTITUTION_OUTAGE
+          - SCHEDULED_MAINTENANCE
+          - CONSENT_ERROR
+          - CONNECTION_NOT_UPDATING
+          - PARTIAL_SUCCESS
+          - ACCOUNTS_MISSING
+          - BALANCE_INCORRECT
+          - TRANSACTIONS_MISSING
+          - TRANSACTIONS_INCORRECT
+          - TRANSACTIONS_INSTALLMENTS_ISSUE
+          - INVESTMENTS_MISSING
+          - INVESTMENTS_INCORRECT
+          - IDENTITY_MISSING
+          - HISTORICAL_DATA_MISSING
+          - WEBHOOK_DELAY
+          - PAYMENT_FAILURE
+          - OTHER
+          type: string
+          description: 'What is broken, as opposed to how badly (severity) or how far along we are (state). Use it to group the same problem across institutions, and to decide which incidents are worth showing your own users: a SCHEDULED_MAINTENANCE and a TRANSACTIONS_MISSING both read as ''degraded'' otherwise. OTHER means Pluggy has not classified it, not that nothing is wrong'
+        product:
+          enum:
+          - dados
+          - pis
+          - pis-agendado
+          - pixauto
+          - smart
+          - infra
+          type: string
+          description: Which Pluggy product line the incident affects
+        kind:
+          enum:
+          - INCIDENT
+          - MAINTENANCE
+          type: string
+          description: Whether this is an unplanned incident or a planned maintenance window
+        severity:
+          enum:
+          - DEGRADED
+          - PARTIAL_OUTAGE
+          - MAJOR_OUTAGE
+          - MAINTENANCE
+          type: string
+          description: How badly the institution is affected
+        state:
+          enum:
+          - INVESTIGATING
+          - IDENTIFIED
+          - MONITORING
+          - SCHEDULED
+          type: string
+          description: Where the incident is in its lifecycle. Resolved incidents are not listed
+        startedAt:
+          type: string
+          format: date-time
+          description: When the incident began
+        updatedAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: When the incident was last updated
+        url:
+          type: string
+          description: Permalink to the incident on the status page, with its full timeline and postmortem. Safe to show to your own users
+      type: object
+      required:
+      - id
+      - title
+      - type
+      - product
+      - kind
+      - severity
+      - state
+      - startedAt
+      - url
+    PaymentRequestCallbackUrls:
+      description: Redirect urls after the payment was completed or ended in error status
+      properties:
+        success:
+          type: string
+          description: Url to be redirected after the payment was completed
+        pending:
+          type: string
+          description: Url to be redirected when the payment is pending (for example, when it has status WAITING_PAYER_AUTHORIZATION
+        error:
+          type: string
+          description: Url to be redirected after the payment ended in error status
+      type: object
+      example:
+        success: https://merchant.example.com/orders/4821/success
+        pending: https://merchant.example.com/orders/4821/pending
+        error: https://merchant.example.com/orders/4821/error
+    MONTHLY:
+      title: Monthly option
+      description: Schedule attribute to generate monthly payments on a specific day of the month.
+      properties:
+        type:
+          type: string
+          description: Schedule discriminator. Always `MONTHLY` for this variant.
+          enum:
+          - MONTHLY
+          example: MONTHLY
+        startDate:
+          type: string
+          format: date
+          description: The start date of the validity of the scheduled payment authorization.
+          example: '2024-06-11'
+        dayOfMonth:
+          type: number
+          description: Day of the month on which each payment will occur. For example, if `10`, the first payment will occur on the next 10th day of the month after `startDate` (or the same day if it is already the 10th), and every 10th day after that.
+          minimum: 1
+          maximum: 30
+          example: 3
+        occurrences:
+          type: number
+          description: Under the specified schedule frequency, how many payments will be scheduled to occur.
+          format: integer
+          minimum: 3
+          maximum: 23
+          example: 3
+      type: object
+      required:
+      - type
+      - startDate
+      - dayOfMonth
+      - occurrences
+    BoletoRecipient:
+      description: Boleto recipient information
+      properties:
+        taxNumber:
+          type: string
+          description: Recipient CPF or CNPJ
+        name:
+          type: string
+          description: Recipient name
+      type: object
+      required:
+      - taxNumber
+      - name
+    CreateAutomaticPixPaymentRequest:
+      description: Automatic PIX data
+      type: object
+      properties:
+        fixedAmount:
+          type: number
+          description: Fixed charge amount; if filled in, it represents consent for payments of fixed amounts, not subject to change during the validity of the consent. If it's sent, minimumVariableAmount and maximumVariableAmount cannot be provided.
+        minimumVariableAmount:
+          type: number
+          description: Minimum amount allowed per charge; if filled in, it represents consent for payments of variable amounts. If it's sent, fixedAmount cannot be provided.
+        maximumVariableAmount:
+          type: number
+          description: Maximum amount allowed per charge; if filled in, it represents consent for payments of variable amounts. If it's sent, fixedAmount cannot be provided.
+        description:
+          type: string
+          description: Description for the automatic pix authorization
+        startDate:
+          type: string
+          format: date
+          description: 'Represents the expected date for the first occurrence of a payment associated with the recurrence. Date format must be YYYY-MM-DD (for example: 2025-06-16)'
+        expiresAt:
+          type: string
+          format: date
+          description: 'Expiration date for the automatic pix authorization. The date must be in UTC and the format must follow the following pattern: YYYY-MM-DDTHH:MM:SSZ (for example: 2025-06-16T03:00:00Z).'
+        isRetryAccepted:
+          type: boolean
+          description: Indicates whether the receiving customer is allowed to make payment attempts, according to the rules established in the Pix arrangement.
+        firstPayment:
+          $ref: '#/components/schemas/AutomaticPixFirstPayment'
+        interval:
+          $ref: '#/components/schemas/AutomaticPixInterval'
+        automaticRetriesConfiguration:
+          $ref: '#/components/schemas/AutomaticPixRetriesConfiguration'
+        schedulerConfiguration:
+          $ref: '#/components/schemas/AutomaticPixSchedulerConfiguration'
+        callbackUrls:
+          anyOf:
+          - $ref: '#/components/schemas/PaymentRequestCallbackUrls'
+          - type: 'null'
+        recipientId:
+          type: string
+          description: Primary identifier of the payment recipient
+        clientPaymentId:
+          type: string
+          description: Client payment identifier
+        customerId:
+          type: string
+          description: Primary identifier of the customer
+      required:
+      - startDate
+      - interval
+      - recipientId
+    AutomaticPixRetriesConfiguration:
+      description: “Configuration for automatic retries. If provided, the scheduled payments associated with this consent will only be retried on the days specified in the array after the original payment date. This does not apply to the first payment, only for scheduled payments.
+      type: object
+      properties:
+        retryDays:
+          type: array
+          items:
+            type: integer
+            enum:
+            - 1
+            - 2
+            - 3
+            - 4
+            - 5
+            - 6
+            - 7
+      required:
+      - retryDays
+    SINGLE:
+      title: One time option
+      description: Schedule attribute to generate a single payment on a specific future date.
+      properties:
+        type:
+          type: string
+          description: Schedule discriminator. Always `SINGLE` for this variant.
+          enum:
+          - SINGLE
+          example: SINGLE
+        date:
+          type: string
+          format: date
+          description: Settlement date for the payment (YYYY-MM-DD).
+          example: '2024-06-11'
+      type: object
+      required:
+      - type
+      - date
+    PaymentRequestStatus:
+      type: string
+      description: 'Lifecycle of a payment request.
+
+        - `CREATED`: the request was created and is waiting for a payment intent.
+
+        - `IN_PROGRESS`: a payment intent is being processed by the institution.
+
+        - `WAITING_PAYER_AUTHORIZATION`: the payer must authorize the payment at the institution.
+
+        - `AUTHORIZED`: only for Automatic PIX. The recurring consent was authorized; individual payments will be executed under it.
+
+        - `SCHEDULED`: the payment is scheduled for a future date.
+
+        - `COMPLETED`: the payment was confirmed by the institution.
+
+        - `ERROR`: the payment failed (see `errorDetail`).
+
+        - `REFUND_IN_PROGRESS`: a refund was requested and is being processed.
+
+        - `REFUNDED`: the refund was completed.
+
+        - `REFUND_ERROR`: the refund failed.
+
+        - `EXPIRED`: the request expired without being paid.
+
+        - `CANCELED`: the request was canceled.'
+      enum:
+      - CREATED
+      - IN_PROGRESS
+      - WAITING_PAYER_AUTHORIZATION
+      - AUTHORIZED
+      - SCHEDULED
+      - COMPLETED
+      - ERROR
+      - REFUND_IN_PROGRESS
+      - REFUNDED
+      - REFUND_ERROR
+      - EXPIRED
+      - CANCELED
+    BoletoPaymentRecipient:
+      type: object
+      description: Payment recipient inferred from a boleto.
+      properties:
+        type:
+          type: string
+          enum:
+          - BOLETO
+        name:
+          type: string
+          description: Recipient name from the boleto
+        taxNumber:
+          type: string
+          description: Recipient CPF or CNPJ from the boleto
+      required:
+      - type
+    AutomaticPix:
+      description: Automatic PIX data
+      type: object
+      properties:
+        fixedAmount:
+          type: number
+          description: Fixed charge amount; if filled in, it represents consent for payments of fixed amounts, not subject to change during the validity of the consent. If it's sent, minimumVariableAmount and maximumVariableAmount cannot be provided.
+        minimumVariableAmount:
+          type: number
+          description: Minimum amount allowed per charge; if filled in, it represents consent for payments of variable amounts. If it's sent, fixedAmount cannot be provided.
+        maximumVariableAmount:
+          type: number
+          description: Maximum amount allowed per charge; if filled in, it represents consent for payments of variable amounts. If it's sent, fixedAmount cannot be provided.
+        startDate:
+          type: string
+          format: date-time
+          description: Represents the expected date for the first occurrence of a payment associated with the recurrence.
+        expiresAt:
+          type: string
+          format: date-time
+          description: Expiration date for the automatic pix authorization
+        isRetryAccepted:
+          type: boolean
+          description: Indicates whether the receiving customer is allowed to make payment attempts, according to the rules established in the Pix arrangement.
+        firstPayment:
+          $ref: '#/components/schemas/AutomaticPixFirstPayment'
+        interval:
+          $ref: '#/components/schemas/AutomaticPixInterval'
+        automaticRetriesConfiguration:
+          $ref: '#/components/schemas/AutomaticPixRetriesConfiguration'
+        schedulerConfiguration:
+          $ref: '#/components/schemas/AutomaticPixSchedulerConfiguration'
+      required:
+      - startDate
+      - interval
+    AutomaticPixInterval:
+      type: string
+      enum:
+      - WEEKLY
+      - MONTHLY
+      - QUARTERLY
+      - SEMESTER
+      - YEARLY
+      description: Permitted frequency for recurring PIX payments under a consent.
+    BoletoPayer:
+      description: Payer of a boleto being paid. Only identity data — this is not the payer of an issued boleto, which carries the full address block under `IssuedBoleto.payer`.
+      properties:
+        taxNumber:
+          type: string
+          description: Payer CPF or CNPJ
+        name:
+          type: string
+          description: Payer name
+      type: object
+      required:
+      - taxNumber
+      - name
+    PaymentCustomerType:
+      type: string
+      enum:
+      - INDIVIDUAL
+      - BUSINESS
+      description: 'Customer type.
+
+        - `INDIVIDUAL`: identified by `cpf`.
+
+        - `BUSINESS`: identified by `cnpj`.'
+    Boleto:
+      description: Boleto data
+      properties:
+        digitableLine:
+          type: string
+          description: Boleto digitable line
+        barcode:
+          type: string
+          description: Boleto barcode
+        payer:
+          $ref: '#/components/schemas/BoletoPayer'
+        recipient:
+          $ref: '#/components/schemas/BoletoRecipient'
+        date:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: Boleto issue date
+        dueDate:
+          type: string
+          format: date-time
+          description: Boleto due date
+        expirationDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: After this date, the boleto cannot be paid
+        baseAmount:
+          type: number
+          description: Boleto original amount, without interests, penalties and discounts
+        penaltyAmount:
+          type: number
+          description: Boleto penalty amount. If there is no penalty, it will be returned as zero
+        interestAmount:
+          type: number
+          description: Boleto interest amount. If there is no interest, it will be returned as zero
+        discountAmount:
+          type: number
+          description: Boleto discount amount. If there is no discounts, it will be returned as zero
+        totalAmount:
+          type: number
+          description: Boleto final amount. It is equal to the base amount plus penalties and interests, minus discounts
+        updatedAt:
+          type: string
+          format: date-time
+          description: Date when the lastest information of this boleto has been retrieved
+      type: object
+      required:
+      - digitableLine
+      - barcode
+      - payer
+      - recipient
+      - dueDate
+      - baseAmount
+      - penaltyAmount
+      - discountAmount
+      - totalAmount
+    PaymentInstitution:
+      description: Response with information related to a payment institution
+      properties:
+        id:
+          type: string
+          description: Primary identifier
+        name:
+          type: string
+          description: Payment institution name
+        tradeName:
+          type: string
+          description: Payment institution trade name
+        ispb:
+          type: string
+          description: Payment institution ISPB
+        compe:
+          type: string
+          description: Payment institution COMPE
+        createdAt:
+          type: string
+          format: date-time
+          description: Date when the payment institution was created
+        updatedAt:
+          type: string
+          format: date-time
+          description: Date when the payment institution was updated
+      type: object
+      required:
+      - id
+      - name
+      - ispb
+      - tradeName
+      - createdAt
+      - updatedAt
+      example:
+        id: 5e9f8f8f-f8f8-4f8f-8f8f-8f8f8f8f8f8f
+        name: Banco J. Safra S.A.
+        ispb: '03017677'
+        tradeName: Banco Safra
+        compe: '074'
+        createdAt: '2020-04-21T15:00:00.000Z'
+        updatedAt: '2020-04-21T15:00:00.000Z'
+    AutomaticPixPaymentStatus:
+      type: string
+      enum:
+      - SCHEDULED
+      - CREATED
+      - COMPLETED
+      - CANCELED
+      - ERROR
+      description: 'Status of an individual recurring PIX payment.
+
+        - `SCHEDULED`: the payment has been scheduled at the institution.
+
+        - `CREATED`: the payment is created and pending execution.
+
+        - `COMPLETED`: the payment was confirmed.
+
+        - `CANCELED`: the payment was canceled.
+
+        - `ERROR`: the payment failed (see `errorDetail`).'
+    PaymentRequestRecipient:
+      description: 'Recipient embedded inside a payment request. Polymorphic depending on the kind of payment.
+
+        - `BANK_ACCOUNT`: a registered bank-account recipient (see `PaymentRecipient`).
+
+        - `PIX_QR_CODE`: recipient derived from a PIX QR code attached to the request.
+
+        - `BOLETO`: recipient derived from a boleto attached to the request.'
+      oneOf:
+      - $ref: '#/components/schemas/PaymentRecipient'
+      - $ref: '#/components/schemas/PixQrPaymentRecipient'
+      - $ref: '#/components/schemas/BoletoPaymentRecipient'
+      discriminator:
+        propertyName: type
+        mapping:
+          BANK_ACCOUNT: '#/components/schemas/PaymentRecipient'
+          PIX_QR_CODE: '#/components/schemas/PixQrPaymentRecipient'
+          BOLETO: '#/components/schemas/BoletoPaymentRecipient'
+    PixQrPaymentRecipient:
+      type: object
+      description: Payment recipient inferred from a PIX QR code (only the merchant name is exposed).
+      properties:
+        type:
+          type: string
+          enum:
+          - PIX_QR_CODE
+        name:
+          type: string
+          description: Merchant name decoded from the PIX QR code
+      required:
+      - type
+    CUSTOM:
+      title: Customized option
+      description: Schedule attribute to generate payments on an explicit list of dates.
+      properties:
+        type:
+          type: string
+          description: Schedule discriminator. Always `CUSTOM` for this variant.
+          enum:
+          - CUSTOM
+          example: CUSTOM
+        dates:
+          type: array
+          description: Explicit list of dates (YYYY-MM-DD) on which payments will be settled.
+          items:
+            type: string
+            format: date
+            example: '2024-06-11'
+        additionalInformation:
+          type: string
+          description: Additional information about the custom schedule
+      type: object
+      required:
+      - type
+      - dates
+    AutomaticPixPaymentDetail:
+      description: Automatic PIX payment detail with additional fields
+      allOf:
+      - $ref: '#/components/schemas/AutomaticPixPayment'
+      - type: object
+        properties:
+          scheduledStatusReached:
+            type: boolean
+            description: Indicates whether the payment reached the scheduled status in the last attempt. Useful to determine if a retry can be executed.
+        required:
+        - scheduledStatusReached
+    CredentialSelectOption:
+      description: Option for ConnectorCredential of type select
+      properties:
+        value:
+          type: string
+          description: Value for the option
+        label:
+          type: string
+          description: Label for the option
+      type: object
+      required:
+      - value
+      - label
+    AutomaticPixPayment:
+      description: Automatic PIX payment
+      type: object
+      properties:
+        id:
+          type: string
+          description: Payment primary identifier
+        status:
+          $ref: '#/components/schemas/AutomaticPixPaymentStatus'
+        amount:
+          type: number
+          description: Payment amount
+        description:
+          type: string
+          description: Payment description
+        date:
+          type: string
+          format: date
+          description: Payment scheduled date
+        endToEndId:
+          type:
+          - string
+          - 'null'
+          description: Payment end to end identifier
+        errorDetail:
+          anyOf:
+          - $ref: '#/components/schemas/AutomaticPixPaymentErrorDetail'
+          - type: 'null'
+        clientPaymentId:
+          type: string
+          description: External identifier for the payment
+        recipientId:
+          type: string
+          format: uuid
+          description: Payment recipient identifier
+        isFirstPayment:
+          type: boolean
+          description: Indicates if this is the first payment
+        attempts:
+          type: array
+          items:
+            $ref: '#/components/schemas/AutomaticPixPaymentAttempt'
+      required:
+      - id
+      - status
+      - amount
+      - date
+      - recipientId
+    RetryAutomaticPixPaymentRequest:
+      description: Request to retry an automatic PIX payment
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+          description: 'The date to retry the payment within a 7-day window. Date format must be YYYY-MM-DD (for example: 2025-06-16)'
+      required:
+      - date
+    Connector:
+      description: Connector object
+      properties:
+        id:
+          type: number
+          format: integer
+          description: Primary identifier
+        name:
+          type: string
+          description: Name of the institution
+        institutionUrl:
+          type: string
+          description: Homepage of the institution
+        imageUrl:
+          type: string
+          description: Image of the logo hosted by Pluggy
+        primaryColor:
+          type: string
+          description: Primary color
+        type:
+          type: string
+          description: Type of institution
+        country:
+          type: string
+          description: Country located
+        credentials:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConnectorCredential'
+          description: Parameters required to start the connection
+        hasMFA:
+          type: boolean
+          description: Does the connector require an MFA to execute?
+        products:
+          type: array
+          items:
+            type: string
+            enum:
+            - ACCOUNTS
+            - CREDIT_CARDS
+            - TRANSACTIONS
+            - PAYMENT_DATA
+            - INVESTMENTS
+            - INVESTMENTS_TRANSACTIONS
+            - IDENTITY
+            - BROKERAGE_NOTE
+            - MOVE_SECURITY
+            - LOANS
+          description: Products supported by the connector
+        productCoverage:
+          type: array
+          items:
+            type: string
+          description: 'Which sub-products the institution serves, in the Open Finance directory''s own vocabulary (for example INVESTMENTS:TREASURE_TITLES, CREDIT_OPERATIONS:INVOICE_FINANCINGS). Where products says whether the connector serves investments at all, this says which ones: a connector listing INVESTMENTS may serve one of the five investment resources or all five. Absent for direct connectors, which have no Open Finance participant.'
+        oauth:
+          type: boolean
+          description: If 'true', the connector requires an Oauth flow to execute
+        oauthUrl:
+          type: string
+          description: URL to perform Oauth flow if needed
+        resetPasswordUrl:
+          type: string
+          description: URL to the financial institution to reset the password
+        health:
+          $ref: '#/components/schemas/ConnectorHealth'
+        isOpenFinance:
+          type: boolean
+          description: Indicates if the connector uses the regulated Open Finance APIs
+        isSandbox:
+          type: boolean
+          description: Indicates if the connector is a sandbox connector, meant for testing rather than a real institution
+        supportsPaymentInitiation:
+          type: boolean
+          description: Indicates if the connector supports the payment initiation API
+        supportsScheduledPayments:
+          type: boolean
+          description: Indicates if the connector supports scheduled payments
+        supportsSmartTransfers:
+          type: boolean
+          description: Indicates if the connector supports smart transfers
+        supportsBoletoManagement:
+          type: boolean
+          description: Indicates if the connector supports boleto management
+        supportsAutomaticPix:
+          type: boolean
+          description: Indicates if the connector supports automatic Pix
+        createdAt:
+          type: string
+          format: date-time
+          description: Date of creation
+        updatedAt:
+          type: string
+          format: date-time
+          description: Date of last modification
+      type: object
+      required:
+      - id
+      example:
+        id: 601
+        name: Itaú
+        primaryColor: EC7000
+        institutionUrl: https://www.itau.com.br
+        country: BR
+        type: PERSONAL_BANK
+        credentials:
+        - validation: ^\d{3}\.?\d{3}\.?\d{3}-?\d{2}$
+          validationMessage: CPF deve ter 11 números.
+          label: CPF
+          name: cpf
+          type: number
+          placeholder: ''
+          optional: false
+        imageUrl: https://cdn.pluggy.ai/assets/connector-icons/201.svg
+        hasMFA: false
+        oauth: true
+        health:
+          status: ONLINE
+          stage: null
+        products:
+        - ACCOUNTS
+        - TRANSACTIONS
+        - IDENTITY
+        - CREDIT_CARDS
+        - PAYMENT_DATA
+        - LOANS
+        - INVESTMENTS
+        createdAt: '2023-09-01T18:05:09.145Z'
+        isSandbox: false
+        isOpenFinance: true
+        updatedAt: '2024-07-16T15:34:08.028Z'
+        supportsPaymentInitiation: true
+        supportsScheduledPayments: true
+        supportsSmartTransfers: true
+        supportsBoletoManagement: true
+        supportsAutomaticPix: true
+    ConnectorCredential:
+      description: Credential details for a connector
+      properties:
+        name:
+          type: string
+          description: Name of the key
+        label:
+          type: string
+          description: Label for input
+        type:
+          enum:
+          - text
+          - password
+          - number
+          - image
+          - select
+          type: string
+          description: Type of credential required
+        assistiveText:
+          type: string
+          description: Text to help the user when completing the input
+        data:
+          type: string
+          description: Used to return base64 images
+        placeholder:
+          type: string
+          description: Placeholder text for the input
+        validation:
+          type: string
+          description: Regex validation for the user's input
+        validationMessage:
+          type: string
+          description: Validation message when input doesn't match the regex
+        mfa:
+          type: boolean
+          description: Credential is an MFA parameter and must be refreshed on each execution
+        options:
+          type: array
+          items:
+            $ref: '#/components/schemas/CredentialSelectOption'
+          description: List of possible values for the input
+        optional:
+          type: boolean
+          description: Whether the credential can be left empty. Always present; defaults to false
+        instructions:
+          type: string
+          description: Instructions to help the user obtain this credential
+        expiresAt:
+          type: string
+          format: date-time
+          description: Expiration date of the credential value, when the institution sets one
+      type: object
+      required:
+      - name
+      - label
+      - type
+      - optional
+  securitySchemes:
+    default:
+      type: apiKey
+      name: X-API-KEY
+      in: header

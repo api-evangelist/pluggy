@@ -1,0 +1,82 @@
+generated: '2026-10-18'
+method: searched
+generator: extract-docs-artifacts.py (deepseek)
+source: https://docs.pluggy.ai/en/docs/guides/sandbox.md
+sources:
+- https://docs.pluggy.ai/en/docs/guides/sandbox.md
+- https://docs.pluggy.ai/en/docs/smart-transfers/sandbox.md
+- https://docs.pluggy.ai/en/docs/boleto/sandbox.md
+- https://docs.pluggy.ai/en/docs/guides/sandbox
+description: Pluggy's sandbox environment for testing integrations with synthetic data that simulates real banking scenarios including basic flows,
+  MFA flows, joint accounts, QR login, Open Finance, boleto payments, and smart transfers.
+modes:
+- name: Sandbox
+test_values:
+- value: password-ok
+  kind: password
+  meaning: Correct password for successful flow
+- value: '123456'
+  kind: mfa_token
+  meaning: Correct MFA token for successful flow
+- value: user-ok
+  kind: username
+  meaning: Successful connection
+- value: user-logged
+  kind: username
+  meaning: User already has opened login session
+- value: user-locked
+  kind: username
+  meaning: User account is locked
+- value: user-error
+  kind: username
+  meaning: Connector had a random error
+- value: user-unavailable
+  kind: username
+  meaning: Provider site was not available
+- value: user-account-need-actions
+  kind: username
+  meaning: Provider requesting manual action from user
+- value: user-account-need-actions-provider-message
+  kind: username
+  meaning: Provider requesting manual action with instructions in providerMessage field
+- value: 333.333.333-33
+  kind: tax_number
+  meaning: Sample tax number in account data
+- value: 111.111.111-11
+  kind: cpf
+  meaning: Sample payer CPF in transaction data
+- value: PL.UGG.Y12/AB00-42
+  kind: cnpj
+  meaning: Sample receiver CNPJ in transaction data
+- value: '11190000111001113911100000021110600000000111000'
+  kind: digitable_line
+  meaning: Sample boleto digitable line
+- value: 3b3341e4-d30c-48d6-bcbe-79a3fe47d704
+  kind: bill_id
+  meaning: Sample credit card bill ID
+- value: 40.430.971/0001-96
+  kind: cnpj
+  meaning: Sample issuer CNPJ for investment
+- value: '30306294000145'
+  kind: cnpj
+  meaning: Sample institution CNPJ for investment
+- value: '123456789'
+  kind: isin
+  meaning: Sample ISIN code for ETF
+- value: BRGGRCCTF002
+  kind: isin
+  meaning: Sample ISIN code for real estate fund
+- value: '123.01'
+  kind: amount
+  meaning: Boleto amount ending in ,01 triggers partial payment scenario
+- value: '100.00'
+  kind: amount
+  meaning: Boleto amount ending in ,00 triggers full payment scenario
+time_simulation: 5 minutes for boleto scenario transitions; transactions refreshed weekly and may change daily
+note: The documentation provides test credentials, usernames for different execution statuses, sample data values, and boleto scenario triggers
+  based on amount cents. However, it does not specify base URLs, portal access methods, key prefixes/formats, or explicit fixture/trigger tooling.
+docs:
+- https://docs.pluggy.ai/en/docs/guides/sandbox.md
+- https://docs.pluggy.ai/en/docs/smart-transfers/sandbox.md
+- https://docs.pluggy.ai/en/docs/boleto/sandbox.md
+- https://docs.pluggy.ai/en/docs/guides/sandbox

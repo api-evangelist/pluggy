@@ -1,0 +1,695 @@
+openapi: 3.2.0
+info:
+  title: Pluggy Payment Customer API
+  description: Pluggy's main API to review data and execute connectors
+  license:
+    name: MIT
+  contact:
+    email: hello@pluggy.ai
+    name: Pluggy
+    url: https://pluggy.ai
+  version: 1.0.0
+servers:
+- url: https://api.pluggy.ai
+  description: Pluggy API
+tags:
+- name: Payment Customer
+  description: Payment customer management
+paths:
+  /payments/customers:
+    get:
+      operationId: payment-customers-list
+      summary: List
+      description: Recovers all created payment customers
+      responses:
+        '200':
+          description: Retrieve a list of all payment customers
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  page:
+                    type: number
+                    format: double
+                    description: ''
+                  total:
+                    type: number
+                    format: double
+                    description: ''
+                  totalPages:
+                    type: number
+                    format: double
+                    description: ''
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PaymentCustomer'
+                    description: List of payment customers
+              examples:
+                response:
+                  value:
+                    page: 1
+                    total: 1
+                    totalPages: 1
+                    results:
+                    - id: 05c693bf-c196-47ea-a28c-8251d6bb8a06
+                      type: INDIVIDUAL
+                      name: Marco Silva
+                      email: marco.silva@example.com
+                      createdAt: '2023-11-06T13:03:45.689Z'
+                      updatedAt: '2023-11-06T13:03:45.689Z'
+      tags:
+      - Payment Customer
+      security:
+      - default: []
+      parameters:
+      - description: 'Page size for the paging request, default: 500'
+        in: query
+        name: pageSize
+        required: false
+        schema:
+          type: number
+          format: double
+        example: '50'
+      - description: 'Page number for the paging request, default: 1'
+        in: query
+        name: page
+        required: false
+        schema:
+          type: number
+          format: double
+        example: '1'
+      - description: Filter payment customers by name
+        in: query
+        name: name
+        required: false
+        schema:
+          type: string
+        example: John
+      - description: Filter payment customers by email
+        in: query
+        name: email
+        required: false
+        schema:
+          type: string
+        example: john.doe@email.com
+      - description: Filter payment customers by CPF
+        in: query
+        name: cpf
+        required: false
+        schema:
+          type: string
+        example: '11111111111'
+      - description: Filter payment customers by CNPJ
+        in: query
+        name: cnpj
+        required: false
+        schema:
+          type: string
+        example: '1111111111111'
+    post:
+      operationId: payment-customer-create
+      summary: Create
+      responses:
+        '200':
+          description: Create a payment customer.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentCustomer'
+        '400':
+          description: Payment Customer its Invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+              example:
+                code: 400
+                message: email its not an email
+      tags:
+      - Payment Customer
+      security:
+      - default: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePaymentCustomerRequestBody'
+        required: true
+  /payments/customers/{id}:
+    get:
+      operationId: payment-customer-retrieve
+      summary: Retrieve
+      responses:
+        '200':
+          description: Retrieve a customer request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentCustomer'
+        '404':
+          description: Payment Customer not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+              example:
+                code: 404
+                codeDescription: PAYMENT_CUSTOMER_NOT_FOUND
+                message: Payment customer not found
+      description: Recovers the payment customer resource by its id
+      tags:
+      - Payment Customer
+      security:
+      - default: []
+      parameters:
+      - description: Payment customer primary identifier
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+          format: uuid
+        example: d0e8a7f0-6d86-11ea-b77f-2e728ce88125
+    delete:
+      operationId: payment-customer-delete
+      summary: Delete
+      responses:
+        '200':
+          description: Delete a customer request.
+        '404':
+          description: Payment customer not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+              example:
+                code: 404
+                codeDescription: PAYMENT_CUSTOMER_NOT_FOUND
+                message: Payment customer not found
+      description: Deletes the payment customer resource by its id
+      tags:
+      - Payment Customer
+      security:
+      - default: []
+      parameters:
+      - description: Payment customer primary identifier
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+          format: uuid
+        example: d0e8a7f0-6d86-11ea-b77f-2e728ce88125
+    patch:
+      operationId: payment-customer-update
+      summary: Update
+      responses:
+        '200':
+          description: Update a payment customer.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentCustomer'
+      description: Updates the payment customer resource
+      tags:
+      - Payment Customer
+      security:
+      - default: []
+      parameters:
+      - description: Payment customer primary identifier
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+          format: uuid
+        example: d0f8a8c0-e8e3-11e9-b210-d663bd873d93
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateOrUpdatePaymentCustomer'
+        required: true
+components:
+  schemas:
+    ConnectorIncident:
+      description: 'An incident affecting a connector right now, as published on the Pluggy status page. Only incidents active at this moment are listed: a scheduled maintenance appears once its window opens, not when it is announced, and disappears when the window closes.'
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Status page identifier of the incident
+        title:
+          type: string
+          description: Short, customer-facing summary, for example 'XP Banking - Compras parceladas não sendo retornadas'
+        description:
+          type:
+          - string
+          - 'null'
+          description: Longer explanation, when there is one
+        type:
+          enum:
+          - CONNECTOR_UNAVAILABLE
+          - CONNECTOR_DEGRADED
+          - INSTITUTION_OUTAGE
+          - SCHEDULED_MAINTENANCE
+          - CONSENT_ERROR
+          - CONNECTION_NOT_UPDATING
+          - PARTIAL_SUCCESS
+          - ACCOUNTS_MISSING
+          - BALANCE_INCORRECT
+          - TRANSACTIONS_MISSING
+          - TRANSACTIONS_INCORRECT
+          - TRANSACTIONS_INSTALLMENTS_ISSUE
+          - INVESTMENTS_MISSING
+          - INVESTMENTS_INCORRECT
+          - IDENTITY_MISSING
+          - HISTORICAL_DATA_MISSING
+          - WEBHOOK_DELAY
+          - PAYMENT_FAILURE
+          - OTHER
+          type: string
+          description: 'What is broken, as opposed to how badly (severity) or how far along we are (state). Use it to group the same problem across institutions, and to decide which incidents are worth showing your own users: a SCHEDULED_MAINTENANCE and a TRANSACTIONS_MISSING both read as ''degraded'' otherwise. OTHER means Pluggy has not classified it, not that nothing is wrong'
+        product:
+          enum:
+          - dados
+          - pis
+          - pis-agendado
+          - pixauto
+          - smart
+          - infra
+          type: string
+          description: Which Pluggy product line the incident affects
+        kind:
+          enum:
+          - INCIDENT
+          - MAINTENANCE
+          type: string
+          description: Whether this is an unplanned incident or a planned maintenance window
+        severity:
+          enum:
+          - DEGRADED
+          - PARTIAL_OUTAGE
+          - MAJOR_OUTAGE
+          - MAINTENANCE
+          type: string
+          description: How badly the institution is affected
+        state:
+          enum:
+          - INVESTIGATING
+          - IDENTIFIED
+          - MONITORING
+          - SCHEDULED
+          type: string
+          description: Where the incident is in its lifecycle. Resolved incidents are not listed
+        startedAt:
+          type: string
+          format: date-time
+          description: When the incident began
+        updatedAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: When the incident was last updated
+        url:
+          type: string
+          description: Permalink to the incident on the status page, with its full timeline and postmortem. Safe to show to your own users
+      type: object
+      required:
+      - id
+      - title
+      - type
+      - product
+      - kind
+      - severity
+      - state
+      - startedAt
+      - url
+    CreateOrUpdatePaymentCustomer:
+      description: Body to update a payment customer. All fields are optional.
+      properties:
+        type:
+          $ref: '#/components/schemas/PaymentCustomerType'
+        name:
+          type: string
+          description: Customer name
+        email:
+          type: string
+          description: Customer email
+        cpf:
+          type: string
+          description: Customer CPF
+        cnpj:
+          type: string
+          description: Customer CNPJ, if type is `BUSINESS`
+      type: object
+      example:
+        name: Marco Silva
+        email: marco.silva@example.com
+    PaymentCustomer:
+      description: Response with information related to a payment customer
+      properties:
+        id:
+          type: string
+          description: Primary identifier
+        type:
+          $ref: '#/components/schemas/PaymentCustomerType'
+        name:
+          type: string
+          description: Customer name
+        email:
+          type: string
+          description: Customer email
+        cpf:
+          type: string
+          description: Customer CPF
+        cnpj:
+          type: string
+          description: Customer CNPJ, if type is `BUSINESS`
+        connector:
+          $ref: '#/components/schemas/Connector'
+          description: Default institution to be used in the Pluggy's payment initiation flow (https://pay.pluggy.ai) by the payer.
+        createdAt:
+          type: string
+          format: date-time
+          description: Date when the customer was created
+        updatedAt:
+          type: string
+          format: date-time
+          description: Date when the customer was last updated
+      type: object
+      required:
+      - id
+      - type
+      - name
+      - createdAt
+      - updatedAt
+      example:
+        id: 5e9f8f8f-f8f8-4f8f-8f8f-8f8f8f8f8f8f
+        type: INDIVIDUAL
+        name: Marco Silva
+        email: marco.silva@example.com
+        cpf: 222.222.222-22
+        cnpj: null
+        connector: null
+        createdAt: '2024-01-15T10:30:00.000Z'
+        updatedAt: '2024-01-15T10:30:00.000Z'
+    GlobalErrorResponse:
+      title: Global Error Response Schema
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: number
+        message:
+          type: string
+        codeDescription:
+          type: string
+          description: Distinctive code description, useful to distinguish the error.
+        data:
+          type: object
+          description: Additional data related to the error, if any
+          properties: {}
+      example:
+        code: 500
+        codeDescription: INTERNAL_SERVER_ERROR
+        message: Internal Server Error
+    ConnectorHealth:
+      description: Connector health status
+      properties:
+        status:
+          type: string
+          description: '''ONLINE'' | ''OFFLINE'' | ''UNSTABLE'''
+        stage:
+          type:
+          - string
+          - 'null'
+        incidents:
+          type: array
+          description: 'Incidents currently affecting this connector, as published on https://status.pluggy.ai. Absent when the connector has none, so a healthy connector''s payload is unchanged. Ordered worst-first, so the first entry is the one to show if you only show one. Note this is about the institution, not about your own connections: use it to warn a user before they pick a bank that is known to be failing right now.'
+          items:
+            $ref: '#/components/schemas/ConnectorIncident'
+        details:
+          type: object
+          description: Statistics about your recent connections on the connector and recent connection rate (percentage of healthy connections). This field is only present if you include the parameter healthDetails=true. This will be null if there was an error obtaining health details.
+          properties:
+            connectionRateLast6Hours:
+              type: number
+              description: 'A number from 0 to 100: the percentage of executions that succesfully connect to the institution: status of CONNECTION_ERROR,ERROR,SITE_NOT_AVAILABLE decrease the percentage. Any other status (like SUCCESS/LOGIN_ERROR) increase the percentage. The value will be null if there were no connections'
+            connectionsLast6Hours:
+              type: number
+              description: Amount of your connections for this connector during the last 6 hours. 0 if there were no connections
+    CredentialSelectOption:
+      description: Option for ConnectorCredential of type select
+      properties:
+        value:
+          type: string
+          description: Value for the option
+        label:
+          type: string
+          description: Label for the option
+      type: object
+      required:
+      - value
+      - label
+    CreatePaymentCustomerRequestBody:
+      description: Body to create a payment customer
+      properties:
+        type:
+          $ref: '#/components/schemas/PaymentCustomerType'
+        name:
+          type: string
+          description: Customer name
+        email:
+          type: string
+          description: Customer email
+        cpf:
+          type: string
+          description: Customer CPF. Required when `type=INDIVIDUAL`.
+        cnpj:
+          type: string
+          description: Customer CNPJ. Required when `type=BUSINESS`.
+        connectorId:
+          type: number
+          description: Default connector id to be used in the Pluggy's payment initiation flow (https://pay.pluggy.ai) by the payer.
+      type: object
+      required:
+      - type
+      - name
+      example:
+        type: INDIVIDUAL
+        name: Marco Silva
+        email: marco.silva@example.com
+        cpf: '22222222222'
+    Connector:
+      description: Connector object
+      properties:
+        id:
+          type: number
+          format: integer
+          description: Primary identifier
+        name:
+          type: string
+          description: Name of the institution
+        institutionUrl:
+          type: string
+          description: Homepage of the institution
+        imageUrl:
+          type: string
+          description: Image of the logo hosted by Pluggy
+        primaryColor:
+          type: string
+          description: Primary color
+        type:
+          type: string
+          description: Type of institution
+        country:
+          type: string
+          description: Country located
+        credentials:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConnectorCredential'
+          description: Parameters required to start the connection
+        hasMFA:
+          type: boolean
+          description: Does the connector require an MFA to execute?
+        products:
+          type: array
+          items:
+            type: string
+            enum:
+            - ACCOUNTS
+            - CREDIT_CARDS
+            - TRANSACTIONS
+            - PAYMENT_DATA
+            - INVESTMENTS
+            - INVESTMENTS_TRANSACTIONS
+            - IDENTITY
+            - BROKERAGE_NOTE
+            - MOVE_SECURITY
+            - LOANS
+          description: Products supported by the connector
+        productCoverage:
+          type: array
+          items:
+            type: string
+          description: 'Which sub-products the institution serves, in the Open Finance directory''s own vocabulary (for example INVESTMENTS:TREASURE_TITLES, CREDIT_OPERATIONS:INVOICE_FINANCINGS). Where products says whether the connector serves investments at all, this says which ones: a connector listing INVESTMENTS may serve one of the five investment resources or all five. Absent for direct connectors, which have no Open Finance participant.'
+        oauth:
+          type: boolean
+          description: If 'true', the connector requires an Oauth flow to execute
+        oauthUrl:
+          type: string
+          description: URL to perform Oauth flow if needed
+        resetPasswordUrl:
+          type: string
+          description: URL to the financial institution to reset the password
+        health:
+          $ref: '#/components/schemas/ConnectorHealth'
+        isOpenFinance:
+          type: boolean
+          description: Indicates if the connector uses the regulated Open Finance APIs
+        isSandbox:
+          type: boolean
+          description: Indicates if the connector is a sandbox connector, meant for testing rather than a real institution
+        supportsPaymentInitiation:
+          type: boolean
+          description: Indicates if the connector supports the payment initiation API
+        supportsScheduledPayments:
+          type: boolean
+          description: Indicates if the connector supports scheduled payments
+        supportsSmartTransfers:
+          type: boolean
+          description: Indicates if the connector supports smart transfers
+        supportsBoletoManagement:
+          type: boolean
+          description: Indicates if the connector supports boleto management
+        supportsAutomaticPix:
+          type: boolean
+          description: Indicates if the connector supports automatic Pix
+        createdAt:
+          type: string
+          format: date-time
+          description: Date of creation
+        updatedAt:
+          type: string
+          format: date-time
+          description: Date of last modification
+      type: object
+      required:
+      - id
+      example:
+        id: 601
+        name: Itaú
+        primaryColor: EC7000
+        institutionUrl: https://www.itau.com.br
+        country: BR
+        type: PERSONAL_BANK
+        credentials:
+        - validation: ^\d{3}\.?\d{3}\.?\d{3}-?\d{2}$
+          validationMessage: CPF deve ter 11 números.
+          label: CPF
+          name: cpf
+          type: number
+          placeholder: ''
+          optional: false
+        imageUrl: https://cdn.pluggy.ai/assets/connector-icons/201.svg
+        hasMFA: false
+        oauth: true
+        health:
+          status: ONLINE
+          stage: null
+        products:
+        - ACCOUNTS
+        - TRANSACTIONS
+        - IDENTITY
+        - CREDIT_CARDS
+        - PAYMENT_DATA
+        - LOANS
+        - INVESTMENTS
+        createdAt: '2023-09-01T18:05:09.145Z'
+        isSandbox: false
+        isOpenFinance: true
+        updatedAt: '2024-07-16T15:34:08.028Z'
+        supportsPaymentInitiation: true
+        supportsScheduledPayments: true
+        supportsSmartTransfers: true
+        supportsBoletoManagement: true
+        supportsAutomaticPix: true
+    PaymentCustomerType:
+      type: string
+      enum:
+      - INDIVIDUAL
+      - BUSINESS
+      description: 'Customer type.
+
+        - `INDIVIDUAL`: identified by `cpf`.
+
+        - `BUSINESS`: identified by `cnpj`.'
+    ConnectorCredential:
+      description: Credential details for a connector
+      properties:
+        name:
+          type: string
+          description: Name of the key
+        label:
+          type: string
+          description: Label for input
+        type:
+          enum:
+          - text
+          - password
+          - number
+          - image
+          - select
+          type: string
+          description: Type of credential required
+        assistiveText:
+          type: string
+          description: Text to help the user when completing the input
+        data:
+          type: string
+          description: Used to return base64 images
+        placeholder:
+          type: string
+          description: Placeholder text for the input
+        validation:
+          type: string
+          description: Regex validation for the user's input
+        validationMessage:
+          type: string
+          description: Validation message when input doesn't match the regex
+        mfa:
+          type: boolean
+          description: Credential is an MFA parameter and must be refreshed on each execution
+        options:
+          type: array
+          items:
+            $ref: '#/components/schemas/CredentialSelectOption'
+          description: List of possible values for the input
+        optional:
+          type: boolean
+          description: Whether the credential can be left empty. Always present; defaults to false
+        instructions:
+          type: string
+          description: Instructions to help the user obtain this credential
+        expiresAt:
+          type: string
+          format: date-time
+          description: Expiration date of the credential value, when the institution sets one
+      type: object
+      required:
+      - name
+      - label
+      - type
+      - optional
+  securitySchemes:
+    default:
+      type: apiKey
+      name: X-API-KEY
+      in: header

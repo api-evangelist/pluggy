@@ -1,0 +1,44 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist agent-surfaces overlay for Pluggy API
+  version: 1.0.0
+extends: openapi/pluggy-api-openapi.yml
+x-generated: '2026-10-18'
+x-method: generated
+x-source: openapi/pluggy-api-openapi.yml
+x-rationale: Adds pointers to the hosted MCP server, llms.txt and the official Agent Skills, makes the unauthenticated /auth
+  operation explicit, and annotates operations that overlap dev-portal MCP tools. The original is not mutated.
+actions:
+- target: $.info
+  description: Link the agent-facing surfaces Pluggy publishes (hosted MCP server, llms.txt, official Agent Skills).
+  update:
+    x-mcp-server:
+      url: https://mcp.pluggy.ai/mcp
+      manifest: mcp/pluggy-mcp.yml
+      crosswalk: mcp/pluggy-tool-crosswalk.yml
+    x-llms-txt: https://docs.pluggy.ai/llms.txt
+    x-agent-skills:
+      official: https://github.com/pluggyai/agent-skills
+      install: npx skills add pluggyai/agent-skills
+      index: skills/_index.yml
+- target: $.paths['/auth'].post
+  description: POST /auth exchanges clientId/clientSecret for an API key and carries no security requirement in the original;
+    make the no-auth requirement explicit.
+  update:
+    security: []
+- target: $.paths['/items/{id}'].get
+  description: Closest dev-portal MCP tool (semantic, low confidence; see crosswalk).
+  update:
+    x-mcp-tool-related:
+    - get_item
+    - debug_item
+- target: $.paths['/connectors'].get
+  description: Closest dev-portal MCP tool (semantic, low confidence).
+  update:
+    x-mcp-tool-related:
+    - list_connectors
+- target: $.paths['/webhooks'].get
+  description: Closest dev-portal MCP tool (semantic, low confidence).
+  update:
+    x-mcp-tool-related:
+    - list_webhooks

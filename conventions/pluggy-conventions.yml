@@ -1,0 +1,33 @@
+generated: '2026-10-18'
+method: searched
+generator: extract-docs-artifacts.py (deepseek)
+source: https://docs.pluggy.ai/en/reference/automatic-pix/payment-request-get-automatic-pix-schedule
+sources:
+- https://docs.pluggy.ai/en/reference/automatic-pix/payment-request-get-automatic-pix-schedule
+- https://docs.pluggy.ai/en/reference/basic-concepts
+- https://docs.pluggy.ai/en/docs/quickstart.md
+- https://docs.pluggy.ai/en/docs/payments/pix-getting-started.md
+idempotency:
+  coverage: none
+pagination:
+  style: cursor and page-number
+  response_fields:
+  - results
+  - next
+  - total
+  - totalPages
+  - page
+  params:
+  - page
+  - pageSize
+  - after
+  evidence: Two models are in use. The v2 endpoints paginate with a cursor; every other list endpoint still paginates by page number. Cursors
+    are how this API paginates from here on, and page-number pagination is being phased out.
+versioning: The API evolves without versions by adding fields to responses; nothing is removed or renamed.
+error_envelope: 'Errors share one shape, whatever the endpoint: code repeats the HTTP status; codeDescription, when present, is the stable identifier
+  to branch on; message is for people. Some errors add a data object.'
+authentication: 'Send Content-Type: application/json on every request with a body, and the credential in X-API-KEY.'
+note: 'Based on the provided pages: idempotency is not mentioned, so coverage is none. Pagination has two styles: cursor (v2 endpoints) with results
+  and next fields, and page-number with total, totalPages, page, results fields. Versioning is additive without explicit versioning. Error envelope
+  has code, codeDescription, message fields. Authentication uses X-API-KEY header. Other fields not mentioned in provided pages.'
+docs: https://docs.pluggy.ai/en/reference/automatic-pix/payment-request-get-automatic-pix-schedule

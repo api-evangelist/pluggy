@@ -1,0 +1,46 @@
+generated: '2026-10-18'
+method: searched
+source: https://docs.pluggy.ai/en/docs/developer-tools/server-sdks.md
+sources:
+- https://docs.pluggy.ai/en/docs/developer-tools/server-sdks.md
+- https://github.com/pluggyai/pluggy-node
+- https://github.com/pluggyai/pluggy-net
+- https://github.com/pluggyai/pluggy-java
+- https://github.com/diraol/pluggy-python
+packages:
+- name: pluggy-sdk
+  registry: npm
+  url: https://www.npmjs.com/package/pluggy-sdk
+  language: JavaScript/TypeScript
+  official: true
+  version: 0.92.0
+  published: '2026-10-08'
+  note: Official Node.js/TypeScript SDK for the Pluggy API
+  ownership_audit: metadata names pluggy.ai
+- name: Pluggy.SDK
+  registry: nuget
+  url: https://www.nuget.org/packages/Pluggy.SDK
+  language: C#/.NET
+  official: false
+  version: null
+  published: null
+  note: Official .NET SDK for Pluggy API - version not found in NuGet registry
+  ownership_audit: 'registry metadata names neither the provider''s domain nor its GitHub org: official downgraded (harvest-packages.py --audit)'
+- name: pluggy-java
+  registry: maven
+  url: https://github.com/pluggyai/pluggy-java
+  language: Java
+  official: true
+  version: null
+  published: null
+  note: Official Java SDK for Pluggy API - version 1.5.0 mentioned in docs but not found in Maven Central
+- name: pluggy-python
+  registry: github
+  url: https://github.com/diraol/pluggy-python
+  language: Python
+  official: false
+  version: null
+  published: null
+  note: Community Python SDK maintained by diraol
+note: Official SDKs are published on GitHub under pluggyai organization. The Node.js package is available on npm, but .NET and Java packages appear
+  to be distributed via GitHub Packages rather than public registries.

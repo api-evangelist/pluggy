@@ -1,0 +1,406 @@
+# Pluggy Docs
+
+> Developer documentation for the Pluggy API
+
+Links below point at the markdown source. Drop the .md for the rendered page.
+
+The full text of every page is at https://docs.pluggy.ai/en/llms-full.txt.
+
+This index is one language. For pt: https://docs.pluggy.ai/pt/llms.txt
+
+OpenAPI: /openapi/pluggy-api.json, /openapi/status-api.json, /openapi/enrichment-api.json
+
+MCP server: https://mcp.pluggy.ai/mcp
+
+## integrations
+
+- [Slack Integration](https://docs.pluggy.ai/en/docs/integrations/slack.md): Add Pluggy's hosted docs bot to your Slack workspace — ask questions and get answers from the live documentation. No setup, no self-hosting.
+
+## Getting Started
+
+- [Overview](https://docs.pluggy.ai/en/docs/overview.md): What Pluggy is, the three objects the whole API is built on, and the two ways to build your first integration.
+- [Quick Start](https://docs.pluggy.ai/en/docs/quickstart.md): Create your first item and read its transactions — with an agent connected to the live docs, or by hand.
+- [Authentication](https://docs.pluggy.ai/en/docs/authentication.md): Learn how to authenticate with the Pluggy API.
+- [Glossary](https://docs.pluggy.ai/en/docs/get-started/glossary.md): Before you start working with our API there are some important concepts that you need to know.
+- [FAQ](https://docs.pluggy.ai/en/docs/get-started/faq.md): The questions we are asked most often about items, connectors, environments and updates.
+- [Contact and support](https://docs.pluggy.ai/en/docs/get-started/contact.md): Who to talk to at Pluggy: sales and onboarding for companies, the Discord community for personal use.
+- [Deleting your Pluggy account](https://docs.pluggy.ai/en/docs/get-started/delete-account.md): How to close a developer account you no longer use, what gets removed with it, and which channel to write to — including data-protection requests under LGPD.
+- [One application, or one per client?](https://docs.pluggy.ai/en/docs/get-started/multi-tenant-applications.md): How to lay out applications when your own product serves many companies — what having one production application per tenant does and does not change.
+
+## Guides
+
+- [Sandbox](https://docs.pluggy.ai/en/docs/guides/sandbox.md): Test your integration with Pluggy's sandbox environment.
+- [Dashboard: connectors, test connections and the itemId](https://docs.pluggy.ai/en/docs/guides/dashboard-connectors.md): Step by step in the Pluggy Dashboard: choose which connectors Pluggy Connect shows, connect an account from the Dashboard itself, and copy the itemId and your API credentials.
+- [Personal use: read your own data with Meu Pluggy](https://docs.pluggy.ai/en/docs/guides/meu-pluggy-personal-use.md): Step by step for individuals: connect your banks in Meu Pluggy, add the MeuPluggy connector in the Pluggy Dashboard, and read your own accounts through the API — free, no due diligence.
+
+## Pluggy Connect Widget
+
+- [Introduction](https://docs.pluggy.ai/en/docs/connect-widget/introduction.md): Pluggy Connect is a drop-in widget that helps you quickly get started with Pluggy, allowing your users to connect their accounts within your app directly to the Pluggy API.
+- [Authentication](https://docs.pluggy.ai/en/docs/connect-widget/authentication.md): When connecting to Pluggy from a client-side application (i.e. Connect Widget), a Connect Token is required. This token provides limited access scoped to the generated Item resource data.
+- [Environments and Configurations](https://docs.pluggy.ai/en/docs/connect-widget/environments.md): Learn about the available environments and configuration options for the Pluggy Connect widget, including sandbox testing and production setup.
+- [Updating an Item](https://docs.pluggy.ai/en/docs/connect-widget/updating-item.md): Learn how to update an existing Item using the Pluggy Connect widget instead of creating a new connection from scratch.
+- [Customization](https://docs.pluggy.ai/en/docs/connect-widget/customization.md): From the Dashboard, it is possible to customize certain visual aspects of Pluggy Connect so that you can provide your users with a more tailored, branded experience.
+- [OAuth Support Guide](https://docs.pluggy.ai/en/docs/connect-widget/oauth-support.md): By following these guidelines, you can ensure a smooth OAuth integration experience for your users across various platforms and devices.
+
+## Connections
+
+- [Item](https://docs.pluggy.ai/en/docs/connections/item.md): An Item is the representation of a connection with a specific Connector of an Institution and serves as the entry point to access the set of products recovered from the user who gave consent to collect their data.
+- [Item lifecycle](https://docs.pluggy.ai/en/docs/connections/item-lifecycle.md): Understand the different statuses and execution states an Item goes through during creation, update, and synchronization with financial institutions.
+- [Errors & Validations](https://docs.pluggy.ai/en/docs/connections/errors-validations.md): Learn about the different statuses and errors you could face using Pluggy's API.
+- [Warnings & Status Codes](https://docs.pluggy.ai/en/docs/connections/warnings-status-codes.md): Understanding warning codes and their meanings when retrieving data from Pluggy connectors.
+- [Consents and expiration](https://docs.pluggy.ai/en/docs/connections/consents.md): The first time an Item connects, a Consent is created with an expiration date. The Consent shows which financial products an item is authorized to recover for a given period.
+- [Item resources](https://docs.pluggy.ai/en/docs/connections/resources.md): What the institution declared for an Open Finance consent, resource by resource — and how to tell 'the bank did not share it' apart from 'we have not collected it'.
+- [Connectors coverage](https://docs.pluggy.ai/en/docs/connections/connectors-coverage.md): Here you will find all the connectors available in Pluggy listed by type of connector, detailing which products are supported in each case.
+- [Credit Cards coverage](https://docs.pluggy.ai/en/docs/connections/credit-cards-coverage.md): Here you will find the coverage we have for each connector regarding Credit Card product.
+- [Accounts coverage](https://docs.pluggy.ai/en/docs/connections/accounts-coverage.md): Here you will find the coverage we have for each connector regarding Account product.
+- [Payment data coverage](https://docs.pluggy.ai/en/docs/connections/paymentdata-coverage.md): Here you will find the data coverage we have for each connector regarding Payment Data product.
+- [Investments coverage](https://docs.pluggy.ai/en/docs/connections/investments-coverage.md): Here you will find the coverage we have for each connector regarding Investments product.
+- [Investment Transactions coverage](https://docs.pluggy.ai/en/docs/connections/investment-transactions-coverage.md): Here you will find the coverage we have for each connector regarding Investment Transactions product.
+- [Loans coverage](https://docs.pluggy.ai/en/docs/connections/loans-coverage.md): Here you will find the coverage we have for each connector regarding the Loans product.
+- [Identity coverage](https://docs.pluggy.ai/en/docs/connections/identity-coverage.md): Here you will find the coverage we have for each connector regarding Identity product.
+- [Open Finance vs Direct: field differences](https://docs.pluggy.ai/en/docs/connections/open-finance-vs-direct-fields.md): Which API fields you get only from Open Finance connections, and which only from Direct ones.
+- [Reporting Issues](https://docs.pluggy.ai/en/docs/connections/reporting-issues.md): This guide explains how to understand issues that users may have and how to report them to Pluggy's support team.
+
+## Open Finance
+
+- [Open Finance Connectors](https://docs.pluggy.ai/en/docs/open-finance/overview.md): Pluggy supports obtaining data from the Brazilian Open Finance Network with Open Finance Connectors, following the same data model as standard connectors.
+- [Creating an Item](https://docs.pluggy.ai/en/docs/open-finance/creating-item.md): How to create your first Open Finance Regulated connection, step by step through Pluggy's Connect Widget or through API.
+- [Open Finance Institutions Coverage](https://docs.pluggy.ai/en/docs/open-finance/institutions-coverage.md): All institutions available via Open Finance, their contexts (Personal, Business, Investments) and the products each connector exposes.
+- [Considerations & FAQ](https://docs.pluggy.ai/en/docs/open-finance/considerations-faq.md): Things to keep in mind when integrating Open Finance Regulated data that can be different from Direct Connections.
+- [Payment Data Open Finance Coverage](https://docs.pluggy.ai/en/docs/open-finance/payment-data.md): Coverage details for CPF/CNPJ counterpart data availability in Open Finance transaction payment data, by connector and operation type.
+- [Investments Open Finance Coverage](https://docs.pluggy.ai/en/docs/open-finance/investments.md): Coverage table for investment subtypes supported by each Open Finance institution connector.
+- [Operational Rate Limits](https://docs.pluggy.ai/en/docs/open-finance/rate-limits.md): Open Finance operational limits imposed by the Brazilian Open Finance Network on data fetching per product, institution, and CPF/CNPJ, plus the network's response time and timeout requirements.
+- [SCR — Credit Information System](https://docs.pluggy.ai/en/docs/open-finance/scr.md): Query Bacen's Sistema de Informações de Crédito for the document behind a connected Open Finance item, and read the payload the Banco Central returns.
+
+## Products
+
+- [Account](https://docs.pluggy.ai/en/docs/products/accounts.md): The account product is the list of bank accounts such as Checking or Savings Account and Credit Card, that were available in the selected connector.
+- [Real Time Balance](https://docs.pluggy.ai/en/docs/products/real-time-balance.md): The real-time balance endpoint fetches the account balance directly from the financial institution without triggering a full item sync.
+- [Credit Card Bills](https://docs.pluggy.ai/en/docs/products/credit-card-bills.md): The Bill entity is recovered from institutions that support this product. It represents a bill (fatura) associated with an account of type Credit, specifically the subtype CREDIT_CARD.
+- [Credit card transactions and the statement cycle](https://docs.pluggy.ai/en/docs/products/credit-card-statement-cycle.md): Why credit card transactions are deleted and re-created with a new id around a statement closing, what identifies a transaction across syncs, and what to reconcile on when there is no stable provider id.
+- [Transaction](https://docs.pluggy.ai/en/docs/products/transactions.md): Retrieve up to 12 months of transaction data. Transactions data of the accounts provide insights into the user's financial behavior.
+- [Transaction Categorization](https://docs.pluggy.ai/en/docs/products/transaction-categorization.md): Transaction categorization is a feature where we classify your Transactions into useful categories (Restaurants, Gas Stations, Income, etc.) using our categorizer AI engine.
+- [Investment](https://docs.pluggy.ai/en/docs/products/investments.md): The Investment entity is recovered from not only Brokers (XP, Clear) but also from retail and business Bank institutions.
+- [Investment's Transactions](https://docs.pluggy.ai/en/docs/products/investment-transactions.md): Each investment contains a list of transactions corresponding to Applications or Withdrawals. The transaction schema contains a set of details of that operation.
+- [Loan](https://docs.pluggy.ai/en/docs/products/loans.md): The Loan entity is recovered from institutions that support this product. It represents a loan contracted by the user, including data like contract number, taxes, interest rates, warranties, installments, etc.
+- [Identity](https://docs.pluggy.ai/en/docs/products/identity.md): The Identity entity is recovered from institutions that support this product, accessing details of personal information related to the owner of the connection's account.
+- [Credit Card Installments](https://docs.pluggy.ai/en/docs/products/credit-card-installments.md): How Pluggy captures, synchronizes, and delivers credit card installment purchases via API, including institution-specific behaviors, Open Finance rate limits, and webhook best practices.
+
+## Intelligence APIs
+
+- [Connection Insights](https://docs.pluggy.ai/en/docs/intelligence/connection-insights.md): Based on connected accounts you can recover user's insights, book of variables, income analysis & recurring patterns.
+- [Transaction Enrichment](https://docs.pluggy.ai/en/docs/intelligence/transaction-enrichment.md): If you need to enhance your own data, we offer different solutions engine as an API for you to use.
+- [Recurring Payments Analysis](https://docs.pluggy.ai/en/docs/intelligence/recurring-payments.md): We offer a Recurring Payments API that allows you to identify a user's repeating expenses and repeating incomes, useful for financial profiling.
+
+## Payments
+
+- [Payments Overview](https://docs.pluggy.ai/en/docs/payments/overview.md): With Pluggy Payments, you can easily create payment links to bill your customers and automatically track their payments, leveraging secure OAuth integrations with institutions using the Open Finance Payment Initiation infrastructure.
+- [Payment Intent Lifecycle and Errors](https://docs.pluggy.ai/en/docs/payments/intent-lifecycle.md): Here you can find the possible statuses of a Payment Intent and the error codes that may occur when attempting to process a payment.
+- [Scheduled Payments (Pix Agendado)](https://docs.pluggy.ai/en/docs/payments/scheduled-payments.md): With our payment initiation functionality, you can schedule payments to occur in the future (also called PIX RECORRENTE) using different scheduling modes.
+- [Scheduled Payment Webhooks](https://docs.pluggy.ai/en/docs/payments/scheduled-webhooks.md): Learn about the webhook flow and payloads for scheduled payments, including error codes that may occur during payment processing.
+- [FAQ](https://docs.pluggy.ai/en/docs/payments/scheduled-faq.md): The purpose of this page is to answer common questions about Scheduled Payments.
+- [PIX Automatico](https://docs.pluggy.ai/en/docs/payments/pix-automatico.md): Introduction to Pix Automático with Pluggy - your gateway to seamless, automated recurring payments in Brazil.
+- [Getting Started](https://docs.pluggy.ai/en/docs/payments/pix-getting-started.md): Integrating with Pluggy's payment gateway for Pix Automático - learn how to create your first payment request, handle authorization, schedule payments, and manage retries.
+- [Automatic PIX Scheduler](https://docs.pluggy.ai/en/docs/payments/pix-scheduler.md): The Automatic PIX Scheduler automates recurring payment scheduling without manual intervention, respecting the allowed D+2 to D+10 scheduling window.
+- [Automatic retries](https://docs.pluggy.ai/en/docs/payments/pix-retries.md): When an Automatic Pix Payment fails, Pluggy can automatically handle retries for you - no extra API calls, no polling, no cron jobs on your side.
+- [FAQ](https://docs.pluggy.ai/en/docs/payments/pix-faq.md): Common questions related to how Pix Automatico works, including payment requests, first payments, scheduling, cancellation, and retries.
+- [Coverage](https://docs.pluggy.ai/en/docs/payments/coverage.md): Here you will understand how to keep track of which Institutions support each type of payment.
+
+## Smart Transfers
+
+- [Introduction](https://docs.pluggy.ai/en/docs/smart-transfers/introduction.md): Pluggy's Smart Transfers API makes payments instant, easy, and secure. Here we describe in a simple way how you can implement it.
+- [Creating a preauthorization](https://docs.pluggy.ai/en/docs/smart-transfers/preauthorization.md): In this section, you will learn how to create a preauthorization to do payments without user interaction.
+- [Creating a payment](https://docs.pluggy.ai/en/docs/smart-transfers/creating-payment.md): In this section, you will learn how to create a payment associated with a Smart Transfer Preauthorization.
+- [Smart Transfers Sandbox](https://docs.pluggy.ai/en/docs/smart-transfers/sandbox.md): The easiest way to try the Smart Transfers product is by using the sandbox connector.
+
+## Developer Tools
+
+- [Basic concepts](https://docs.pluggy.ai/en/docs/developer-tools/basic-concepts.md): Security protocols, API conventions, environment, request identifiers, and pagination used by the Pluggy API.
+- [Run in Postman](https://docs.pluggy.ai/en/docs/developer-tools/postman.md): Access Pluggy's Postman Collection to test all available API endpoints using your CLIENT_ID and CLIENT_SECRET.
+- [Connect an account](https://docs.pluggy.ai/en/docs/developer-tools/connect-account.md): Learn how to connect the Pluggy API with a financial institution, including connectors with and without verification codes.
+- [Tutorials](https://docs.pluggy.ai/en/docs/developer-tools/tutorials.md): Get step-by-step guides on how to successfully connect your account with specific financial institutions.
+- [Server-Side SDKs](https://docs.pluggy.ai/en/docs/developer-tools/server-sdks.md): Pluggy offers client libraries for Node.js, .NET, and Java to simplify API integration.
+- [No-Code integrations](https://docs.pluggy.ai/en/docs/developer-tools/no-code.md): Here is a list of integrations that don't require any development to start running Pluggy.
+- [Bubble](https://docs.pluggy.ai/en/docs/developer-tools/bubble.md): Step-by-step guide to integrating Pluggy Connect in a Bubble application.
+- [Errors Codes](https://docs.pluggy.ai/en/docs/developer-tools/error-codes.md): The following errors describe in general what you will get for the different endpoints available in Pluggy API.
+- [Rate limits](https://docs.pluggy.ai/en/docs/developer-tools/rate-limits.md): Pluggy's API implements a rate limiter to maximize its stability when dealing with large bursts of incoming requests.
+- [Status Page API](https://docs.pluggy.ai/en/docs/developer-tools/status-page-api.md): Programmatically consume Pluggy's public status page — connector health, incidents and infrastructure components.
+- [Webhook](https://docs.pluggy.ai/en/docs/developer-tools/webhooks-ref.md): Learn about the webhooks sent by Pluggy to create a reactive integration to data and payment changes.
+- [Configure & Troubleshoot](https://docs.pluggy.ai/en/docs/developer-tools/webhook-troubleshoot.md): View, create and edit webhooks from Dashboard, visualize which webhooks were sent, their payloads and retry them to sync collected data.
+- [Detecting authentication failures](https://docs.pluggy.ai/en/docs/developer-tools/authentication-failures.md): There is no dedicated webhook event for a failed bank login. `item/error` is the event, and its `error.code` tells you whether the user has to re-enter credentials, authorise on their device, or just wait.
+- [MCP Server](https://docs.pluggy.ai/en/docs/developer-tools/mcp.md): Connect any AI agent — Claude, ChatGPT/Codex, Cursor, VS Code, Windsurf, Gemini — to Pluggy's live documentation, API reference, changelog, recipes, and curated Q&A through the hosted, no-auth MCP server.
+- [Agent Skills](https://docs.pluggy.ai/en/docs/developer-tools/ai-skills.md): Official Pluggy skills for AI coding agents like Claude Code, Cursor, and GitHub Copilot — install with one command so your agent builds and reviews integrations following Pluggy's documented patterns.
+- [Support Ticket Webhooks](https://docs.pluggy.ai/en/docs/developer-tools/support-ticket-webhooks.md): Receive an event whenever one of your Partner Support API tickets moves — status, resolution, replies and priority — signed with HMAC-SHA256 and retried on failure.
+
+## Integration Checklist
+
+- [Creating a use case from scratch](https://docs.pluggy.ai/en/docs/integration-checklist/use-case.md): This article is a step by step guide to build a simple example app that integrates with Pluggy.
+- [Pluggy's Integration Checklist](https://docs.pluggy.ai/en/docs/integration-checklist/overview.md): Follow these steps to ensure your Application is fully integrated with Pluggy API.
+- [Get your API keys](https://docs.pluggy.ai/en/docs/integration-checklist/api-keys.md): Get to know Dashboard. Create your first Application and obtain your access keys.
+- [Create your first Item](https://docs.pluggy.ai/en/docs/integration-checklist/first-item.md): Get to know our Demo application. Get to know Pluggy Connect and our Sandbox environment.
+- [Use our SDKs to Authenticate](https://docs.pluggy.ai/en/docs/integration-checklist/sdk-auth.md): Using your Application CLIENT_ID and CLIENT_SECRET credentials, set up authentication with Pluggy API.
+- [Setup PluggyConnect Widget on your app](https://docs.pluggy.ai/en/docs/integration-checklist/setup-widget.md): The Connect Widget is Pluggy's plug and play frontend solution that allows users to connect their financial accounts on a step by step flow.
+- [Data sync: Update an Item](https://docs.pluggy.ai/en/docs/integration-checklist/data-sync.md): After creating an Item, the next step is keeping it up to date.
+- [Setup Two-way sync with Webhooks](https://docs.pluggy.ai/en/docs/integration-checklist/webhooks-sync.md): Webhooks allow Pluggy to notify your application of events without requiring you to request updates, keeping you up to date with the latest changes.
+- [Consent management: Delete an Item](https://docs.pluggy.ai/en/docs/integration-checklist/consent-management.md): It's of utmost importance for your integration to allow your users to revoke the consent given when sharing their financial data.
+- [Subscribe to our Status Page](https://docs.pluggy.ai/en/docs/integration-checklist/status-page.md): Check out our public status page where we post any incident and outages, so you can keep awareness on any existing issues.
+
+## Boleto
+
+- [Boleto Management API](https://docs.pluggy.ai/en/docs/boleto/management-api.md): Issue boletos, track their payment and receive a webhook the moment one is settled — through a single API that hides each bank's differences.
+- [Testing with the Sandbox](https://docs.pluggy.ai/en/docs/boleto/sandbox.md): Issue boletos and watch them reach every status by themselves, without a bank account, a real payer, or waiting for a due date to pass.
+- [Coverage](https://docs.pluggy.ai/en/docs/boleto/coverage.md): Which institutions the Boleto Management API can issue through today, which are being built, and how each one authorises a connection.
+- [Inter Empresas](https://docs.pluggy.ai/en/docs/boleto/inter.md): What an Inter Empresas boleto connection needs, how Inter reports payments, and the behaviours worth knowing before you go live.
+
+## Tutorials
+
+- [Caixa PF Tutorial (Mobile)](https://docs.pluggy.ai/en/docs/developer-tools/tutorials/caixa-pf-mobile.md): Step-by-step guide to authorize your device and connect a Caixa Econômica Federal personal account using the Caixa mobile app.
+- [Caixa PF Tutorial (Web)](https://docs.pluggy.ai/en/docs/developer-tools/tutorials/caixa-pf-web.md): Step-by-step guide to authorize your device and connect a Caixa Econômica Federal personal account using Internet Banking on the web.
+- [Caixa PJ Tutorial](https://docs.pluggy.ai/en/docs/developer-tools/tutorials/caixa-pj.md): Which credentials to use when connecting a Caixa Empresas business account: the same username and password used in Internet Banking.
+- [Banco Inter MEI Tutorial](https://docs.pluggy.ai/en/docs/developer-tools/tutorials/inter-mei.md): How to connect a Banco Inter MEI account by logging into the Inter app with your MEI account number and scanning the access QR code.
+- [Banco Inter Empresas Tutorial](https://docs.pluggy.ai/en/docs/developer-tools/tutorials/inter-pj.md): How to create an API integration in Banco Inter Empresas to obtain the Client ID, Client Secret, key, and certificate needed to connect with Pluggy.
+- [Sicredi Tutorial](https://docs.pluggy.ai/en/docs/developer-tools/tutorials/sicredi.md): Which credentials to use when connecting a Sicredi Empresas account: CNPJ, username, and password — the same ones used in the Sicredi app.
+- [Sicoob PJ Tutorial](https://docs.pluggy.ai/en/docs/developer-tools/tutorials/sicoob-pj.md): Which credentials to use when connecting a Sicoob Empresas account: cooperative number, access key, and password from Internet Banking.
+- [Santander PJ Secondary User Tutorial](https://docs.pluggy.ai/en/docs/developer-tools/tutorials/santander-pj-secondary-user.md): Step-by-step guide to create a secondary user in Santander Empresas so you can connect your business account with Pluggy.
+- [Santander PJ Tutorial](https://docs.pluggy.ai/en/docs/developer-tools/tutorials/santander-pj.md): Which credentials to use when connecting a Santander Empresas business account: branch, account, username and password — the same used in Internet Banking.
+- [Itaú PJ Tutorial](https://docs.pluggy.ai/en/docs/developer-tools/tutorials/itau-pj.md): Which credentials to use when connecting an Itaú Empresas business account: branch, account, password and CPF — the same used in Internet Banking.
+- [Itaú PJ Tutorial — User Without a Token](https://docs.pluggy.ai/en/docs/developer-tools/tutorials/itau-pj-user-without-token.md): How to create an operator user without a token in Itaú Empresas: create an access profile, add an operator and validate it via the web.
+- [Banco do Brasil PJ Tutorial — Device Authorization](https://docs.pluggy.ai/en/docs/developer-tools/tutorials/bb-pj-device-authorization.md): How to authorize a device in Banco do Brasil's Internet Banking so you can connect your Banco do Brasil Empresas account.
+- [Banco do Brasil PJ Tutorial](https://docs.pluggy.ai/en/docs/developer-tools/tutorials/bb-pj.md): Which credentials to use when connecting a Banco do Brasil Empresas business account: J key, J password and 8-digit password — plus best practices for a successful connection.
+- [Bradesco PJ Tutorial — Enable Mobile App Access](https://docs.pluggy.ai/en/docs/developer-tools/tutorials/bradesco-pj-mobile-access.md): How to enable mobile app access for a Bradesco Empresas user through the Internet Banking administration section.
+- [Bradesco PJ Tutorial](https://docs.pluggy.ai/en/docs/developer-tools/tutorials/bradesco-pj.md): Which credentials to use when connecting a Bradesco Empresas business account: username, password and the security key generated in the Bradesco app.
+- [Bradesco PF Open Finance Tutorial](https://docs.pluggy.ai/en/docs/developer-tools/tutorials/bradesco-pf-of.md): Step-by-step guide to connect a Bradesco personal (PF) account via Open Finance, using the QR code validation in the Bradesco app.
+- [Efí Bank PJ Tutorial](https://docs.pluggy.ai/en/docs/developer-tools/tutorials/efi-pj.md): How to create an API application in Efí Bank Empresas to obtain the Client ID, Client Secret and certificate needed to connect with Pluggy.
+
+## API Reference
+
+- [Authentication](https://docs.pluggy.ai/en/docs/reference/authentication.md): The two credentials the Pluggy API accepts, how each is issued, how long it lives and what it can reach.
+- [Basic Concepts](https://docs.pluggy.ai/en/docs/reference/basic-concepts.md): Base URL, transport, request and response conventions, and how paginated endpoints are read.
+- [Error Codes](https://docs.pluggy.ai/en/docs/reference/error-codes.md): The HTTP status codes the Pluggy API returns, what each means, and the shape of an error body.
+- [Rate Limits](https://docs.pluggy.ai/en/docs/reference/rate-limits.md): Per-endpoint request limits, the 429 response, and the headers that say when to retry.
+- [Webhook](https://docs.pluggy.ai/en/docs/reference/webhooks.md): Subscribing to events, the event list, the payload every notification carries, and the delivery and retry rules.
+- [Server-Side SDKs](https://docs.pluggy.ai/en/docs/reference/server-sdks.md): The official client libraries, how to install each, and the OpenAPI document to generate your own.
+
+## API Reference: Status
+
+- [GET /api/status](https://docs.pluggy.ai/en/reference/status/status-snapshot): Retrieve status snapshot
+- [GET /api/connectors-incidents](https://docs.pluggy.ai/en/reference/status/status-connector-incidents): Retrieve active incidents by connector
+- [GET /api/summary](https://docs.pluggy.ai/en/reference/status/status-summary): Retrieve status summary
+
+## API Reference: Enrichment
+
+- [POST /categorize](https://docs.pluggy.ai/en/reference/enrichment/categorize): Categorize
+- [POST /behavior-analysis](https://docs.pluggy.ai/en/reference/enrichment/behavior-analysis): Behavior Analysis
+- [POST /recurring-payments](https://docs.pluggy.ai/en/reference/enrichment/recurring-payments): Recurring Payments
+
+## API Reference: Auth
+
+- [POST /auth](https://docs.pluggy.ai/en/reference/auth/auth-create): Create API Key
+- [POST /connect_token](https://docs.pluggy.ai/en/reference/auth/connect-token-create): Create Connect Token
+
+## API Reference: Connector
+
+- [GET /connectors](https://docs.pluggy.ai/en/reference/connector/connectors-list): List
+- [GET /connectors/{id}](https://docs.pluggy.ai/en/reference/connector/connector-retrieve): Retrieve
+- [POST /connectors/{id}/validate](https://docs.pluggy.ai/en/reference/connector/connectors-validate): Validate
+
+## API Reference: Items
+
+- [POST /items](https://docs.pluggy.ai/en/reference/items/items-create): Create
+- [GET /items/{id}](https://docs.pluggy.ai/en/reference/items/items-retrieve): Retrieve
+- [PATCH /items/{id}](https://docs.pluggy.ai/en/reference/items/items-update): Update
+- [DELETE /items/{id}](https://docs.pluggy.ai/en/reference/items/items-delete): Delete
+- [GET /items/{id}/resources](https://docs.pluggy.ai/en/reference/items/items-resources): List Item resources
+- [POST /items/{id}/mfa](https://docs.pluggy.ai/en/reference/items/items-send-mfa): Send MFA
+- [PATCH /items/{id}/disable-auto-sync](https://docs.pluggy.ai/en/reference/items/items-disable-autosync): Disable item auto sync
+- [GET /v2/items](https://docs.pluggy.ai/en/reference/items/items-list-by-cursor): List
+
+## API Reference: SCR
+
+- [GET /items/{id}/scr](https://docs.pluggy.ai/en/reference/scr/items-retrieve-scr): Retrieve SCR
+
+## API Reference: Consent
+
+- [GET /consents](https://docs.pluggy.ai/en/reference/consent/consents-list): List
+- [GET /consents/{id}](https://docs.pluggy.ai/en/reference/consent/consent-retrieve): Retrieve
+
+## API Reference: Account
+
+- [GET /accounts](https://docs.pluggy.ai/en/reference/account/accounts-list): List
+- [GET /accounts/{id}](https://docs.pluggy.ai/en/reference/account/accounts-retrieve): Retrieve
+- [GET /accounts/{id}/statements](https://docs.pluggy.ai/en/reference/account/account-statements-list): List account statements
+- [GET /accounts/{id}/balance](https://docs.pluggy.ai/en/reference/account/account-balance-get): Get real-time balance
+
+## API Reference: Transaction
+
+- [GET /transactions](https://docs.pluggy.ai/en/reference/transaction/transactions-list): List by Page (deprecated)
+- [GET /v2/transactions](https://docs.pluggy.ai/en/reference/transaction/transactions-list-by-cursor): List
+- [GET /transactions/{id}](https://docs.pluggy.ai/en/reference/transaction/transactions-retrieve): Retrieve
+- [PATCH /transactions/{id}](https://docs.pluggy.ai/en/reference/transaction/transactions-Update): Update
+
+## API Reference: Investment
+
+- [GET /investments](https://docs.pluggy.ai/en/reference/investment/investments-list): List
+- [GET /investments/{id}](https://docs.pluggy.ai/en/reference/investment/investments-retrieve): Retrieve
+- [GET /investments/{id}/transactions](https://docs.pluggy.ai/en/reference/investment/investment-transactions-list): List investment transactions
+
+## API Reference: Identity
+
+- [GET /identity](https://docs.pluggy.ai/en/reference/identity/identity-find-by-item): Find by item
+- [GET /identity/{id}](https://docs.pluggy.ai/en/reference/identity/identity-retrieve): Retrieve
+
+## API Reference: Webhook
+
+- [GET /webhooks](https://docs.pluggy.ai/en/reference/webhook/webhooks-list): List
+- [POST /webhooks](https://docs.pluggy.ai/en/reference/webhook/webhooks-create): Create
+- [GET /webhooks/{id}](https://docs.pluggy.ai/en/reference/webhook/webhooks-retrieve): Retrieve
+- [PATCH /webhooks/{id}](https://docs.pluggy.ai/en/reference/webhook/webhooks-update): Update
+- [DELETE /webhooks/{id}](https://docs.pluggy.ai/en/reference/webhook/webhooks-delete): Delete
+
+## API Reference: Category
+
+- [GET /categories](https://docs.pluggy.ai/en/reference/category/categories-list): List
+- [GET /categories/{id}](https://docs.pluggy.ai/en/reference/category/categories-retrieve): Retrieve
+- [GET /categories/rules](https://docs.pluggy.ai/en/reference/category/client-category-rules-list): List Category Rules
+- [POST /categories/rules](https://docs.pluggy.ai/en/reference/category/client-category-rules-create): Create Category Rule
+- [DELETE /categories/rules/{id}](https://docs.pluggy.ai/en/reference/category/client-category-rules-delete): Delete Category Rule
+
+## API Reference: Loan
+
+- [GET /loans](https://docs.pluggy.ai/en/reference/loan/loans-list): List
+- [GET /loans/{id}](https://docs.pluggy.ai/en/reference/loan/loans-retrieve): Retrieve
+
+## API Reference: Merchant
+
+- [GET /merchants](https://docs.pluggy.ai/en/reference/merchant/merchants-get-by-cnpj): Get merchants by CNPJ list
+
+## API Reference: Bill
+
+- [GET /bills](https://docs.pluggy.ai/en/reference/bill/bills-list): List
+- [GET /bills/{id}](https://docs.pluggy.ai/en/reference/bill/bills-retrieve): Retrieve
+
+## API Reference: Payment Customer
+
+- [GET /payments/customers](https://docs.pluggy.ai/en/reference/payment-customer/payment-customers-list): List
+- [POST /payments/customers](https://docs.pluggy.ai/en/reference/payment-customer/payment-customer-create): Create
+- [GET /payments/customers/{id}](https://docs.pluggy.ai/en/reference/payment-customer/payment-customer-retrieve): Retrieve
+- [PATCH /payments/customers/{id}](https://docs.pluggy.ai/en/reference/payment-customer/payment-customer-update): Update
+- [DELETE /payments/customers/{id}](https://docs.pluggy.ai/en/reference/payment-customer/payment-customer-delete): Delete
+
+## API Reference: Payment Recipient
+
+- [GET /payments/recipients](https://docs.pluggy.ai/en/reference/payment-recipient/payment-recipients-list): List
+- [POST /payments/recipients](https://docs.pluggy.ai/en/reference/payment-recipient/payment-recipient-create): Create
+- [GET /payments/recipients/{id}](https://docs.pluggy.ai/en/reference/payment-recipient/payment-recipient-retrieve): Retrieve
+- [PATCH /payments/recipients/{id}](https://docs.pluggy.ai/en/reference/payment-recipient/payment-recipient-update): Update
+- [DELETE /payments/recipients/{id}](https://docs.pluggy.ai/en/reference/payment-recipient/payment-recipient-delete): Delete
+- [GET /payments/recipients/institutions](https://docs.pluggy.ai/en/reference/payment-recipient/payment-recipients-institution-list): List Institutions
+- [GET /payments/recipients/institutions/{id}](https://docs.pluggy.ai/en/reference/payment-recipient/payment-recipient-institutions-retrieve): Retrieve Institution
+
+## API Reference: Payment Request
+
+- [GET /payments/requests](https://docs.pluggy.ai/en/reference/payment-request/payment-requests-list): List
+- [POST /payments/requests](https://docs.pluggy.ai/en/reference/payment-request/payment-request-create): Create
+- [POST /payments/requests/pix-qr](https://docs.pluggy.ai/en/reference/payment-request/payment-request-create-pix-qr): Create PIX QR payment request
+- [GET /payments/requests/{id}](https://docs.pluggy.ai/en/reference/payment-request/payment-request-retrieve): Retrieve
+- [PATCH /payments/requests/{id}](https://docs.pluggy.ai/en/reference/payment-request/payment-request-update): Update
+- [DELETE /payments/requests/{id}](https://docs.pluggy.ai/en/reference/payment-request/payment-request-delete): Delete
+
+## API Reference: Automatic PIX
+
+- [POST /payments/requests/automatic-pix](https://docs.pluggy.ai/en/reference/automatic-pix/payment-request-create-automatic-pix): Create Automatic PIX payment request
+- [POST /payments/requests/{id}/automatic-pix/schedule](https://docs.pluggy.ai/en/reference/automatic-pix/payment-request-create-automatic-pix-schedule): Schedule Automatic PIX payment
+- [GET /payments/requests/{id}/automatic-pix/schedules](https://docs.pluggy.ai/en/reference/automatic-pix/payment-request-get-automatic-pix-schedules): List Automatic PIX scheduled payments
+- [GET /payments/requests/{requestId}/automatic-pix/schedules/{paymentId}](https://docs.pluggy.ai/en/reference/automatic-pix/payment-request-get-automatic-pix-schedule): Get an automatic PIX scheduled payment
+- [POST /payments/requests/{id}/automatic-pix/cancel](https://docs.pluggy.ai/en/reference/automatic-pix/payment-request-cancel-automatic-pix-consent): Cancel an automatic PIX consent
+- [POST /payments/requests/{id}/automatic-pix/schedules/{scheduleId}/cancel](https://docs.pluggy.ai/en/reference/automatic-pix/cancel-automatic-pix-schedule): Cancel an Automatic PIX schedule
+- [POST /payments/requests/{id}/automatic-pix/schedules/{scheduleId}/retry](https://docs.pluggy.ai/en/reference/automatic-pix/retry-automatic-pix-schedule): Retry an Automatic PIX schedule
+
+## API Reference: Payment Schedule
+
+- [GET /payments/requests/{id}/schedules](https://docs.pluggy.ai/en/reference/payment-schedule/payment-schedules-list): List Schedules
+- [POST /payments/requests/{id}/schedules/cancel](https://docs.pluggy.ai/en/reference/payment-schedule/payment-schedules-cancel): Cancel Payment Schedule Authorization
+- [POST /payments/requests/{id}/schedules/{scheduleId}/cancel](https://docs.pluggy.ai/en/reference/payment-schedule/payment-schedules-cancel-specific): Cancel Payment Schedule
+
+## API Reference: Payment Intent
+
+- [GET /payments/intents](https://docs.pluggy.ai/en/reference/payment-intent/payment-intents-list): List
+- [POST /payments/intents](https://docs.pluggy.ai/en/reference/payment-intent/payment-intent-create): Create
+- [GET /payments/intents/{id}](https://docs.pluggy.ai/en/reference/payment-intent/payment-intent-retrieve): Retrieve
+
+## API Reference: Smart Transfer
+
+- [GET /smart-transfers/preauthorizations](https://docs.pluggy.ai/en/reference/smart-transfer/smart-tranfers-preauthorizations-list): List preauthorizations
+- [POST /smart-transfers/preauthorizations](https://docs.pluggy.ai/en/reference/smart-transfer/smart-transfer-preauthorization-create): Create preauthorization
+- [GET /smart-transfers/preauthorizations/{id}](https://docs.pluggy.ai/en/reference/smart-transfer/smart-transfer-preauthorization-retrieve): Retrieve preauthorization
+- [GET /smart-transfers/preauthorizations/{id}/balance](https://docs.pluggy.ai/en/reference/smart-transfer/smart-transfer-preauthorization-balance-retrieve): Retrieve source account balance
+- [DELETE /smart-transfers/preauthorizations/{id}/data-consent](https://docs.pluggy.ai/en/reference/smart-transfer/smart-transfer-preauthorization-data-consent-delete): Cancel balance permission
+- [GET /smart-transfers/preauthorizations/{id}/payments](https://docs.pluggy.ai/en/reference/smart-transfer/smart-transfer-preauthorization-payments-list): List preauthorization payments
+- [POST /smart-transfers/payments](https://docs.pluggy.ai/en/reference/smart-transfer/smart-transfer-payment-create): Create payment
+- [GET /smart-transfers/payments/{id}](https://docs.pluggy.ai/en/reference/smart-transfer/smart-transfer-paymentretrieve): Retrieve payment
+
+## API Reference: Boleto Management
+
+- [POST /boleto-connections](https://docs.pluggy.ai/en/reference/boleto-management/boleto-connection-create): Connect boleto credentials
+- [POST /boleto-connections/from-item](https://docs.pluggy.ai/en/reference/boleto-management/boleto-connection-create-from-item): Create boleto connection from Item
+- [POST /boletos](https://docs.pluggy.ai/en/reference/boleto-management/boleto-create): Issue Boleto
+- [POST /boletos/{id}/cancel](https://docs.pluggy.ai/en/reference/boleto-management/boleto-cancel): Cancel Boleto
+- [GET /boletos/{id}](https://docs.pluggy.ai/en/reference/boleto-management/boleto-get): Get Boleto
+
+## Recipes
+
+- [Deleting your Data](https://docs.pluggy.ai/en/recipes/deleting-your-data.md): Delete Items to remove user consents from Pluggy.
+- [Encrypt parameters](https://docs.pluggy.ai/en/recipes/encrypt-parameters.md): Example to encrypt your parameters before create or update an item.
+- [Generate a Connect Token with permissions to update an existing Item](https://docs.pluggy.ai/en/recipes/generate-a-connect-token-with-permissions-to-update-an-existing-item.md): In order to update an Item you should generate, in your server, a Connect Token linked to the Item Id you want to update.
+- [PluggyConnect: Continue connecting item in background as soon as user's login is completed](https://docs.pluggy.ai/en/recipes/pluggyconnect-continue-connecting-item-in-background-as-soon-as-users-login-is-completed.md): Hide PluggyConnect in background as soon as the login step has been completed, so the User can focus again on your application. PluggyConnect will continue polling the item status until it's completed.
+- [Polling an item connector's execution status](https://docs.pluggy.ai/en/recipes/polling-an-item-connectors-execution-status.md): How to check and poll for the Item status, to know when the Item execution finishes and be able to act on it.
+- [Update an Item using Pluggy Connect](https://docs.pluggy.ai/en/recipes/update-an-item-using-pluggy-connect.md): Full standalone HTML client example to update an existing Item using Pluggy Connect widget.
+
+## Changelog
+
+- [Product Updates | July/2026](https://docs.pluggy.ai/en/changelog#2026.07): Published 2026-08-13
+- [Product Updates | June/2026](https://docs.pluggy.ai/en/changelog#2026.06): Published 2026-08-12
+- [Product Updates | May/2026](https://docs.pluggy.ai/en/changelog#2026.05): Published 2026-07-22
+- [Product Updates | March/2026](https://docs.pluggy.ai/en/changelog#2026.03): Published 2026-04-09
+- [Product Updates | February 2026](https://docs.pluggy.ai/en/changelog#2026.02): Published 2026-03-18
+- [Atualizações de Produto | Setembro 2025](https://docs.pluggy.ai/en/changelog#2025.09): Published 2025-10-07
+- [[Atualizações de Produto] Agosto-25](https://docs.pluggy.ai/en/changelog#2025.08): Published 2025-09-15
+- [[Atualizações de Produto] Julho-25](https://docs.pluggy.ai/en/changelog#2025.07): Published 2025-08-07
+- [[Atualizações de Produto] Junho-25](https://docs.pluggy.ai/en/changelog#2025.06): Published 2025-07-04
+- [[Atualizações de Produto] Maio-25](https://docs.pluggy.ai/en/changelog#2025.05): Published 2025-06-05
+- [[Atualizações de Produto] Abril-25](https://docs.pluggy.ai/en/changelog#2025.04): Published 2025-05-05
+- [[Atualizações de Produto] Março-25](https://docs.pluggy.ai/en/changelog#2025.03): Published 2025-04-04
+- [[Atualizações de Produto] Fevereiro-25](https://docs.pluggy.ai/en/changelog#2025.02): Published 2025-03-05
+- [[Atualizações de Produto] Janeiro-25](https://docs.pluggy.ai/en/changelog#2025.01): Published 2025-02-05
+- [[Atualizações de Produto] Dezembro-24](https://docs.pluggy.ai/en/changelog#2024.12): Published 2025-01-05
+- [Product Updates | December-24](https://docs.pluggy.ai/en/changelog#2024.12): Published 2024-12-16
+- [[Atualizações de Produto] Novembro-24](https://docs.pluggy.ai/en/changelog#2024.11): Published 2024-11-18
+- [[Atualizações de Produto] Outubro-24](https://docs.pluggy.ai/en/changelog#2024.10): Published 2024-10-08
+- [Q3 (Jun-Sep) 2024](https://docs.pluggy.ai/en/changelog#2024.Q3): Published 2024-08-27
+- [Q1 (Jan-Mar) 2024](https://docs.pluggy.ai/en/changelog#2024.Q1): Published 2024-06-21
+- [Q2 (Apr-Jun) 2024](https://docs.pluggy.ai/en/changelog#2024.Q2): Published 2024-06-21
+- [Q2 (Apr-Jun) 2024](https://docs.pluggy.ai/en/changelog#2024.Q2): Published 2024-06-21
+- [Q1 (Jan-Mar) 2024](https://docs.pluggy.ai/en/changelog#2024.Q1): Published 2024-06-21
+- [Initial Platform Launch](https://docs.pluggy.ai/en/changelog#1.0.0): Published 2024-01-10
+- [December 2023 (Monthly Update)](https://docs.pluggy.ai/en/changelog#2023.12): Published 2023-12-07
+- [December 2023 (Monthly Update)](https://docs.pluggy.ai/en/changelog#2023.12): Published 2023-12-07
+- [September 2023 (Monthly Update)](https://docs.pluggy.ai/en/changelog#2023.09): Published 2023-10-08
+- [September 2023 (Monthly Update)](https://docs.pluggy.ai/en/changelog#2023.09): Published 2023-10-08
+- [August 2023 (Monthly Update)](https://docs.pluggy.ai/en/changelog#2023.08): Published 2023-09-07
+- [August 2023 (Monthly Update)](https://docs.pluggy.ai/en/changelog#2023.08): Published 2023-09-07
+- [July 2023 (Monthly Update)](https://docs.pluggy.ai/en/changelog#2023.07): Published 2023-08-07
+- [July 2023 (Monthly Update)](https://docs.pluggy.ai/en/changelog#2023.07): Published 2023-08-07
+- [June 2023 (Monthly Update)](https://docs.pluggy.ai/en/changelog#2023.06): Published 2023-07-04
+- [June 2023 (Monthly Update)](https://docs.pluggy.ai/en/changelog#2023.06): Published 2023-07-04
+- [May 2023 (Monthly Update)](https://docs.pluggy.ai/en/changelog#2023.05): Published 2023-05-31
+- [May 2023 (Monthly Update)](https://docs.pluggy.ai/en/changelog#2023.05): Published 2023-05-31
+- [April 2023 (Monthly Update)](https://docs.pluggy.ai/en/changelog#2023.04): Published 2023-05-03
+- [April 2023 (Monthly Update)](https://docs.pluggy.ai/en/changelog#2023.04): Published 2023-05-03
+- [March 2023 (Monthly Update)](https://docs.pluggy.ai/en/changelog#2023.03): Published 2023-04-03
+- [March 2023 (Monthly Update)](https://docs.pluggy.ai/en/changelog#2023.03): Published 2023-03-14
+- [February 2023 (Monthly Update)](https://docs.pluggy.ai/en/changelog#2023.02): Published 2023-02-20
+- [February 2023 (Monthly Update)](https://docs.pluggy.ai/en/changelog#2023.02): Published 2023-02-20
+- [January 2023 (Monthly Update)](https://docs.pluggy.ai/en/changelog#2023.01): Published 2023-01-10
+- [January 2023 (Monthly Update)](https://docs.pluggy.ai/en/changelog#2023.01): Published 2023-01-10
+- [December 2022 (Monthly Update)](https://docs.pluggy.ai/en/changelog#2022.12): Published 2022-12-15
+- [December 2022 (Monthly Update)](https://docs.pluggy.ai/en/changelog#2022.12): Published 2022-12-15

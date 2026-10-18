@@ -1,0 +1,1157 @@
+generated: '2026-10-18'
+method: derived
+generator: derive-data-model.py
+source:
+- openapi/pluggy-api-openapi.yml
+- openapi/pluggy-enrichment-api-openapi.yml
+- openapi/pluggy-status-api-openapi.yml
+notation: has_one = property $ref; has_many = array of $ref; belongs_to = <entity>_id field
+summary:
+  entities: 172
+  entities_in_spec: 172
+  relationships: 159
+entities:
+- name: Account
+  fields: 15
+  description: Account of type bank
+- name: AdditionalCard
+  fields: 1
+  description: Additional credit card data
+- name: Address
+  fields: 12
+  description: The address object contains data related to an specific owner's location.
+- name: AuthRequest
+  fields: 2
+  description: Authentication parameters required to get access to Pluggy's API
+- name: AuthResponse
+  fields: 1
+  description: Authentication confirmed response to interact with the api
+- name: AutomaticPix
+  fields: 10
+  description: Automatic PIX data
+- name: AutomaticPixFirstPayment
+  fields: 3
+  description: Definitions for the first payment. It is considered as the user's enrollment payment for the service.
+- name: AutomaticPixPayment
+  fields: 11
+  description: Automatic PIX payment
+- name: AutomaticPixPaymentAttempt
+  fields: 5
+  description: Payment attempt. It represents an attempt to complete this payment. Useful for tracking the payment
+    history.
+- name: AutomaticPixPaymentDetail
+  fields: 0
+  description: Automatic PIX payment detail with additional fields
+- name: AutomaticPixPaymentErrorDetail
+  fields: 2
+  description: Details about an error that occurred with the automatic PIX payment
+- name: AutomaticPixRetriesConfiguration
+  fields: 1
+  description: “Configuration for automatic retries. If provided, the scheduled payments associated with this consent
+    will only be retried on the days specified in the array after the original payment date. This doe
+- name: AutomaticPixSchedulerConfiguration
+  fields: 3
+  description: Configuration for automatic scheduling of payments. When enabled, the system will schedule payments
+    according to the consent interval and start date.
+- name: BankData
+  fields: 8
+  description: Bank account additional fields
+- name: Bill
+  fields: 9
+  description: Response with information related to a credit card bill
+- name: BillFinanceCharge
+  fields: 5
+  description: Response with information related to a credit card bill finance charge
+- name: BillPayment
+  fields: 6
+  description: Response with information related to a credit card bill payment
+- name: Boleto
+  fields: 13
+  description: Boleto data
+- name: BoletoConnection
+  fields: 4
+  description: Response with information related to a boleto connection
+- name: BoletoPayer
+  fields: 2
+  description: Payer of a boleto being paid. Only identity data — this is not the payer of an issued boleto, which
+    carries the full address block under `IssuedBoleto.payer`.
+- name: BoletoPaymentRecipient
+  fields: 3
+  description: Payment recipient inferred from a boleto.
+- name: BoletoRecipient
+  fields: 2
+  description: Boleto recipient information
+- name: BusinessOtherDocument
+  fields: 4
+  description: Additional document for businesses headquartered abroad and not required to register a CNPJ
+- name: BusinessParty
+  fields: 14
+  description: Partner or administrator of a business. Partners with less than 25% shareholding may be omitted by
+    the institution
+- name: CUSTOM
+  fields: 3
+  description: Schedule attribute to generate payments on an explicit list of dates.
+- name: Category
+  fields: 5
+  description: Cateogry response
+- name: ClientCategoryRule
+  fields: 6
+  description: Category rule by client id
+- name: Company
+  fields: 2
+  description: Company object that holds the company's information
+- name: Component
+  fields: 4
+  description: A Pluggy infrastructure component (API, webhooks, Connect widget).
+- name: ConnectTokenRequest
+  fields: 2
+  description: Create a connect token request payload
+- name: ConnectTokenResponse
+  fields: 1
+  description: Connect token response
+- name: Connector
+  fields: 24
+  description: Connector object
+- name: ConnectorCredential
+  fields: 13
+  description: Credential details for a connector
+- name: ConnectorHealth
+  fields: 4
+  description: Connector health status
+- name: ConnectorIncident
+  fields: 11
+  description: 'An incident affecting a connector right now, as published on the Pluggy status page. Only incidents
+    active at this moment are listed: a scheduled maintenance appears once its window opens, not when it'
+- name: ConnectorIncidents
+  fields: 2
+- name: ConnectorListResponse
+  fields: 4
+  description: Connector List Response
+- name: ConnectorUserAction
+  fields: 4
+  description: User action details for an item
+- name: Consent
+  fields: 7
+  description: Item consent information
+- name: CreateAutomaticPixPaymentRequest
+  fields: 15
+  description: Automatic PIX data
+- name: CreateBoleto
+  fields: 2
+  description: Request with information to create a boleto
+- name: CreateBoletoConnection
+  fields: 2
+  description: Request with information to create a boleto connection
+- name: CreateBoletoConnectionFromItem
+  fields: 1
+  description: Request with information to create a boleto connection from an Item
+- name: CreateClientCategoryRule
+  fields: 5
+  description: Create client category rule
+- name: CreateItem
+  fields: 7
+  description: Create Item Request
+- name: CreateOrUpdatePaymentCustomer
+  fields: 5
+  description: Body to update a payment customer. All fields are optional.
+- name: CreatePaymentCustomerRequestBody
+  fields: 6
+  description: Body to create a payment customer
+- name: CreatePaymentIntent
+  fields: 5
+  description: Request with information to create a payment intent
+- name: CreatePaymentRecipient
+  fields: 4
+  description: Request with information to create a payment recipient.
+- name: CreatePaymentRequest
+  fields: 8
+  description: Request with information to create a payment request
+- name: CreatePixQrPaymentRequest
+  fields: 4
+  description: Request with information to create a PIX QR payment request
+- name: CreateSmartTransferPayment
+  fields: 5
+  description: Create smart transfer payment request data
+- name: CreateSmartTransferPreauthorization
+  fields: 7
+  description: Create smart transfer preauthorization request data
+- name: CreateWebhook
+  fields: 3
+- name: CredentialSelectOption
+  fields: 2
+  description: Option for ConnectorCredential of type select
+- name: CreditCardMetadata
+  fields: 15
+  description: Data of a transaction specific to credit card transactions
+- name: CreditData
+  fields: 14
+  description: Credit account additional fields
+- name: CursorPageResponseItems
+  fields: 2
+  description: Cursor-based paginated response for items
+- name: CursorPageResponseTransactions
+  fields: 2
+  description: Cursor-based paginated response for transactions
+- name: DAILY
+  fields: 3
+  description: Schedule attribute to generate daily payments starting from `startDate`.
+- name: Debtor
+  fields: 3
+  description: Information about the payer's account, as returned by the institution after the payment is completed.
+    Only populated for `PAYMENT_COMPLETED` payment intents on connectors that expose this data.
+- name: DisaggregatedCreditLimit
+  fields: 15
+  description: Disaggregated credit card limit
+- name: Document
+  fields: 2
+  description: Document object containing type & value
+- name: EconomicActivity
+  fields: 2
+  description: CNAE code describing one of the business's economic activities. Only one entry per response should
+    be marked as main
+- name: Email
+  fields: 2
+  description: The email object contains emails associated with the owner of the account
+- name: GeographicCoordinates
+  fields: 2
+  description: Geographic coordinates in decimal degrees, WGS84 reference system
+- name: GlobalErrorResponse
+  fields: 4
+- name: ICountResponse
+  fields: 1
+  description: Deletion response
+- name: IdentityRelation
+  fields: 3
+  description: The relation object contains name and relation to the owner of the account
+- name: IdentityResponse
+  fields: 30
+  description: Response with details personal information related to the owner of the connection's account
+- name: Incident
+  fields: 22
+- name: IncidentInstitution
+  fields: 2
+- name: IncidentUpdate
+  fields: 5
+  description: One entry of an incident timeline, newest last.
+- name: InformedRevenue
+  fields: 4
+  description: Revenue (faturamento) informed by the business — the business equivalent of informedIncome
+- name: Institution
+  fields: 14
+- name: Investment
+  fields: 44
+  description: Investment representing a specific asset
+- name: InvestmentExpenses
+  fields: 13
+  description: Taxes and fees that applied to the transaction
+- name: InvestmentInstitution
+  fields: 2
+  description: Financial institution holding the investment
+- name: InvestmentMetadata
+  fields: 8
+  description: Investment metadata for Previdencia migrations
+- name: InvestmentTransaction
+  fields: 15
+  description: Movement of the investment
+- name: IssuedBoleto
+  fields: 17
+  description: Response with information related to an issued boleto
+- name: Item
+  fields: 18
+  description: Item object
+- name: ItemCreationErrorResponse
+  fields: 6
+- name: ItemOptions
+  fields: 4
+  description: Item options available to send through connect tokens
+- name: ItemParameter
+  fields: 0
+  description: Key-Value credentials neccesary to create an item
+- name: ItemResource
+  fields: 3
+  description: One resource the financial institution declared for the item's Open Finance consent, reported verbatim.
+- name: Loan
+  fields: 27
+  description: Response with information related to a loan
+- name: LoanContractedFee
+  fields: 6
+- name: LoanContractedFinanceCharge
+  fields: 3
+- name: LoanInstallmentBalloonPayment
+  fields: 2
+- name: LoanInstallmentBalloonPaymentAmount
+  fields: 2
+  description: Monetary value of the non-regular installment due
+- name: LoanInstallments
+  fields: 8
+- name: LoanInterestRate
+  fields: 10
+  description: Object that brings the set of information necessary to demonstrate the composition of the remunerative
+    interest rates of the Credit Type
+- name: LoanPaymentRelease
+  fields: 6
+- name: LoanPaymentReleaseOverParcel
+  fields: 2
+  description: Object of fees and charges that were paid outside the installment
+- name: LoanPaymentReleaseOverParcelCharge
+  fields: 3
+- name: LoanPaymentReleaseOverParcelFee
+  fields: 3
+- name: LoanPayments
+  fields: 2
+- name: LoanWarranty
+  fields: 4
+- name: MONTHLY
+  fields: 4
+  description: Schedule attribute to generate monthly payments on a specific day of the month.
+- name: MaritalStatus
+  fields: 2
+  description: Marital status of the natural person
+- name: Merchant
+  fields: 5
+  description: Merchant extracted from the transaction data
+- name: Nationality
+  fields: 2
+  description: Nationality of the natural person
+- name: NationalityDocument
+  fields: 6
+  description: Supporting document for a non-Brazilian nationality
+- name: NotAuthenticatedResponse
+  fields: 2
+- name: Observation
+  fields: 8
+  description: A high-confidence situation Pluggy is investigating. It is not a confirmed incident and does not
+    change component availability.
+- name: OtherDocument
+  fields: 6
+  description: Other identification document held by the natural person. Brazilian acronyms are kept verbatim; OTHER
+    covers any other type
+- name: PageResponseCategories
+  fields: 4
+  description: Paginated list of transaction categories
+- name: PageResponseCategoryRules
+  fields: 4
+- name: PageResponseConsents
+  fields: 4
+- name: PageResponseInvestmentTransactions
+  fields: 4
+- name: PageResponseTransactions
+  fields: 4
+- name: ParameterValidationError
+  fields: 3
+- name: ParameterValidationResponse
+  fields: 2
+  description: Response to parameter's validations
+- name: Passport
+  fields: 4
+  description: Passport metadata for the natural person. Applies when the client is a non-resident not required
+    to register a CPF
+- name: PaycheckBankLink
+  fields: 5
+  description: Paycheck-bank (banco-folha) link to an employer, active or formerly active. Old employers may not
+    have closed the link, so an entry doesn't guarantee the listed employer is the current one
+- name: PaymentCustomer
+  fields: 9
+  description: Response with information related to a payment customer
+- name: PaymentData
+  fields: 8
+  description: Payment or Transfer participant's data
+- name: PaymentDataBoletoMetadata
+  fields: 6
+  description: Information of the boleto associated with the payment
+- name: PaymentDataParticipant
+  fields: 6
+  description: Participant of the payment data
+- name: PaymentInstitution
+  fields: 7
+  description: Response with information related to a payment institution
+- name: PaymentIntent
+  fields: 12
+  description: Request with information related to a payment intent
+- name: PaymentIntentErrorDetail
+  fields: 4
+  description: Details about an error that occurred with the payment intent
+- name: PaymentIntentParameter
+  fields: 3
+  description: Credentials neccesary to create a payment intent
+- name: PaymentRecipient
+  fields: 10
+  description: Bank-account payment recipient. Returned by `/payments/recipients` endpoints and embedded inside
+    payment requests when the request targets a registered recipient.
+- name: PaymentRecipientAccount
+  fields: 3
+  description: Payment receiver bank account information
+- name: PaymentRequest
+  fields: 19
+  description: Response with information related to a payment request
+- name: PaymentRequestCallbackUrls
+  fields: 3
+  description: Redirect urls after the payment was completed or ended in error status
+- name: PhoneNumber
+  fields: 6
+  description: The phone number object contains data related to contact information.
+- name: PixData
+  fields: 2
+  description: Payment Intent PIX data
+- name: PixQrPaymentRecipient
+  fields: 2
+  description: Payment recipient inferred from a PIX QR code (only the merchant name is exposed).
+- name: PortabilityReceived
+  fields: 5
+  description: Salary portability received by the institution from a previous paycheck bank (banco-folha). Approved
+    requests only — a portability is never explicitly closed, so an entry doesn't guarantee an active l
+- name: ProductStatus
+  fields: 4
+  description: Manual per-institution status for the payment products. Payment rails have no automatic health check,
+    so a row only appears here when Pluggy sets it.
+- name: ReservedBalance
+  fields: 3
+  description: Funds reserved/earmarked on a bank account (for example, goal-based savings or judicial holds)
+- name: ReservedBalanceAmount
+  fields: 3
+  description: A single amount within a reserved balance, optionally with its remuneration
+- name: ReservedBalanceRemuneration
+  fields: 7
+  description: Remuneration applied to a reserved balance
+- name: RetryAutomaticPixPaymentRequest
+  fields: 1
+  description: Request to retry an automatic PIX payment
+- name: SINGLE
+  fields: 2
+  description: Schedule attribute to generate a single payment on a specific future date.
+- name: ScheduleAutomaticPixPaymentRequest
+  fields: 5
+  description: Request to schedule an Automatic PIX payment
+- name: SchedulePayment
+  fields: 6
+  description: Information of a schedule payment
+- name: ScrAdditionalInfo
+  fields: 3
+- name: ScrDatabase
+  fields: 10
+  description: One consulted base date, and what the SCR holds for the client in it
+- name: ScrGuarantee
+  fields: 2
+- name: ScrMaturityBalances
+  fields: 30
+  description: 'Balance of the operation group split across Bacen''s maturity vertices, in BRL. Each key is a vertex
+    code and belongs to one of three families: amounts not yet due (a payment up to 14 days late still c'
+- name: ScrOperation
+  fields: 8
+  description: 'A group of credit operations. The SCR does not return contracts one by one: it aggregates them by
+    the combination of modality, source of funds, index and exchange variation.'
+- name: ScrResponse
+  fields: 5
+  description: Bacen's SCR response, forwarded exactly as the Banco Central returns it — field names, codes and
+    all. Nothing is renamed or normalised, so a value read here is the same value an institution reads at t
+- name: ScrValidationMessage
+  fields: 2
+- name: SmartAccount
+  fields: 8
+  description: Pluggy Smart Account (escrow account) attached to a payment request. Receives funds and lets the
+    client orchestrate splits and withdrawals.
+- name: SmartTransferCallbackUrls
+  fields: 2
+  description: Redirect urls after the preauthorization flow was completed or ended in error status
+- name: SmartTransferDataConsent
+  fields: 3
+  description: Balance permission granted with the preauthorization. Its status is refreshed from the institution
+    when the preauthorization is retrieved by id (`GET /smart-transfers/preauthorizations/{id}`); the lis
+- name: SmartTransferOverdraft
+  fields: 3
+- name: SmartTransferPayment
+  fields: 10
+  description: Smart transfer payment
+- name: SmartTransferPreauthorization
+  fields: 12
+  description: Smart transfer preauthorization
+- name: SmartTransferPreauthorizationBalance
+  fields: 2
+- name: SmartTransferPreauthorizationConfiguration
+  fields: 3
+  description: Smart transfer preauthorization configuration
+- name: SmartTransferPreauthorizationConfigurationPeriodicLimit
+  fields: 2
+  description: Transactional limit per period. If sent, at least one of the fields (quantityLimit or transactionLimit)
+    must be filled in.
+- name: SmartTransferPreauthorizationConfigurationPeriodicLimits
+  fields: 4
+  description: Transactional limits per period as determined by the paying user.
+- name: SmartTransferPreauthorizationParameter
+  fields: 2
+  description: Credentials neccesary to create a smart transfer preauthorization
+- name: StatusDetail
+  fields: 9
+  description: Detailed status of the item. This field will be present when the status is PARTIAL_SUCCESS or when
+    a product in the item has warnings
+- name: StatusDetailProduct
+  fields: 3
+  description: Detailed status of the product
+- name: StatusDetailProductWarning
+  fields: 3
+- name: StatusSnapshot
+  fields: 6
+- name: StatusSummary
+  fields: 4
+- name: Transaction
+  fields: 23
+  description: Transaction product
+- name: UpdateItem
+  fields: 4
+  description: Update Item Request
+- name: UpdatePaymentRecipient
+  fields: 4
+  description: Request with information to update a payment recipient
+- name: UpdatePaymentRequest
+  fields: 7
+  description: Request with information to update a payment request
+- name: UpdateTransaction
+  fields: 1
+  description: Update transaction category request body
+- name: UpdateWebhook
+  fields: 4
+  description: Partial update of a webhook. All fields are optional.
+- name: WEEKLY
+  fields: 4
+  description: Schedule attribute to generate weekly payments on a specific day of the week.
+- name: Webhook
+  fields: 7
+- name: WebhookCreationErrorResponse
+  fields: 2
+relationships:
+- from: ScrOperation
+  to: ScrMaturityBalances
+  type: has_one
+  via: resVenc
+- from: ScrOperation
+  to: ScrGuarantee
+  type: has_many
+  via: lsGar
+- from: ScrOperation
+  to: ScrAdditionalInfo
+  type: has_many
+  via: lsInfAd
+- from: ScrDatabase
+  to: ScrOperation
+  type: has_many
+  via: lsOp
+- from: ScrResponse
+  to: ScrDatabase
+  type: has_many
+  via: lsDtb
+- from: ScrResponse
+  to: ScrValidationMessage
+  type: has_many
+  via: listaDeMensagensDeValidacao
+- from: ReservedBalance
+  to: ReservedBalanceAmount
+  type: has_many
+  via: availableAmounts
+- from: ReservedBalanceAmount
+  to: ReservedBalanceRemuneration
+  type: has_one
+  via: remuneration
+- from: Account
+  to: Item
+  type: belongs_to
+  via: itemId
+- from: Account
+  to: BankData
+  type: has_one
+  via: bankData
+- from: Account
+  to: CreditData
+  type: has_one
+  via: creditData
+- from: ConnectorCredential
+  to: CredentialSelectOption
+  type: has_many
+  via: options
+- from: Connector
+  to: ConnectorCredential
+  type: has_many
+  via: credentials
+- from: Connector
+  to: ConnectorHealth
+  type: has_one
+  via: health
+- from: ConnectorListResponse
+  to: Connector
+  type: has_many
+  via: results
+- from: ConnectorHealth
+  to: ConnectorIncident
+  type: has_many
+  via: incidents
+- from: Item
+  to: Connector
+  type: has_one
+  via: connector
+- from: Item
+  to: ConnectorCredential
+  type: has_one
+  via: parameter
+- from: Item
+  to: ConnectorUserAction
+  type: has_one
+  via: userAction
+- from: Item
+  to: StatusDetail
+  type: has_one
+  via: statusDetail
+- from: CreateItem
+  to: Connector
+  type: belongs_to
+  via: connectorId
+- from: StatusDetail
+  to: StatusDetailProduct
+  type: has_one
+  via: accounts
+- from: StatusDetail
+  to: StatusDetailProduct
+  type: has_one
+  via: creditCards
+- from: StatusDetail
+  to: StatusDetailProduct
+  type: has_one
+  via: transactions
+- from: StatusDetail
+  to: StatusDetailProduct
+  type: has_one
+  via: investments
+- from: StatusDetail
+  to: StatusDetailProduct
+  type: has_one
+  via: identity
+- from: StatusDetail
+  to: StatusDetailProduct
+  type: has_one
+  via: investmentsTransactions
+- from: StatusDetail
+  to: StatusDetailProduct
+  type: has_one
+  via: paymentData
+- from: StatusDetail
+  to: StatusDetailProduct
+  type: has_one
+  via: loans
+- from: StatusDetail
+  to: StatusDetailProduct
+  type: has_one
+  via: accountStatements
+- from: StatusDetailProduct
+  to: StatusDetailProductWarning
+  type: has_many
+  via: warnings
+- from: ParameterValidationResponse
+  to: ParameterValidationError
+  type: has_many
+  via: errors
+- from: ParameterValidationResponse
+  to: ItemParameter
+  type: has_one
+  via: parameters
+- from: PaymentDataParticipant
+  to: Document
+  type: has_one
+  via: documentNumber
+- from: PaymentData
+  to: PaymentDataParticipant
+  type: has_one
+  via: payer
+- from: PaymentData
+  to: PaymentDataParticipant
+  type: has_one
+  via: receiver
+- from: PaymentData
+  to: PaymentDataBoletoMetadata
+  type: has_one
+  via: boletoMetadata
+- from: CreditCardMetadata
+  to: Bill
+  type: belongs_to
+  via: billId
+- from: Transaction
+  to: Category
+  type: belongs_to
+  via: categoryId
+- from: Transaction
+  to: PaymentData
+  type: has_one
+  via: paymentData
+- from: Transaction
+  to: CreditCardMetadata
+  type: has_one
+  via: creditCardMetadata
+- from: Transaction
+  to: Merchant
+  type: has_one
+  via: merchant
+- from: Transaction
+  to: Account
+  type: belongs_to
+  via: accountId
+- from: PageResponseTransactions
+  to: Transaction
+  type: has_many
+  via: results
+- from: CursorPageResponseItems
+  to: Item
+  type: has_many
+  via: results
+- from: CursorPageResponseTransactions
+  to: Transaction
+  type: has_many
+  via: results
+- from: UpdateTransaction
+  to: Category
+  type: belongs_to
+  via: categoryId
+- from: ClientCategoryRule
+  to: Category
+  type: belongs_to
+  via: categoryId
+- from: CreateClientCategoryRule
+  to: Category
+  type: belongs_to
+  via: categoryId
+- from: InvestmentTransaction
+  to: InvestmentExpenses
+  type: has_one
+  via: expenses
+- from: PageResponseInvestmentTransactions
+  to: InvestmentTransaction
+  type: has_many
+  via: results
+- from: PageResponseCategories
+  to: Category
+  type: has_many
+  via: results
+- from: PageResponseCategoryRules
+  to: ClientCategoryRule
+  type: has_many
+  via: results
+- from: InvestmentMetadata
+  to: Company
+  type: has_one
+  via: insurer
+- from: Investment
+  to: Item
+  type: belongs_to
+  via: itemId
+- from: Investment
+  to: InvestmentMetadata
+  type: has_one
+  via: metadata
+- from: Investment
+  to: InvestmentInstitution
+  type: has_one
+  via: institution
+- from: Investment
+  to: InvestmentTransaction
+  type: has_many
+  via: transactions
+- from: Address
+  to: GeographicCoordinates
+  type: has_one
+  via: geographicCoordinates
+- from: IdentityResponse
+  to: Item
+  type: belongs_to
+  via: itemId
+- from: IdentityResponse
+  to: MaritalStatus
+  type: has_one
+  via: maritalStatus
+- from: IdentityResponse
+  to: Nationality
+  type: has_one
+  via: nationality
+- from: IdentityResponse
+  to: Passport
+  type: has_one
+  via: passport
+- from: ConnectTokenRequest
+  to: Item
+  type: belongs_to
+  via: itemId
+- from: ConnectTokenRequest
+  to: ItemOptions
+  type: has_one
+  via: options
+- from: ItemCreationErrorResponse
+  to: ParameterValidationError
+  type: has_many
+  via: errors
+- from: ItemCreationErrorResponse
+  to: ParameterValidationError
+  type: has_many
+  via: details
+- from: Loan
+  to: Item
+  type: belongs_to
+  via: itemId
+- from: Loan
+  to: LoanInterestRate
+  type: has_many
+  via: interestRates
+- from: Loan
+  to: LoanContractedFee
+  type: has_many
+  via: contractedFees
+- from: Loan
+  to: LoanContractedFinanceCharge
+  type: has_many
+  via: contractedFinanceCharges
+- from: Loan
+  to: LoanWarranty
+  type: has_many
+  via: warranties
+- from: Loan
+  to: LoanInstallments
+  type: has_one
+  via: installments
+- from: Loan
+  to: LoanPayments
+  type: has_one
+  via: payments
+- from: LoanInstallments
+  to: LoanInstallmentBalloonPayment
+  type: has_many
+  via: balloonPayments
+- from: LoanInstallmentBalloonPayment
+  to: LoanInstallmentBalloonPaymentAmount
+  type: has_one
+  via: amount
+- from: LoanPayments
+  to: LoanPaymentRelease
+  type: has_many
+  via: releases
+- from: LoanPaymentRelease
+  to: LoanPaymentReleaseOverParcel
+  type: has_one
+  via: overParcel
+- from: LoanPaymentReleaseOverParcel
+  to: LoanPaymentReleaseOverParcelFee
+  type: has_many
+  via: fees
+- from: LoanPaymentReleaseOverParcel
+  to: LoanPaymentReleaseOverParcelCharge
+  type: has_many
+  via: charges
+- from: Bill
+  to: BillFinanceCharge
+  type: has_many
+  via: financeCharges
+- from: Bill
+  to: BillPayment
+  type: has_many
+  via: payments
+- from: PaymentRequest
+  to: PaymentRequestCallbackUrls
+  type: has_one
+  via: callbackUrls
+- from: PaymentRequest
+  to: PaymentCustomer
+  type: has_one
+  via: customer
+- from: PaymentRequest
+  to: SmartAccount
+  type: has_one
+  via: smartAccount
+- from: PaymentRequest
+  to: Boleto
+  type: has_one
+  via: boleto
+- from: PaymentRequest
+  to: AutomaticPix
+  type: has_one
+  via: automaticPix
+- from: PaymentRequest
+  to: SINGLE
+  type: has_one
+  via: schedule
+- from: PaymentRequest
+  to: DAILY
+  type: has_one
+  via: schedule
+- from: PaymentRequest
+  to: WEEKLY
+  type: has_one
+  via: schedule
+- from: PaymentRequest
+  to: MONTHLY
+  type: has_one
+  via: schedule
+- from: PaymentRequest
+  to: CUSTOM
+  type: has_one
+  via: schedule
+- from: CreatePaymentRequest
+  to: PaymentRequestCallbackUrls
+  type: has_one
+  via: callbackUrls
+- from: CreatePaymentRequest
+  to: SINGLE
+  type: has_one
+  via: schedule
+- from: CreatePaymentRequest
+  to: DAILY
+  type: has_one
+  via: schedule
+- from: CreatePaymentRequest
+  to: WEEKLY
+  type: has_one
+  via: schedule
+- from: CreatePaymentRequest
+  to: MONTHLY
+  type: has_one
+  via: schedule
+- from: CreatePaymentRequest
+  to: CUSTOM
+  type: has_one
+  via: schedule
+- from: CreatePixQrPaymentRequest
+  to: PaymentRequestCallbackUrls
+  type: has_one
+  via: callbackUrls
+- from: UpdatePaymentRequest
+  to: PaymentRequestCallbackUrls
+  type: has_one
+  via: callbackUrls
+- from: PaymentIntent
+  to: PaymentRequest
+  type: has_one
+  via: paymentRequest
+- from: PaymentIntent
+  to: Connector
+  type: has_one
+  via: connector
+- from: PaymentIntent
+  to: PixData
+  type: has_one
+  via: pixData
+- from: PaymentIntent
+  to: Debtor
+  type: has_one
+  via: debtor
+- from: PaymentIntent
+  to: PaymentIntentErrorDetail
+  type: has_one
+  via: errorDetail
+- from: CreatePaymentIntent
+  to: PaymentRequest
+  type: belongs_to
+  via: paymentRequestId
+- from: CreatePaymentIntent
+  to: PaymentIntentParameter
+  type: has_one
+  via: parameters
+- from: CreatePaymentIntent
+  to: Connector
+  type: belongs_to
+  via: connectorId
+- from: PaymentCustomer
+  to: Connector
+  type: has_one
+  via: connector
+- from: CreatePaymentCustomerRequestBody
+  to: Connector
+  type: belongs_to
+  via: connectorId
+- from: PaymentRecipient
+  to: PaymentInstitution
+  type: has_one
+  via: paymentInstitution
+- from: PaymentRecipient
+  to: PaymentRecipientAccount
+  type: has_one
+  via: account
+- from: CreatePaymentRecipient
+  to: PaymentInstitution
+  type: belongs_to
+  via: paymentInstitutionId
+- from: CreatePaymentRecipient
+  to: PaymentRecipientAccount
+  type: has_one
+  via: account
+- from: UpdatePaymentRecipient
+  to: PaymentInstitution
+  type: belongs_to
+  via: paymentInstitutionId
+- from: UpdatePaymentRecipient
+  to: PaymentRecipientAccount
+  type: has_one
+  via: account
+- from: Boleto
+  to: BoletoPayer
+  type: has_one
+  via: payer
+- from: Boleto
+  to: BoletoRecipient
+  type: has_one
+  via: recipient
+- from: PageResponseConsents
+  to: Consent
+  type: has_many
+  via: results
+- from: Consent
+  to: Item
+  type: belongs_to
+  via: itemId
+- from: SmartTransferPreauthorization
+  to: SmartTransferCallbackUrls
+  type: has_one
+  via: callbackUrls
+- from: SmartTransferPreauthorization
+  to: PaymentRecipient
+  type: has_many
+  via: recipients
+- from: SmartTransferPreauthorization
+  to: Connector
+  type: has_one
+  via: connector
+- from: SmartTransferPreauthorization
+  to: SmartTransferPreauthorizationConfiguration
+  type: has_one
+  via: configuration
+- from: SmartTransferPreauthorization
+  to: SmartTransferDataConsent
+  type: has_one
+  via: dataConsent
+- from: SmartTransferPreauthorizationConfiguration
+  to: SmartTransferPreauthorizationConfigurationPeriodicLimits
+  type: has_one
+  via: periodicLimits
+- from: SmartTransferPreauthorizationConfigurationPeriodicLimits
+  to: SmartTransferPreauthorizationConfigurationPeriodicLimit
+  type: has_one
+  via: day
+- from: SmartTransferPreauthorizationConfigurationPeriodicLimits
+  to: SmartTransferPreauthorizationConfigurationPeriodicLimit
+  type: has_one
+  via: week
+- from: SmartTransferPreauthorizationConfigurationPeriodicLimits
+  to: SmartTransferPreauthorizationConfigurationPeriodicLimit
+  type: has_one
+  via: month
+- from: SmartTransferPreauthorizationConfigurationPeriodicLimits
+  to: SmartTransferPreauthorizationConfigurationPeriodicLimit
+  type: has_one
+  via: year
+- from: CreateSmartTransferPreauthorization
+  to: Connector
+  type: belongs_to
+  via: connectorId
+- from: CreateSmartTransferPreauthorization
+  to: SmartTransferPreauthorizationParameter
+  type: has_one
+  via: parameters
+- from: CreateSmartTransferPreauthorization
+  to: SmartTransferCallbackUrls
+  type: has_one
+  via: callbackUrls
+- from: CreateSmartTransferPreauthorization
+  to: SmartTransferPreauthorizationConfiguration
+  type: has_one
+  via: configuration
+- from: SmartTransferPreauthorizationBalance
+  to: SmartTransferOverdraft
+  type: has_one
+  via: overdraft
+- from: SmartTransferPayment
+  to: PaymentRecipient
+  type: has_one
+  via: recipient
+- from: CreateBoletoConnection
+  to: Connector
+  type: belongs_to
+  via: connectorId
+- from: CreateBoletoConnectionFromItem
+  to: Item
+  type: belongs_to
+  via: itemId
+- from: BoletoConnection
+  to: Connector
+  type: belongs_to
+  via: connectorId
+- from: CreateBoleto
+  to: BoletoConnection
+  type: belongs_to
+  via: boletoConnectionId
+- from: IssuedBoleto
+  to: BoletoConnection
+  type: belongs_to
+  via: boletoConnectionId
+- from: CreateAutomaticPixPaymentRequest
+  to: AutomaticPixFirstPayment
+  type: has_one
+  via: firstPayment
+- from: CreateAutomaticPixPaymentRequest
+  to: AutomaticPixRetriesConfiguration
+  type: has_one
+  via: automaticRetriesConfiguration
+- from: CreateAutomaticPixPaymentRequest
+  to: AutomaticPixSchedulerConfiguration
+  type: has_one
+  via: schedulerConfiguration
+- from: CreateAutomaticPixPaymentRequest
+  to: PaymentRequestCallbackUrls
+  type: has_one
+  via: callbackUrls
+- from: AutomaticPix
+  to: AutomaticPixFirstPayment
+  type: has_one
+  via: firstPayment
+- from: AutomaticPix
+  to: AutomaticPixRetriesConfiguration
+  type: has_one
+  via: automaticRetriesConfiguration
+- from: AutomaticPix
+  to: AutomaticPixSchedulerConfiguration
+  type: has_one
+  via: schedulerConfiguration
+- from: AutomaticPixPayment
+  to: AutomaticPixPaymentErrorDetail
+  type: has_one
+  via: errorDetail
+- from: AutomaticPixPayment
+  to: AutomaticPixPaymentAttempt
+  type: has_many
+  via: attempts
+- from: AutomaticPixPaymentAttempt
+  to: AutomaticPixPaymentErrorDetail
+  type: has_one
+  via: errorDetail
+- from: IncidentUpdate
+  to: Incident
+  type: belongs_to
+  via: incident_id
+- from: Incident
+  to: IncidentInstitution
+  type: has_many
+  via: institutions
+- from: Incident
+  to: IncidentUpdate
+  type: has_many
+  via: updates
+- from: StatusSnapshot
+  to: Institution
+  type: has_many
+  via: institutions
+- from: StatusSnapshot
+  to: Incident
+  type: has_many
+  via: incidents
+- from: StatusSnapshot
+  to: Observation
+  type: has_many
+  via: observations
+- from: StatusSnapshot
+  to: Component
+  type: has_many
+  via: components
+- from: StatusSnapshot
+  to: ProductStatus
+  type: has_many
+  via: productStatus

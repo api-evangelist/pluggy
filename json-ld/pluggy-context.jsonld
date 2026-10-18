@@ -1,0 +1,1959 @@
+{
+  "@context": {
+    "@vocab": "https://pluggy.ai/schema#",
+    "schema": "https://schema.org/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "dcterms": "http://purl.org/dc/terms/",
+    "pluggy": "https://pluggy.ai/schema#",
+    "ScrMaturityBalances": "pluggy:ScrMaturityBalances",
+    "v20": {
+      "@id": "pluggy:v20",
+      "@type": "xsd:decimal"
+    },
+    "v40": {
+      "@id": "pluggy:v40",
+      "@type": "xsd:decimal"
+    },
+    "v60": {
+      "@id": "pluggy:v60",
+      "@type": "xsd:decimal"
+    },
+    "v80": {
+      "@id": "pluggy:v80",
+      "@type": "xsd:decimal"
+    },
+    "v110": {
+      "@id": "pluggy:v110",
+      "@type": "xsd:decimal"
+    },
+    "v120": {
+      "@id": "pluggy:v120",
+      "@type": "xsd:decimal"
+    },
+    "v130": {
+      "@id": "pluggy:v130",
+      "@type": "xsd:decimal"
+    },
+    "v140": {
+      "@id": "pluggy:v140",
+      "@type": "xsd:decimal"
+    },
+    "v150": {
+      "@id": "pluggy:v150",
+      "@type": "xsd:decimal"
+    },
+    "v160": {
+      "@id": "pluggy:v160",
+      "@type": "xsd:decimal"
+    },
+    "v165": {
+      "@id": "pluggy:v165",
+      "@type": "xsd:decimal"
+    },
+    "v170": {
+      "@id": "pluggy:v170",
+      "@type": "xsd:decimal"
+    },
+    "v175": {
+      "@id": "pluggy:v175",
+      "@type": "xsd:decimal"
+    },
+    "v180": {
+      "@id": "pluggy:v180",
+      "@type": "xsd:decimal"
+    },
+    "v190": {
+      "@id": "pluggy:v190",
+      "@type": "xsd:decimal"
+    },
+    "v199": {
+      "@id": "pluggy:v199",
+      "@type": "xsd:decimal"
+    },
+    "v205": {
+      "@id": "pluggy:v205",
+      "@type": "xsd:decimal"
+    },
+    "v210": {
+      "@id": "pluggy:v210",
+      "@type": "xsd:decimal"
+    },
+    "v220": {
+      "@id": "pluggy:v220",
+      "@type": "xsd:decimal"
+    },
+    "v230": {
+      "@id": "pluggy:v230",
+      "@type": "xsd:decimal"
+    },
+    "v240": {
+      "@id": "pluggy:v240",
+      "@type": "xsd:decimal"
+    },
+    "v245": {
+      "@id": "pluggy:v245",
+      "@type": "xsd:decimal"
+    },
+    "v250": {
+      "@id": "pluggy:v250",
+      "@type": "xsd:decimal"
+    },
+    "v255": {
+      "@id": "pluggy:v255",
+      "@type": "xsd:decimal"
+    },
+    "v260": {
+      "@id": "pluggy:v260",
+      "@type": "xsd:decimal"
+    },
+    "v270": {
+      "@id": "pluggy:v270",
+      "@type": "xsd:decimal"
+    },
+    "v280": {
+      "@id": "pluggy:v280",
+      "@type": "xsd:decimal"
+    },
+    "v290": {
+      "@id": "pluggy:v290",
+      "@type": "xsd:decimal"
+    },
+    "v310": {
+      "@id": "pluggy:v310",
+      "@type": "xsd:decimal"
+    },
+    "v320": {
+      "@id": "pluggy:v320",
+      "@type": "xsd:decimal"
+    },
+    "ScrGuarantee": "pluggy:ScrGuarantee",
+    "tp": {
+      "@id": "pluggy:tp",
+      "@type": "xsd:string"
+    },
+    "qtd": {
+      "@id": "pluggy:qtd",
+      "@type": "xsd:decimal"
+    },
+    "ScrAdditionalInfo": "pluggy:ScrAdditionalInfo",
+    "cd": {
+      "@id": "pluggy:cd",
+      "@type": "xsd:string"
+    },
+    "ScrOperation": "pluggy:ScrOperation",
+    "mod": {
+      "@id": "pluggy:mod",
+      "@type": "xsd:string"
+    },
+    "oriRec": {
+      "@id": "pluggy:oriRec",
+      "@type": "xsd:string"
+    },
+    "indx": {
+      "@id": "pluggy:indx",
+      "@type": "xsd:string"
+    },
+    "varCamb": {
+      "@id": "pluggy:varCamb",
+      "@type": "xsd:string"
+    },
+    "subJDisc": {
+      "@id": "pluggy:subJDisc",
+      "@type": "xsd:string"
+    },
+    "resVenc": {
+      "@id": "pluggy:resVenc",
+      "@type": "@id"
+    },
+    "lsGar": {
+      "@id": "pluggy:lsGar",
+      "@container": "@list"
+    },
+    "lsInfAd": {
+      "@id": "pluggy:lsInfAd",
+      "@container": "@list"
+    },
+    "ScrDatabase": "pluggy:ScrDatabase",
+    "dtb": {
+      "@id": "pluggy:dtb",
+      "@type": "xsd:decimal"
+    },
+    "msg": {
+      "@id": "pluggy:msg",
+      "@type": "xsd:string"
+    },
+    "docProc": {
+      "@id": "pluggy:docProc",
+      "@type": "xsd:string"
+    },
+    "volProc": {
+      "@id": "pluggy:volProc",
+      "@type": "xsd:string"
+    },
+    "qtdIfs": {
+      "@id": "pluggy:qtdIfs",
+      "@type": "xsd:decimal"
+    },
+    "qtdCongFinc": {
+      "@id": "pluggy:qtdCongFinc",
+      "@type": "xsd:decimal"
+    },
+    "dtbIniRel": {
+      "@id": "pluggy:dtbIniRel",
+      "@type": "xsd:string"
+    },
+    "coobAss": {
+      "@id": "pluggy:coobAss",
+      "@type": "xsd:decimal"
+    },
+    "coobRec": {
+      "@id": "pluggy:coobRec",
+      "@type": "xsd:decimal"
+    },
+    "lsOp": {
+      "@id": "pluggy:lsOp",
+      "@container": "@list"
+    },
+    "ScrValidationMessage": "pluggy:ScrValidationMessage",
+    "codigo": {
+      "@id": "pluggy:codigo",
+      "@type": "xsd:string"
+    },
+    "mensagem": {
+      "@id": "pluggy:mensagem",
+      "@type": "xsd:string"
+    },
+    "ScrResponse": "pluggy:ScrResponse",
+    "dtbConsult": {
+      "@id": "pluggy:dtbConsult",
+      "@type": "xsd:string"
+    },
+    "cdCli": {
+      "@id": "pluggy:cdCli",
+      "@type": "xsd:string"
+    },
+    "tpCli": {
+      "@id": "pluggy:tpCli",
+      "@type": "xsd:string"
+    },
+    "lsDtb": {
+      "@id": "pluggy:lsDtb",
+      "@container": "@list"
+    },
+    "listaDeMensagensDeValidacao": {
+      "@id": "pluggy:listaDeMensagensDeValidacao",
+      "@container": "@list"
+    },
+    "BankData": "pluggy:BankData",
+    "transferNumber": {
+      "@id": "pluggy:transferNumber",
+      "@type": "xsd:string"
+    },
+    "closingBalance": {
+      "@id": "pluggy:closingBalance",
+      "@type": "xsd:decimal"
+    },
+    "automaticallyInvestedBalance": {
+      "@id": "pluggy:automaticallyInvestedBalance",
+      "@type": "xsd:decimal"
+    },
+    "overdraftContractedLimit": {
+      "@id": "pluggy:overdraftContractedLimit",
+      "@type": "xsd:decimal"
+    },
+    "overdraftUsedLimit": {
+      "@id": "pluggy:overdraftUsedLimit",
+      "@type": "xsd:decimal"
+    },
+    "unarrangedOverdraftAmount": {
+      "@id": "pluggy:unarrangedOverdraftAmount",
+      "@type": "xsd:decimal"
+    },
+    "hasReservedBalance": {
+      "@id": "pluggy:hasReservedBalance",
+      "@type": "xsd:boolean"
+    },
+    "reservedBalances": {
+      "@id": "pluggy:reservedBalances",
+      "@container": "@list"
+    },
+    "ReservedBalance": "pluggy:ReservedBalance",
+    "name": {
+      "@id": "pluggy:name",
+      "@type": "xsd:string"
+    },
+    "identification": {
+      "@id": "pluggy:identification",
+      "@type": "xsd:string"
+    },
+    "availableAmounts": {
+      "@id": "pluggy:availableAmounts",
+      "@container": "@list"
+    },
+    "ReservedBalanceAmount": "pluggy:ReservedBalanceAmount",
+    "amount": {
+      "@id": "pluggy:amount",
+      "@type": "xsd:decimal"
+    },
+    "currencyCode": {
+      "@id": "pluggy:currencyCode",
+      "@type": "xsd:string"
+    },
+    "remuneration": {
+      "@id": "pluggy:remuneration",
+      "@type": "@id"
+    },
+    "ReservedBalanceRemuneration": "pluggy:ReservedBalanceRemuneration",
+    "preFixedRate": {
+      "@id": "pluggy:preFixedRate",
+      "@type": "xsd:decimal"
+    },
+    "postFixedIndexerPercentage": {
+      "@id": "pluggy:postFixedIndexerPercentage",
+      "@type": "xsd:decimal"
+    },
+    "rateType": {
+      "@id": "pluggy:rateType",
+      "@type": "xsd:string"
+    },
+    "indexer": {
+      "@id": "pluggy:indexer",
+      "@type": "xsd:string"
+    },
+    "calculation": {
+      "@id": "pluggy:calculation",
+      "@type": "xsd:string"
+    },
+    "ratePeriodicity": {
+      "@id": "pluggy:ratePeriodicity",
+      "@type": "xsd:string"
+    },
+    "indexerAdditionalInfo": {
+      "@id": "pluggy:indexerAdditionalInfo",
+      "@type": "xsd:string"
+    },
+    "CreditData": "pluggy:CreditData",
+    "level": {
+      "@id": "pluggy:level",
+      "@type": "xsd:string"
+    },
+    "brand": {
+      "@id": "pluggy:brand",
+      "@type": "xsd:string"
+    },
+    "brandAdditionalInfo": {
+      "@id": "pluggy:brandAdditionalInfo",
+      "@type": "xsd:string"
+    },
+    "balanceCloseDate": {
+      "@id": "pluggy:balanceCloseDate",
+      "@type": "xsd:dateTime"
+    },
+    "balanceDueDate": {
+      "@id": "pluggy:balanceDueDate",
+      "@type": "xsd:dateTime"
+    },
+    "availableCreditLimit": {
+      "@id": "pluggy:availableCreditLimit",
+      "@type": "xsd:decimal"
+    },
+    "balanceForeignCurrency": {
+      "@id": "pluggy:balanceForeignCurrency",
+      "@type": "xsd:decimal"
+    },
+    "minimumPayment": {
+      "@id": "pluggy:minimumPayment",
+      "@type": "xsd:decimal"
+    },
+    "creditLimit": {
+      "@id": "pluggy:creditLimit",
+      "@type": "xsd:decimal"
+    },
+    "isLimitFlexible": {
+      "@id": "pluggy:isLimitFlexible",
+      "@type": "xsd:boolean"
+    },
+    "status": {
+      "@id": "pluggy:status",
+      "@type": "xsd:string"
+    },
+    "holderType": {
+      "@id": "pluggy:holderType",
+      "@type": "xsd:string"
+    },
+    "disaggregatedCreditLimits": {
+      "@id": "pluggy:disaggregatedCreditLimits",
+      "@container": "@list"
+    },
+    "additionalCards": {
+      "@id": "pluggy:additionalCards",
+      "@container": "@list"
+    },
+    "AdditionalCard": "pluggy:AdditionalCard",
+    "number": {
+      "@id": "pluggy:number",
+      "@type": "xsd:string"
+    },
+    "DisaggregatedCreditLimit": "pluggy:DisaggregatedCreditLimit",
+    "creditLineLimitType": {
+      "@id": "pluggy:creditLineLimitType",
+      "@type": "xsd:string"
+    },
+    "consolidationType": {
+      "@id": "pluggy:consolidationType",
+      "@type": "xsd:string"
+    },
+    "identificationNumber": {
+      "@id": "pluggy:identificationNumber",
+      "@type": "xsd:string"
+    },
+    "usedAmount": {
+      "@id": "pluggy:usedAmount",
+      "@type": "xsd:decimal"
+    },
+    "usedAmountCurrencyCode": {
+      "@id": "pluggy:usedAmountCurrencyCode",
+      "@type": "xsd:string"
+    },
+    "lineName": {
+      "@id": "pluggy:lineName",
+      "@type": "xsd:string"
+    },
+    "lineNameAdditionalInfo": {
+      "@id": "pluggy:lineNameAdditionalInfo",
+      "@type": "xsd:string"
+    },
+    "limitAmount": {
+      "@id": "pluggy:limitAmount",
+      "@type": "xsd:decimal"
+    },
+    "limitAmountCurrencyCode": {
+      "@id": "pluggy:limitAmountCurrencyCode",
+      "@type": "xsd:string"
+    },
+    "limitAmountReason": {
+      "@id": "pluggy:limitAmountReason",
+      "@type": "xsd:string"
+    },
+    "customizedLimitAmount": {
+      "@id": "pluggy:customizedLimitAmount",
+      "@type": "xsd:decimal"
+    },
+    "customizedLimitAmountCurrencyCode": {
+      "@id": "pluggy:customizedLimitAmountCurrencyCode",
+      "@type": "xsd:string"
+    },
+    "availableAmount": {
+      "@id": "pluggy:availableAmount",
+      "@type": "xsd:decimal"
+    },
+    "availableAmountCurrencyCode": {
+      "@id": "pluggy:availableAmountCurrencyCode",
+      "@type": "xsd:string"
+    },
+    "Account": "pluggy:Account",
+    "id": {
+      "@id": "pluggy:id",
+      "@type": "xsd:string"
+    },
+    "type": {
+      "@id": "pluggy:type",
+      "@type": "xsd:string"
+    },
+    "subtype": {
+      "@id": "pluggy:subtype",
+      "@type": "xsd:string"
+    },
+    "marketingName": {
+      "@id": "pluggy:marketingName",
+      "@type": "xsd:string"
+    },
+    "balance": {
+      "@id": "pluggy:balance",
+      "@type": "xsd:decimal"
+    },
+    "itemId": {
+      "@id": "pluggy:itemId",
+      "@type": "xsd:string"
+    },
+    "taxNumber": {
+      "@id": "pluggy:taxNumber",
+      "@type": "xsd:string"
+    },
+    "owner": {
+      "@id": "pluggy:owner",
+      "@type": "xsd:string"
+    },
+    "bankData": {
+      "@id": "pluggy:bankData",
+      "@type": "@id"
+    },
+    "creditData": {
+      "@id": "pluggy:creditData",
+      "@type": "@id"
+    },
+    "createdAt": {
+      "@id": "pluggy:createdAt",
+      "@type": "xsd:dateTime"
+    },
+    "updatedAt": {
+      "@id": "pluggy:updatedAt",
+      "@type": "xsd:dateTime"
+    },
+    "CredentialSelectOption": "pluggy:CredentialSelectOption",
+    "value": {
+      "@id": "pluggy:value",
+      "@type": "xsd:string"
+    },
+    "label": {
+      "@id": "pluggy:label",
+      "@type": "xsd:string"
+    },
+    "ConnectorCredential": "pluggy:ConnectorCredential",
+    "assistiveText": {
+      "@id": "pluggy:assistiveText",
+      "@type": "xsd:string"
+    },
+    "data": {
+      "@id": "pluggy:data",
+      "@type": "xsd:string"
+    },
+    "placeholder": {
+      "@id": "pluggy:placeholder",
+      "@type": "xsd:string"
+    },
+    "validation": {
+      "@id": "pluggy:validation",
+      "@type": "xsd:string"
+    },
+    "validationMessage": {
+      "@id": "pluggy:validationMessage",
+      "@type": "xsd:string"
+    },
+    "mfa": {
+      "@id": "pluggy:mfa",
+      "@type": "xsd:boolean"
+    },
+    "options": {
+      "@id": "pluggy:options",
+      "@container": "@list"
+    },
+    "optional": {
+      "@id": "pluggy:optional",
+      "@type": "xsd:boolean"
+    },
+    "instructions": {
+      "@id": "pluggy:instructions",
+      "@type": "xsd:string"
+    },
+    "expiresAt": {
+      "@id": "pluggy:expiresAt",
+      "@type": "xsd:dateTime"
+    },
+    "ConnectorUserAction": "pluggy:ConnectorUserAction",
+    "attributes": {
+      "@id": "pluggy:attributes"
+    },
+    "Connector": "pluggy:Connector",
+    "institutionUrl": {
+      "@id": "pluggy:institutionUrl",
+      "@type": "xsd:string"
+    },
+    "imageUrl": {
+      "@id": "pluggy:imageUrl",
+      "@type": "xsd:string"
+    },
+    "primaryColor": {
+      "@id": "pluggy:primaryColor",
+      "@type": "xsd:string"
+    },
+    "country": {
+      "@id": "pluggy:country",
+      "@type": "xsd:string"
+    },
+    "credentials": {
+      "@id": "pluggy:credentials",
+      "@container": "@list"
+    },
+    "hasMFA": {
+      "@id": "pluggy:hasMFA",
+      "@type": "xsd:boolean"
+    },
+    "products": {
+      "@id": "pluggy:products",
+      "@container": "@list"
+    },
+    "productCoverage": {
+      "@id": "pluggy:productCoverage",
+      "@container": "@list"
+    },
+    "oauth": {
+      "@id": "pluggy:oauth",
+      "@type": "xsd:boolean"
+    },
+    "oauthUrl": {
+      "@id": "pluggy:oauthUrl",
+      "@type": "xsd:string"
+    },
+    "resetPasswordUrl": {
+      "@id": "pluggy:resetPasswordUrl",
+      "@type": "xsd:string"
+    },
+    "health": {
+      "@id": "pluggy:health",
+      "@type": "@id"
+    },
+    "isOpenFinance": {
+      "@id": "pluggy:isOpenFinance",
+      "@type": "xsd:boolean"
+    },
+    "isSandbox": {
+      "@id": "pluggy:isSandbox",
+      "@type": "xsd:boolean"
+    },
+    "supportsPaymentInitiation": {
+      "@id": "pluggy:supportsPaymentInitiation",
+      "@type": "xsd:boolean"
+    },
+    "supportsScheduledPayments": {
+      "@id": "pluggy:supportsScheduledPayments",
+      "@type": "xsd:boolean"
+    },
+    "supportsSmartTransfers": {
+      "@id": "pluggy:supportsSmartTransfers",
+      "@type": "xsd:boolean"
+    },
+    "supportsBoletoManagement": {
+      "@id": "pluggy:supportsBoletoManagement",
+      "@type": "xsd:boolean"
+    },
+    "supportsAutomaticPix": {
+      "@id": "pluggy:supportsAutomaticPix",
+      "@type": "xsd:boolean"
+    },
+    "ConnectorListResponse": "pluggy:ConnectorListResponse",
+    "page": {
+      "@id": "pluggy:page",
+      "@type": "xsd:decimal"
+    },
+    "total": {
+      "@id": "pluggy:total",
+      "@type": "xsd:decimal"
+    },
+    "totalPages": {
+      "@id": "pluggy:totalPages",
+      "@type": "xsd:decimal"
+    },
+    "results": {
+      "@id": "pluggy:results",
+      "@container": "@list"
+    },
+    "ConnectorHealth": "pluggy:ConnectorHealth",
+    "stage": {
+      "@id": "pluggy:stage",
+      "@type": "xsd:string"
+    },
+    "incidents": {
+      "@id": "pluggy:incidents",
+      "@container": "@list"
+    },
+    "details": {
+      "@id": "pluggy:details"
+    },
+    "ConnectorIncident": "pluggy:ConnectorIncident",
+    "title": {
+      "@id": "pluggy:title",
+      "@type": "xsd:string"
+    },
+    "description": {
+      "@id": "pluggy:description",
+      "@type": "xsd:string"
+    },
+    "product": {
+      "@id": "pluggy:product",
+      "@type": "xsd:string"
+    },
+    "kind": {
+      "@id": "pluggy:kind",
+      "@type": "xsd:string"
+    },
+    "severity": {
+      "@id": "pluggy:severity",
+      "@type": "xsd:string"
+    },
+    "state": {
+      "@id": "pluggy:state",
+      "@type": "xsd:string"
+    },
+    "startedAt": {
+      "@id": "pluggy:startedAt",
+      "@type": "xsd:dateTime"
+    },
+    "url": {
+      "@id": "pluggy:url",
+      "@type": "xsd:string"
+    },
+    "Item": "pluggy:Item",
+    "connector": {
+      "@id": "pluggy:connector",
+      "@type": "@id"
+    },
+    "executionStatus": {
+      "@id": "pluggy:executionStatus",
+      "@type": "xsd:string"
+    },
+    "error": {
+      "@id": "pluggy:error"
+    },
+    "parameter": {
+      "@id": "pluggy:parameter",
+      "@type": "@id"
+    },
+    "userAction": {
+      "@id": "pluggy:userAction",
+      "@type": "@id"
+    },
+    "webhookUrl": {
+      "@id": "pluggy:webhookUrl",
+      "@type": "xsd:string"
+    },
+    "lastUpdatedAt": {
+      "@id": "pluggy:lastUpdatedAt",
+      "@type": "xsd:dateTime"
+    },
+    "statusDetail": {
+      "@id": "pluggy:statusDetail",
+      "@type": "@id"
+    },
+    "nextAutoSyncAt": {
+      "@id": "pluggy:nextAutoSyncAt",
+      "@type": "xsd:dateTime"
+    },
+    "consecutiveFailedLoginAttempts": {
+      "@id": "pluggy:consecutiveFailedLoginAttempts",
+      "@type": "xsd:decimal"
+    },
+    "consentExpiresAt": {
+      "@id": "pluggy:consentExpiresAt",
+      "@type": "xsd:dateTime"
+    },
+    "resourcesCollectedAt": {
+      "@id": "pluggy:resourcesCollectedAt",
+      "@type": "xsd:dateTime"
+    },
+    "hasResourcesPendingAuthorization": {
+      "@id": "pluggy:hasResourcesPendingAuthorization",
+      "@type": "xsd:boolean"
+    },
+    "CreateItem": "pluggy:CreateItem",
+    "connectorId": {
+      "@id": "pluggy:connectorId",
+      "@type": "xsd:decimal"
+    },
+    "parameters": {
+      "@id": "pluggy:parameters"
+    },
+    "clientUserId": {
+      "@id": "pluggy:clientUserId",
+      "@type": "xsd:string"
+    },
+    "oauthRedirectUri": {
+      "@id": "pluggy:oauthRedirectUri",
+      "@type": "@id"
+    },
+    "avoidDuplicates": {
+      "@id": "pluggy:avoidDuplicates",
+      "@type": "xsd:boolean"
+    },
+    "UpdateItem": "pluggy:UpdateItem",
+    "StatusDetail": "pluggy:StatusDetail",
+    "accounts": {
+      "@id": "pluggy:accounts",
+      "@type": "@id"
+    },
+    "creditCards": {
+      "@id": "pluggy:creditCards",
+      "@type": "@id"
+    },
+    "transactions": {
+      "@id": "pluggy:transactions",
+      "@type": "@id"
+    },
+    "investments": {
+      "@id": "pluggy:investments",
+      "@type": "@id"
+    },
+    "identity": {
+      "@id": "pluggy:identity",
+      "@type": "@id"
+    },
+    "investmentsTransactions": {
+      "@id": "pluggy:investmentsTransactions",
+      "@type": "@id"
+    },
+    "paymentData": {
+      "@id": "pluggy:paymentData",
+      "@type": "@id"
+    },
+    "loans": {
+      "@id": "pluggy:loans",
+      "@type": "@id"
+    },
+    "accountStatements": {
+      "@id": "pluggy:accountStatements",
+      "@type": "@id"
+    },
+    "StatusDetailProduct": "pluggy:StatusDetailProduct",
+    "isUpdated": {
+      "@id": "pluggy:isUpdated",
+      "@type": "xsd:boolean"
+    },
+    "warnings": {
+      "@id": "pluggy:warnings",
+      "@container": "@list"
+    },
+    "StatusDetailProductWarning": "pluggy:StatusDetailProductWarning",
+    "code": {
+      "@id": "pluggy:code",
+      "@type": "xsd:string"
+    },
+    "message": {
+      "@id": "pluggy:message",
+      "@type": "xsd:string"
+    },
+    "providerMessage": {
+      "@id": "pluggy:providerMessage",
+      "@type": "xsd:string"
+    },
+    "ICountResponse": "pluggy:ICountResponse",
+    "count": {
+      "@id": "pluggy:count",
+      "@type": "xsd:decimal"
+    },
+    "Webhook": "pluggy:Webhook",
+    "event": {
+      "@id": "pluggy:event",
+      "@type": "@id"
+    },
+    "disabledAt": {
+      "@id": "pluggy:disabledAt",
+      "@type": "xsd:dateTime"
+    },
+    "headers": {
+      "@id": "pluggy:headers"
+    },
+    "CreateWebhook": "pluggy:CreateWebhook",
+    "UpdateWebhook": "pluggy:UpdateWebhook",
+    "enabled": {
+      "@id": "pluggy:enabled",
+      "@type": "xsd:boolean"
+    },
+    "ParameterValidationError": "pluggy:ParameterValidationError",
+    "PaymentIntentParameter": "pluggy:PaymentIntentParameter",
+    "cpf": {
+      "@id": "pluggy:cpf",
+      "@type": "xsd:string"
+    },
+    "cnpj": {
+      "@id": "pluggy:cnpj",
+      "@type": "xsd:string"
+    },
+    "ParameterValidationResponse": "pluggy:ParameterValidationResponse",
+    "errors": {
+      "@id": "pluggy:errors",
+      "@container": "@list"
+    },
+    "Document": "pluggy:Document",
+    "PaymentDataParticipant": "pluggy:PaymentDataParticipant",
+    "documentNumber": {
+      "@id": "pluggy:documentNumber",
+      "@type": "@id"
+    },
+    "accountNumber": {
+      "@id": "pluggy:accountNumber",
+      "@type": "xsd:string"
+    },
+    "branchNumber": {
+      "@id": "pluggy:branchNumber",
+      "@type": "xsd:string"
+    },
+    "routingNumber": {
+      "@id": "pluggy:routingNumber",
+      "@type": "xsd:string"
+    },
+    "routingNumberISPB": {
+      "@id": "pluggy:routingNumberISPB",
+      "@type": "xsd:string"
+    },
+    "PaymentData": "pluggy:PaymentData",
+    "payer": {
+      "@id": "pluggy:payer",
+      "@type": "@id"
+    },
+    "receiver": {
+      "@id": "pluggy:receiver",
+      "@type": "@id"
+    },
+    "reason": {
+      "@id": "pluggy:reason",
+      "@type": "xsd:string"
+    },
+    "referenceNumber": {
+      "@id": "pluggy:referenceNumber",
+      "@type": "xsd:string"
+    },
+    "receiverReferenceId": {
+      "@id": "pluggy:receiverReferenceId",
+      "@type": "xsd:string"
+    },
+    "authenticationCode": {
+      "@id": "pluggy:authenticationCode",
+      "@type": "xsd:string"
+    },
+    "paymentMethod": {
+      "@id": "pluggy:paymentMethod",
+      "@type": "xsd:string"
+    },
+    "boletoMetadata": {
+      "@id": "pluggy:boletoMetadata",
+      "@type": "@id"
+    },
+    "Merchant": "pluggy:Merchant",
+    "businessName": {
+      "@id": "pluggy:businessName",
+      "@type": "xsd:string"
+    },
+    "cnae": {
+      "@id": "pluggy:cnae",
+      "@type": "xsd:string"
+    },
+    "category": {
+      "@id": "pluggy:category",
+      "@type": "xsd:string"
+    },
+    "CreditCardMetadata": "pluggy:CreditCardMetadata",
+    "installmentNumber": {
+      "@id": "pluggy:installmentNumber",
+      "@type": "xsd:decimal"
+    },
+    "totalInstallments": {
+      "@id": "pluggy:totalInstallments",
+      "@type": "xsd:decimal"
+    },
+    "totalAmount": {
+      "@id": "pluggy:totalAmount",
+      "@type": "xsd:decimal"
+    },
+    "feeType": {
+      "@id": "pluggy:feeType",
+      "@type": "xsd:string"
+    },
+    "feeTypeAdditionalInfo": {
+      "@id": "pluggy:feeTypeAdditionalInfo",
+      "@type": "xsd:string"
+    },
+    "otherCreditsType": {
+      "@id": "pluggy:otherCreditsType",
+      "@type": "xsd:string"
+    },
+    "otherCreditsAdditionalInfo": {
+      "@id": "pluggy:otherCreditsAdditionalInfo",
+      "@type": "xsd:string"
+    },
+    "purchaseDate": {
+      "@id": "pluggy:purchaseDate",
+      "@type": "xsd:dateTime"
+    },
+    "payeeMCC": {
+      "@id": "pluggy:payeeMCC",
+      "@type": "xsd:integer"
+    },
+    "cardNumber": {
+      "@id": "pluggy:cardNumber",
+      "@type": "xsd:string"
+    },
+    "billId": {
+      "@id": "pluggy:billId",
+      "@type": "xsd:string"
+    },
+    "billForecastDate": {
+      "@id": "pluggy:billForecastDate",
+      "@type": "xsd:string"
+    },
+    "paymentType": {
+      "@id": "pluggy:paymentType",
+      "@type": "xsd:string"
+    },
+    "billPostDate": {
+      "@id": "pluggy:billPostDate",
+      "@type": "xsd:date"
+    },
+    "transactionDateTime": {
+      "@id": "pluggy:transactionDateTime",
+      "@type": "xsd:dateTime"
+    },
+    "Transaction": "pluggy:Transaction",
+    "descriptionRaw": {
+      "@id": "pluggy:descriptionRaw",
+      "@type": "xsd:string"
+    },
+    "amountInAccountCurrency": {
+      "@id": "pluggy:amountInAccountCurrency",
+      "@type": "xsd:decimal"
+    },
+    "date": {
+      "@id": "pluggy:date",
+      "@type": "xsd:dateTime"
+    },
+    "providerCode": {
+      "@id": "pluggy:providerCode",
+      "@type": "xsd:string"
+    },
+    "categoryId": {
+      "@id": "pluggy:categoryId",
+      "@type": "xsd:string"
+    },
+    "creditCardMetadata": {
+      "@id": "pluggy:creditCardMetadata",
+      "@type": "@id"
+    },
+    "merchant": {
+      "@id": "pluggy:merchant",
+      "@type": "@id"
+    },
+    "operationType": {
+      "@id": "pluggy:operationType",
+      "@type": "xsd:string"
+    },
+    "operationTypeAdditionalInfo": {
+      "@id": "pluggy:operationTypeAdditionalInfo",
+      "@type": "xsd:string"
+    },
+    "providerId": {
+      "@id": "pluggy:providerId",
+      "@type": "xsd:string"
+    },
+    "accountId": {
+      "@id": "pluggy:accountId",
+      "@type": "xsd:string"
+    },
+    "order": {
+      "@id": "pluggy:order",
+      "@type": "xsd:decimal"
+    },
+    "PageResponseTransactions": "pluggy:PageResponseTransactions",
+    "CursorPageResponseItems": "pluggy:CursorPageResponseItems",
+    "next": {
+      "@id": "pluggy:next",
+      "@type": "xsd:string"
+    },
+    "CursorPageResponseTransactions": "pluggy:CursorPageResponseTransactions",
+    "UpdateTransaction": "pluggy:UpdateTransaction",
+    "Category": "pluggy:Category",
+    "descriptionTranslated": {
+      "@id": "pluggy:descriptionTranslated",
+      "@type": "xsd:string"
+    },
+    "parentId": {
+      "@id": "pluggy:parentId",
+      "@type": "xsd:string"
+    },
+    "parentDescription": {
+      "@id": "pluggy:parentDescription",
+      "@type": "xsd:string"
+    },
+    "ClientCategoryRule": "pluggy:ClientCategoryRule",
+    "clientId": {
+      "@id": "pluggy:clientId",
+      "@type": "xsd:string"
+    },
+    "transactionType": {
+      "@id": "pluggy:transactionType",
+      "@type": "xsd:string"
+    },
+    "accountType": {
+      "@id": "pluggy:accountType",
+      "@type": "xsd:string"
+    },
+    "CreateClientCategoryRule": "pluggy:CreateClientCategoryRule",
+    "matchType": {
+      "@id": "pluggy:matchType",
+      "@type": "xsd:string"
+    },
+    "InvestmentExpenses": "pluggy:InvestmentExpenses",
+    "serviceTax": {
+      "@id": "pluggy:serviceTax",
+      "@type": "xsd:decimal"
+    },
+    "brokerageFee": {
+      "@id": "pluggy:brokerageFee",
+      "@type": "xsd:decimal"
+    },
+    "incomeTax": {
+      "@id": "pluggy:incomeTax",
+      "@type": "xsd:decimal"
+    },
+    "tradingAssetsNoticeFee": {
+      "@id": "pluggy:tradingAssetsNoticeFee",
+      "@type": "xsd:decimal"
+    },
+    "maintenanceFee": {
+      "@id": "pluggy:maintenanceFee",
+      "@type": "xsd:decimal"
+    },
+    "settlementFee": {
+      "@id": "pluggy:settlementFee",
+      "@type": "xsd:decimal"
+    },
+    "clearingFee": {
+      "@id": "pluggy:clearingFee",
+      "@type": "xsd:decimal"
+    },
+    "stockExchangeFee": {
+      "@id": "pluggy:stockExchangeFee",
+      "@type": "xsd:decimal"
+    },
+    "custodyFee": {
+      "@id": "pluggy:custodyFee",
+      "@type": "xsd:decimal"
+    },
+    "operatingFee": {
+      "@id": "pluggy:operatingFee",
+      "@type": "xsd:decimal"
+    },
+    "other": {
+      "@id": "pluggy:other",
+      "@type": "xsd:decimal"
+    },
+    "iof": {
+      "@id": "pluggy:iof",
+      "@type": "xsd:decimal"
+    },
+    "iofProvision": {
+      "@id": "pluggy:iofProvision",
+      "@type": "xsd:decimal"
+    },
+    "InvestmentInstitution": "pluggy:InvestmentInstitution",
+    "InvestmentTransaction": "pluggy:InvestmentTransaction",
+    "movementType": {
+      "@id": "pluggy:movementType",
+      "@type": "xsd:string"
+    },
+    "quantity": {
+      "@id": "pluggy:quantity",
+      "@type": "xsd:decimal"
+    },
+    "agreedRate": {
+      "@id": "pluggy:agreedRate",
+      "@type": "xsd:decimal"
+    },
+    "indexerPercentage": {
+      "@id": "pluggy:indexerPercentage",
+      "@type": "xsd:decimal"
+    },
+    "priceFactor": {
+      "@id": "pluggy:priceFactor",
+      "@type": "xsd:decimal"
+    },
+    "tradeDate": {
+      "@id": "pluggy:tradeDate",
+      "@type": "xsd:dateTime"
+    },
+    "expenses": {
+      "@id": "pluggy:expenses"
+    },
+    "netAmount": {
+      "@id": "pluggy:netAmount",
+      "@type": "xsd:decimal"
+    },
+    "brokerageNumber": {
+      "@id": "pluggy:brokerageNumber",
+      "@type": "xsd:string"
+    },
+    "PageResponseInvestmentTransactions": "pluggy:PageResponseInvestmentTransactions",
+    "PageResponseCategories": "pluggy:PageResponseCategories",
+    "PageResponseCategoryRules": "pluggy:PageResponseCategoryRules",
+    "InvestmentMetadata": "pluggy:InvestmentMetadata",
+    "taxRegime": {
+      "@id": "pluggy:taxRegime",
+      "@type": "xsd:string"
+    },
+    "proposalNumber": {
+      "@id": "pluggy:proposalNumber",
+      "@type": "xsd:string"
+    },
+    "processNumber": {
+      "@id": "pluggy:processNumber",
+      "@type": "xsd:string"
+    },
+    "fundName": {
+      "@id": "pluggy:fundName",
+      "@type": "xsd:string"
+    },
+    "insurer": {
+      "@id": "pluggy:insurer"
+    },
+    "anbimaClass": {
+      "@id": "pluggy:anbimaClass",
+      "@type": "xsd:string"
+    },
+    "anbimaSubclass": {
+      "@id": "pluggy:anbimaSubclass",
+      "@type": "xsd:string"
+    },
+    "anbimaCategory": {
+      "@id": "pluggy:anbimaCategory",
+      "@type": "xsd:string"
+    },
+    "Company": "pluggy:Company",
+    "Investment": "pluggy:Investment",
+    "lastMonthRate": {
+      "@id": "pluggy:lastMonthRate",
+      "@type": "xsd:decimal"
+    },
+    "lastTwelveMonthsRate": {
+      "@id": "pluggy:lastTwelveMonthsRate",
+      "@type": "xsd:decimal"
+    },
+    "annualRate": {
+      "@id": "pluggy:annualRate",
+      "@type": "xsd:decimal"
+    },
+    "isin": {
+      "@id": "pluggy:isin",
+      "@type": "xsd:string"
+    },
+    "taxes": {
+      "@id": "pluggy:taxes",
+      "@type": "xsd:decimal"
+    },
+    "taxes2": {
+      "@id": "pluggy:taxes2",
+      "@type": "xsd:decimal"
+    },
+    "amountProfit": {
+      "@id": "pluggy:amountProfit",
+      "@type": "xsd:decimal"
+    },
+    "amountWithdrawal": {
+      "@id": "pluggy:amountWithdrawal",
+      "@type": "xsd:decimal"
+    },
+    "amountOriginal": {
+      "@id": "pluggy:amountOriginal",
+      "@type": "xsd:decimal"
+    },
+    "metadata": {
+      "@id": "pluggy:metadata"
+    },
+    "dueDate": {
+      "@id": "pluggy:dueDate",
+      "@type": "xsd:dateTime"
+    },
+    "issuer": {
+      "@id": "pluggy:issuer",
+      "@type": "xsd:string"
+    },
+    "issuerCNPJ": {
+      "@id": "pluggy:issuerCNPJ",
+      "@type": "xsd:string"
+    },
+    "issueDate": {
+      "@id": "pluggy:issueDate",
+      "@type": "xsd:dateTime"
+    },
+    "gracePeriodDate": {
+      "@id": "pluggy:gracePeriodDate",
+      "@type": "xsd:dateTime"
+    },
+    "rate": {
+      "@id": "pluggy:rate",
+      "@type": "xsd:decimal"
+    },
+    "fixedAnnualRate": {
+      "@id": "pluggy:fixedAnnualRate",
+      "@type": "xsd:decimal"
+    },
+    "taxExempt": {
+      "@id": "pluggy:taxExempt",
+      "@type": "xsd:boolean"
+    },
+    "debtor": {
+      "@id": "pluggy:debtor"
+    },
+    "couponPayment": {
+      "@id": "pluggy:couponPayment"
+    },
+    "institution": {
+      "@id": "pluggy:institution"
+    },
+    "PhoneNumber": "pluggy:PhoneNumber",
+    "countryCallingCode": {
+      "@id": "pluggy:countryCallingCode",
+      "@type": "xsd:string"
+    },
+    "areaCode": {
+      "@id": "pluggy:areaCode",
+      "@type": "xsd:string"
+    },
+    "extension": {
+      "@id": "pluggy:extension",
+      "@type": "xsd:string"
+    },
+    "additionalInfo": {
+      "@id": "pluggy:additionalInfo",
+      "@type": "xsd:string"
+    },
+    "Email": "pluggy:Email",
+    "Address": "pluggy:Address",
+    "fullAddress": {
+      "@id": "pluggy:fullAddress",
+      "@type": "xsd:string"
+    },
+    "primaryAddress": {
+      "@id": "pluggy:primaryAddress",
+      "@type": "xsd:string"
+    },
+    "city": {
+      "@id": "pluggy:city",
+      "@type": "xsd:string"
+    },
+    "postalCode": {
+      "@id": "pluggy:postalCode",
+      "@type": "xsd:string"
+    },
+    "district": {
+      "@id": "pluggy:district",
+      "@type": "xsd:string"
+    },
+    "ibgeTownCode": {
+      "@id": "pluggy:ibgeTownCode",
+      "@type": "xsd:string"
+    },
+    "countryCode": {
+      "@id": "pluggy:countryCode",
+      "@type": "xsd:string"
+    },
+    "geographicCoordinates": {
+      "@id": "pluggy:geographicCoordinates",
+      "@type": "@id"
+    },
+    "IdentityRelation": "pluggy:IdentityRelation",
+    "document": {
+      "@id": "pluggy:document",
+      "@type": "xsd:string"
+    },
+    "GeographicCoordinates": "pluggy:GeographicCoordinates",
+    "latitude": {
+      "@id": "pluggy:latitude",
+      "@type": "xsd:decimal"
+    },
+    "longitude": {
+      "@id": "pluggy:longitude",
+      "@type": "xsd:decimal"
+    },
+    "MaritalStatus": "pluggy:MaritalStatus",
+    "NationalityDocument": "pluggy:NationalityDocument",
+    "expirationDate": {
+      "@id": "pluggy:expirationDate",
+      "@type": "xsd:dateTime"
+    },
+    "Nationality": "pluggy:Nationality",
+    "hasBrazilianNationality": {
+      "@id": "pluggy:hasBrazilianNationality",
+      "@type": "xsd:boolean"
+    },
+    "otherNationalities": {
+      "@id": "pluggy:otherNationalities",
+      "@container": "@list"
+    },
+    "OtherDocument": "pluggy:OtherDocument",
+    "typeAdditionalInfo": {
+      "@id": "pluggy:typeAdditionalInfo",
+      "@type": "xsd:string"
+    },
+    "checkDigit": {
+      "@id": "pluggy:checkDigit",
+      "@type": "xsd:string"
+    },
+    "Passport": "pluggy:Passport",
+    "BusinessParty": "pluggy:BusinessParty",
+    "personType": {
+      "@id": "pluggy:personType",
+      "@type": "xsd:string"
+    },
+    "documentType": {
+      "@id": "pluggy:documentType",
+      "@type": "xsd:string"
+    },
+    "documentCountry": {
+      "@id": "pluggy:documentCountry",
+      "@type": "xsd:string"
+    },
+    "documentExpirationDate": {
+      "@id": "pluggy:documentExpirationDate",
+      "@type": "xsd:dateTime"
+    },
+    "documentIssueDate": {
+      "@id": "pluggy:documentIssueDate",
+      "@type": "xsd:dateTime"
+    },
+    "documentAdditionalInfo": {
+      "@id": "pluggy:documentAdditionalInfo",
+      "@type": "xsd:string"
+    },
+    "civilName": {
+      "@id": "pluggy:civilName",
+      "@type": "xsd:string"
+    },
+    "socialName": {
+      "@id": "pluggy:socialName",
+      "@type": "xsd:string"
+    },
+    "companyName": {
+      "@id": "pluggy:companyName",
+      "@type": "xsd:string"
+    },
+    "tradeName": {
+      "@id": "pluggy:tradeName",
+      "@type": "xsd:string"
+    },
+    "startDate": {
+      "@id": "pluggy:startDate",
+      "@type": "xsd:dateTime"
+    },
+    "shareholding": {
+      "@id": "pluggy:shareholding",
+      "@type": "xsd:decimal"
+    },
+    "BusinessOtherDocument": "pluggy:BusinessOtherDocument",
+    "EconomicActivity": "pluggy:EconomicActivity",
+    "isMain": {
+      "@id": "pluggy:isMain",
+      "@type": "xsd:boolean"
+    },
+    "InformedRevenue": "pluggy:InformedRevenue",
+    "frequency": {
+      "@id": "pluggy:frequency",
+      "@type": "xsd:string"
+    },
+    "frequencyAdditionalInfo": {
+      "@id": "pluggy:frequencyAdditionalInfo",
+      "@type": "xsd:string"
+    },
+    "year": {
+      "@id": "pluggy:year",
+      "@type": "xsd:decimal"
+    },
+    "PortabilityReceived": "pluggy:PortabilityReceived",
+    "employerName": {
+      "@id": "pluggy:employerName",
+      "@type": "xsd:string"
+    },
+    "employerDocument": {
+      "@id": "pluggy:employerDocument",
+      "@type": "xsd:string"
+    },
+    "paycheckBankDetainerCnpj": {
+      "@id": "pluggy:paycheckBankDetainerCnpj",
+      "@type": "xsd:string"
+    },
+    "paycheckBankDetainerIspb": {
+      "@id": "pluggy:paycheckBankDetainerIspb",
+      "@type": "xsd:string"
+    },
+    "portabilityApprovalDate": {
+      "@id": "pluggy:portabilityApprovalDate",
+      "@type": "xsd:dateTime"
+    },
+    "PaycheckBankLink": "pluggy:PaycheckBankLink",
+    "paycheckBankCnpj": {
+      "@id": "pluggy:paycheckBankCnpj",
+      "@type": "xsd:string"
+    },
+    "paycheckBankIspb": {
+      "@id": "pluggy:paycheckBankIspb",
+      "@type": "xsd:string"
+    },
+    "accountOpeningDate": {
+      "@id": "pluggy:accountOpeningDate",
+      "@type": "xsd:dateTime"
+    },
+    "IdentityResponse": "pluggy:IdentityResponse",
+    "birthDate": {
+      "@id": "pluggy:birthDate",
+      "@type": "xsd:dateTime"
+    },
+    "jobTitle": {
+      "@id": "pluggy:jobTitle",
+      "@type": "xsd:string"
+    },
+    "fullName": {
+      "@id": "pluggy:fullName",
+      "@type": "xsd:string"
+    },
+    "establishmentCode": {
+      "@id": "pluggy:establishmentCode",
+      "@type": "xsd:string"
+    },
+    "establishmentName": {
+      "@id": "pluggy:establishmentName",
+      "@type": "xsd:string"
+    },
+    "phoneNumbers": {
+      "@id": "pluggy:phoneNumbers",
+      "@container": "@list"
+    },
+    "emails": {
+      "@id": "pluggy:emails",
+      "@container": "@list"
+    },
+    "addresses": {
+      "@id": "pluggy:addresses",
+      "@container": "@list"
+    },
+    "relations": {
+      "@id": "pluggy:relations",
+      "@container": "@list"
+    },
+    "investorProfile": {
+      "@id": "pluggy:investorProfile",
+      "@type": "xsd:string"
+    },
+    "qualifications": {
+      "@id": "pluggy:qualifications"
+    },
+    "financialRelationships": {
+      "@id": "pluggy:financialRelationships"
+    },
+    "sex": {
+      "@id": "pluggy:sex",
+      "@type": "xsd:string"
+    },
+    "maritalStatus": {
+      "@id": "pluggy:maritalStatus"
+    },
+    "nationality": {
+      "@id": "pluggy:nationality"
+    },
+    "otherDocuments": {
+      "@id": "pluggy:otherDocuments",
+      "@container": "@list"
+    },
+    "passport": {
+      "@id": "pluggy:passport"
+    },
+    "incorporationDate": {
+      "@id": "pluggy:incorporationDate",
+      "@type": "xsd:dateTime"
+    },
+    "parties": {
+      "@id": "pluggy:parties",
+      "@container": "@list"
+    },
+    "businessOtherDocuments": {
+      "@id": "pluggy:businessOtherDocuments",
+      "@container": "@list"
+    },
+    "companiesCnpj": {
+      "@id": "pluggy:companiesCnpj",
+      "@container": "@list"
+    },
+    "ConnectTokenResponse": "pluggy:ConnectTokenResponse",
+    "accessToken": {
+      "@id": "pluggy:accessToken",
+      "@type": "xsd:string"
+    },
+    "AuthResponse": "pluggy:AuthResponse",
+    "apiKey": {
+      "@id": "pluggy:apiKey",
+      "@type": "xsd:string"
+    },
+    "AuthRequest": "pluggy:AuthRequest",
+    "clientSecret": {
+      "@id": "pluggy:clientSecret",
+      "@type": "xsd:string"
+    },
+    "ConnectTokenRequest": "pluggy:ConnectTokenRequest",
+    "ItemOptions": "pluggy:ItemOptions",
+    "ItemCreationErrorResponse": "pluggy:ItemCreationErrorResponse",
+    "codeDescription": {
+      "@id": "pluggy:codeDescription",
+      "@type": "xsd:string"
+    },
+    "errorId": {
+      "@id": "pluggy:errorId",
+      "@type": "xsd:string"
+    },
+    "WebhookCreationErrorResponse": "pluggy:WebhookCreationErrorResponse",
+    "NotAuthenticatedResponse": "pluggy:NotAuthenticatedResponse",
+    "GlobalErrorResponse": "pluggy:GlobalErrorResponse",
+    "Loan": "pluggy:Loan",
+    "contractNumber": {
+      "@id": "pluggy:contractNumber",
+      "@type": "xsd:string"
+    },
+    "ipocCode": {
+      "@id": "pluggy:ipocCode",
+      "@type": "xsd:string"
+    },
+    "productName": {
+      "@id": "pluggy:productName",
+      "@type": "xsd:string"
+    },
+    "contractDate": {
+      "@id": "pluggy:contractDate",
+      "@type": "xsd:dateTime"
+    },
+    "disbursementDates": {
+      "@id": "pluggy:disbursementDates",
+      "@container": "@list"
+    },
+    "settlementDate": {
+      "@id": "pluggy:settlementDate",
+      "@type": "xsd:dateTime"
+    },
+    "contractAmount": {
+      "@id": "pluggy:contractAmount",
+      "@type": "xsd:decimal"
+    },
+    "installmentPeriodicity": {
+      "@id": "pluggy:installmentPeriodicity",
+      "@type": "xsd:string"
+    },
+    "installmentPeriodicityAdditionalInfo": {
+      "@id": "pluggy:installmentPeriodicityAdditionalInfo",
+      "@type": "xsd:string"
+    },
+    "firstInstallmentDueDate": {
+      "@id": "pluggy:firstInstallmentDueDate",
+      "@type": "xsd:dateTime"
+    },
+    "CET": {
+      "@id": "pluggy:CET",
+      "@type": "xsd:decimal"
+    },
+    "amortizationScheduled": {
+      "@id": "pluggy:amortizationScheduled",
+      "@type": "xsd:string"
+    },
+    "amortizationScheduledAdditionalInfo": {
+      "@id": "pluggy:amortizationScheduledAdditionalInfo",
+      "@type": "xsd:string"
+    },
+    "cnpjConsignee": {
+      "@id": "pluggy:cnpjConsignee",
+      "@type": "xsd:string"
+    },
+    "interestRates": {
+      "@id": "pluggy:interestRates",
+      "@container": "@list"
+    },
+    "contractedFees": {
+      "@id": "pluggy:contractedFees",
+      "@container": "@list"
+    },
+    "contractedFinanceCharges": {
+      "@id": "pluggy:contractedFinanceCharges",
+      "@container": "@list"
+    },
+    "warranties": {
+      "@id": "pluggy:warranties",
+      "@container": "@list"
+    },
+    "installments": {
+      "@id": "pluggy:installments",
+      "@type": "@id"
+    },
+    "payments": {
+      "@id": "pluggy:payments"
+    },
+    "LoanInterestRate": "pluggy:LoanInterestRate",
+    "taxType": {
+      "@id": "pluggy:taxType",
+      "@type": "xsd:string"
+    },
+    "interestRateType": {
+      "@id": "pluggy:interestRateType",
+      "@type": "xsd:string"
+    },
+    "taxPeriodicity": {
+      "@id": "pluggy:taxPeriodicity",
+      "@type": "xsd:string"
+    },
+    "referentialRateIndexerType": {
+      "@id": "pluggy:referentialRateIndexerType",
+      "@type": "xsd:string"
+    },
+    "referentialRateIndexerSubType": {
+      "@id": "pluggy:referentialRateIndexerSubType",
+      "@type": "xsd:string"
+    },
+    "referentialRateIndexerAdditionalInfo": {
+      "@id": "pluggy:referentialRateIndexerAdditionalInfo",
+      "@type": "xsd:string"
+    },
+    "postFixedRate": {
+      "@id": "pluggy:postFixedRate",
+      "@type": "xsd:decimal"
+    },
+    "LoanContractedFee": "pluggy:LoanContractedFee",
+    "chargeType": {
+      "@id": "pluggy:chargeType",
+      "@type": "xsd:string"
+    },
+    "charge": {
+      "@id": "pluggy:charge",
+      "@type": "xsd:string"
+    },
+    "LoanContractedFinanceCharge": "pluggy:LoanContractedFinanceCharge",
+    "LoanWarranty": "pluggy:LoanWarranty",
+    "LoanInstallments": "pluggy:LoanInstallments",
+    "typeNumberOfInstallments": {
+      "@id": "pluggy:typeNumberOfInstallments",
+      "@type": "xsd:string"
+    },
+    "totalNumberOfInstallments": {
+      "@id": "pluggy:totalNumberOfInstallments",
+      "@type": "xsd:decimal"
+    },
+    "typeContractRemaining": {
+      "@id": "pluggy:typeContractRemaining",
+      "@type": "xsd:string"
+    },
+    "contractRemainingNumber": {
+      "@id": "pluggy:contractRemainingNumber",
+      "@type": "xsd:decimal"
+    },
+    "paidInstallments": {
+      "@id": "pluggy:paidInstallments",
+      "@type": "xsd:decimal"
+    },
+    "dueInstallments": {
+      "@id": "pluggy:dueInstallments",
+      "@type": "xsd:decimal"
+    },
+    "pastDueInstallments": {
+      "@id": "pluggy:pastDueInstallments",
+      "@type": "xsd:decimal"
+    },
+    "balloonPayments": {
+      "@id": "pluggy:balloonPayments",
+      "@container": "@list"
+    },
+    "LoanInstallmentBalloonPayment": "pluggy:LoanInstallmentBalloonPayment",
+    "LoanInstallmentBalloonPaymentAmount": "pluggy:LoanInstallmentBalloonPaymentAmount",
+    "ItemResource": "pluggy:ItemResource",
+    "resourceId": {
+      "@id": "pluggy:resourceId",
+      "@type": "xsd:string"
+    },
+    "LoanPayments": "pluggy:LoanPayments",
+    "contractOutstandingBalance": {
+      "@id": "pluggy:contractOutstandingBalance",
+      "@type": "xsd:decimal"
+    },
+    "releases": {
+      "@id": "pluggy:releases",
+      "@container": "@list"
+    },
+    "LoanPaymentRelease": "pluggy:LoanPaymentRelease",
+    "isOverParcelPayment": {
+      "@id": "pluggy:isOverParcelPayment",
+      "@type": "xsd:boolean"
+    },
+    "installmentId": {
+      "@id": "pluggy:installmentId",
+      "@type": "xsd:string"
+    },
+    "paidDate": {
+      "@id": "pluggy:paidDate",
+      "@type": "xsd:dateTime"
+    },
+    "paidAmount": {
+      "@id": "pluggy:paidAmount",
+      "@type": "xsd:decimal"
+    },
+    "overParcel": {
+      "@id": "pluggy:overParcel",
+      "@type": "@id"
+    },
+    "LoanPaymentReleaseOverParcel": "pluggy:LoanPaymentReleaseOverParcel",
+    "fees": {
+      "@id": "pluggy:fees",
+      "@container": "@list"
+    },
+    "charges": {
+      "@id": "pluggy:charges",
+      "@container": "@list"
+    },
+    "LoanPaymentReleaseOverParcelFee": "pluggy:LoanPaymentReleaseOverParcelFee",
+    "LoanPaymentReleaseOverParcelCharge": "pluggy:LoanPaymentReleaseOverParcelCharge",
+    "Bill": "pluggy:Bill",
+    "billClosingDate": {
+      "@id": "pluggy:billClosingDate",
+      "@type": "xsd:dateTime"
+    },
+    "totalAmountCurrencyCode": {
+      "@id": "pluggy:totalAmountCurrencyCode",
+      "@type": "xsd:string"
+    },
+    "minimumPaymentAmount": {
+      "@id": "pluggy:minimumPaymentAmount",
+      "@type": "xsd:decimal"
+    },
+    "allowsInstallments": {
+      "@id": "pluggy:allowsInstallments",
+      "@type": "xsd:boolean"
+    },
+    "financeCharges": {
+      "@id": "pluggy:financeCharges",
+      "@container": "@list"
+    },
+    "BillPayment": "pluggy:BillPayment",
+    "valueType": {
+      "@id": "pluggy:valueType",
+      "@type": "xsd:string"
+    },
+    "paymentDate": {
+      "@id": "pluggy:paymentDate",
+      "@type": "xsd:dateTime"
+    },
+    "paymentMode": {
+      "@id": "pluggy:paymentMode",
+      "@type": "xsd:string"
+    },
+    "BillFinanceCharge": "pluggy:BillFinanceCharge",
+    "PaymentRequestStatus": "pluggy:PaymentRequestStatus",
+    "PaymentCustomerType": "pluggy:PaymentCustomerType",
+    "AutomaticPixInterval": "pluggy:AutomaticPixInterval",
+    "AutomaticPixPaymentStatus": "pluggy:AutomaticPixPaymentStatus",
+    "SmartTransferPaymentStatus": "pluggy:SmartTransferPaymentStatus",
+    "PaymentIntentStatus": "pluggy:PaymentIntentStatus",
+    "WebhookEventType": "pluggy:WebhookEventType",
+    "SmartAccount": "pluggy:SmartAccount",
+    "agency": {
+      "@id": "pluggy:agency",
+      "@type": "xsd:string"
+    },
+    "verifyingDigit": {
+      "@id": "pluggy:verifyingDigit",
+      "@type": "xsd:string"
+    },
+    "pixKey": {
+      "@id": "pluggy:pixKey",
+      "@type": "xsd:string"
+    },
+    "Debtor": "pluggy:Debtor",
+    "bankAccount": {
+      "@id": "pluggy:bankAccount"
+    },
+    "PixQrPaymentRecipient": "pluggy:PixQrPaymentRecipient",
+    "BoletoPaymentRecipient": "pluggy:BoletoPaymentRecipient",
+    "PaymentRequest": "pluggy:PaymentRequest",
+    "clientPaymentId": {
+      "@id": "pluggy:clientPaymentId",
+      "@type": "xsd:string"
+    },
+    "callbackUrls": {
+      "@id": "pluggy:callbackUrls"
+    },
+    "recipient": {
+      "@id": "pluggy:recipient"
+    },
+    "customer": {
+      "@id": "pluggy:customer"
+    },
+    "smartAccount": {
+      "@id": "pluggy:smartAccount"
+    },
+    "paymentUrl": {
+      "@id": "pluggy:paymentUrl",
+      "@type": "xsd:string"
+    },
+    "pixQrCode": {
+      "@id": "pluggy:pixQrCode",
+      "@type": "xsd:string"
+    },
+    "boleto": {
+      "@id": "pluggy:boleto"
+    },
+    "automaticPix": {
+      "@id": "pluggy:automaticPix",
+      "@type": "@id"
+    },
+    "schedule": {
+      "@id": "pluggy:schedule"
+    },
+    "errorDetail": {
+      "@id": "pluggy:errorDetail"
+    },
+    "SchedulePayment": "pluggy:SchedulePayment",
+    "scheduledDate": {
+      "@id": "pluggy:scheduledDate",
+      "@type": "xsd:date"
+    },
+    "endToEndId": {
+      "@id": "pluggy:endToEndId",
+      "@type": "xsd:string"
+    },
+    "CreatePaymentRequest": "pluggy:CreatePaymentRequest",
+    "recipientId": {
+      "@id": "pluggy:recipientId",
+      "@type": "xsd:string"
+    },
+    "customerId": {
+      "@id": "pluggy:customerId",
+      "@type": "xsd:string"
+    },
+    "CreatePixQrPaymentRequest": "pluggy:CreatePixQrPaymentRequest",
+    "UpdatePaymentRequest": "pluggy:UpdatePaymentRequest",
+    "PaymentRequestCallbackUrls": "pluggy:PaymentRequestCallbackUrls",
+    "success": {
+      "@id": "pluggy:success",
+      "@type": "xsd:string"
+    },
+    "pending": {
+      "@id": "pluggy:pending",
+      "@type": "xsd:string"
+    },
+    "PaymentInstitution": "pluggy:PaymentInstitution",
+    "ispb": {
+      "@id": "pluggy:ispb",
+      "@type": "xsd:string"
+    },
+    "compe": {
+      "@id": "pluggy:compe",
+      "@type": "xsd:string"
+    },
+    "PaymentRecipientAccount": "pluggy:PaymentRecipientAccount",
+    "branch": {
+      "@id": "pluggy:branch",
+      "@type": "xsd:string"
+    },
+    "PaymentIntent": "pluggy:PaymentIntent",
+    "paymentRequest": {
+      "@id": "pluggy:paymentRequest"
+    },
+    "consentUrl": {
+      "@id": "pluggy:consentUrl",
+      "@type": "xsd:string"
+    },
+    "referenceId": {
+      "@id": "pluggy:referenceId",
+      "@type": "xsd:string"
+    },
+    "pixData": {
+      "@id": "pluggy:pixData"
+    }
+  },
+  "@type": "schema:Dataset",
+  "schema:name": "Pluggy API JSON-LD context",
+  "schema:description": "A JSON-LD @context for the objects Pluggy's own API contract declares: one class per component schema, one property per declared field, typed from the contract. Derived by script (derive-json-ld.py, 2026-10-18) from openapi/pluggy-api-openapi.yml, openapi/pluggy-enrichment-api-openapi.yml, openapi/pluggy-status-api-openapi.yml.",
+  "dcterms:created": "2026-10-18",
+  "dcterms:source": [
+    "openapi/pluggy-api-openapi.yml",
+    "openapi/pluggy-enrichment-api-openapi.yml",
+    "openapi/pluggy-status-api-openapi.yml"
+  ]
+}

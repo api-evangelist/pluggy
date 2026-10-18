@@ -1,0 +1,97 @@
+openapi: 3.2.0
+info:
+  title: Pluggy Merchant API
+  description: Pluggy's main API to review data and execute connectors
+  license:
+    name: MIT
+  contact:
+    email: hello@pluggy.ai
+    name: Pluggy
+    url: https://pluggy.ai
+  version: 1.0.0
+servers:
+- url: https://api.pluggy.ai
+  description: Pluggy API
+tags:
+- name: Merchant
+  description: Merchant and company information by CNPJ
+paths:
+  /merchants:
+    get:
+      operationId: merchants-get-by-cnpj
+      summary: Get merchants by CNPJ list
+      description: Retrieves merchant information for a list of CNPJs. Returns an object containing found merchants, valid CNPJs that were not found, and invalid CNPJs.
+      responses:
+        '200':
+          description: Merchant query results
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  foundMerchants:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Merchant'
+                    description: List of merchants found for the provided CNPJs
+                  notFoundMerchants:
+                    type: array
+                    items:
+                      type: string
+                    description: List of valid CNPJs that were not found in the merchant database
+                  invalidCnpjs:
+                    type: array
+                    items:
+                      type: string
+                    description: List of invalid CNPJ values provided
+                required:
+                - foundMerchants
+                - notFoundMerchants
+                - invalidCnpjs
+              example:
+                foundMerchants:
+                - businessName: BANCO DO BRASIL SA
+                  cnpj: '66666666000166'
+                  name: BANCO DO BRASIL
+                  cnae: '6422100'
+                  category: Banking
+                notFoundMerchants: []
+                invalidCnpjs: []
+      tags:
+      - Merchant
+      security:
+      - default: []
+      parameters:
+      - description: Comma-separated list of CNPJs
+        in: query
+        name: cnpjs
+        required: false
+        schema:
+          type: string
+        example: 00000000000191,60701190000104
+components:
+  schemas:
+    Merchant:
+      description: Merchant extracted from the transaction data
+      properties:
+        name:
+          type: string
+          description: Merchants name
+        businessName:
+          type: string
+          description: Merchant legal business name
+        cnpj:
+          type: string
+          description: Document number related to the merchant
+        cnae:
+          type: string
+          description: Economic activity classification number related to the merchant
+        category:
+          type: string
+          description: Category derived from the merchant's CNAE, when one can be resolved
+      type: object
+  securitySchemes:
+    default:
+      type: apiKey
+      name: X-API-KEY
+      in: header

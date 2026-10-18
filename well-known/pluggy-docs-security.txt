@@ -1,0 +1,5 @@
+Contact: mailto:security@pluggy.ai
+Contact: mailto:support@pluggy.ai
+Expires: 2027-04-16T00:00:00.000Z
+Preferred-Languages: pt, en, es
+Canonical: https://docs.pluggy.ai/.well-known/security.txt

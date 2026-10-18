@@ -1,0 +1,146 @@
+generated: '2026-10-18'
+method: searched
+generator: extract-docs-artifacts.py (deepseek)
+source: Multiple documentation pages (see sources list)
+sources:
+- https://docs.pluggy.ai/en/docs/developer-tools/rate-limits.md
+- https://docs.pluggy.ai/en/docs/open-finance/rate-limits.md
+- https://docs.pluggy.ai/en/docs/reference/rate-limits.md
+- https://docs.pluggy.ai/en/reference/rate-limits
+name: Pluggy rate limits
+limits:
+- name: POST /auth
+  limit_text: '360'
+  max: 360
+  window: minute
+  scope: per IP
+  endpoint: POST /auth
+- name: GET /accounts
+  limit_text: '360'
+  max: 360
+  window: minute
+  scope: per IP
+  endpoint: GET /accounts or GET /accounts/{id}
+- name: GET /transactions
+  limit_text: '360'
+  max: 360
+  window: minute
+  scope: per IP
+  endpoint: GET /transactions or GET /transactions/{id}
+- name: GET /investments
+  limit_text: '360'
+  max: 360
+  window: minute
+  scope: per IP
+  endpoint: GET /investments or GET /investments/{id}
+- name: GET /investments/{id}/transactions
+  limit_text: '360'
+  max: 360
+  window: minute
+  scope: per IP
+  endpoint: GET /investments/{id}/transactions
+- name: PATCH /items
+  limit_text: '20'
+  max: 20
+  window: minute
+  scope: per IP
+  endpoint: PATCH /items or PATCH /items/{id}
+- name: Account list & details
+  limit_text: '4'
+  max: 4
+  window: month
+  scope: per combination of CPF/CNPJ, institution, and product
+- name: Account balance
+  limit_text: '420'
+  max: 420
+  window: month
+  scope: per combination of CPF/CNPJ, institution, and product
+- name: Recent transactions (1 to 6 days ago)
+  limit_text: '240'
+  max: 240
+  window: month
+  scope: per combination of CPF/CNPJ, institution, and product
+- name: Non-recent transactions (7 to 365 days ago)
+  limit_text: '4'
+  max: 4
+  window: month
+  scope: per combination of CPF/CNPJ, institution, and product
+- name: Credit card list & details
+  limit_text: '4'
+  max: 4
+  window: month
+  scope: per combination of CPF/CNPJ, institution, and product
+- name: Credit card bills & bill transactions
+  limit_text: '30'
+  max: 30
+  window: month
+  scope: per combination of CPF/CNPJ, institution, and product
+- name: Credit card limits
+  limit_text: '240'
+  max: 240
+  window: month
+  scope: per combination of CPF/CNPJ, institution, and product
+- name: Credit card recent transactions (1 to 6 days ago)
+  limit_text: '240'
+  max: 240
+  window: month
+  scope: per combination of CPF/CNPJ, institution, and product
+- name: Credit card non-recent transactions (7 to 365 days ago)
+  limit_text: '4'
+  max: 4
+  window: month
+  scope: per combination of CPF/CNPJ, institution, and product
+- name: Investment list
+  limit_text: '30'
+  max: 30
+  window: month
+  scope: per combination of CPF/CNPJ, institution, and product
+- name: Investment detail
+  limit_text: '4'
+  max: 4
+  window: month
+  scope: per combination of CPF/CNPJ, institution, and product
+- name: Investment balance
+  limit_text: '120'
+  max: 120
+  window: month
+  scope: per combination of CPF/CNPJ, institution, and product
+- name: Investment Transactions (Recent - 1 to 6 days ago)
+  limit_text: '120'
+  max: 120
+  window: month
+  scope: per combination of CPF/CNPJ, institution, and product
+- name: Investment Transactions (History - 7 to 365 days ago)
+  limit_text: '4'
+  max: 4
+  window: month
+  scope: per combination of CPF/CNPJ, institution, and product
+- name: Identity
+  limit_text: '4'
+  max: 4
+  window: month
+  scope: per combination of CPF/CNPJ, institution, and product
+- name: Loans List & Detail
+  limit_text: '4'
+  max: 4
+  window: month
+  scope: per combination of CPF/CNPJ, institution, and product
+- name: Loans Instalments
+  limit_text: '30'
+  max: 30
+  window: month
+  scope: per combination of CPF/CNPJ, institution, and product
+- name: Loans Payments
+  limit_text: '30'
+  max: 30
+  window: month
+  scope: per combination of CPF/CNPJ, institution, and product
+headers:
+- RateLimit-Limit
+- RateLimit-Reset
+- Retry-After
+exhaustion_status: 429
+note: The Open Finance operational limits return status 423 when reached, but these are constraints from financial institutions, not Pluggy API
+  rate limits. Pluggy API rate limits return 429.
+retry_after: '60'
+docs: https://docs.pluggy.ai/en/docs/open-finance/rate-limits.md

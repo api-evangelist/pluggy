@@ -1,0 +1,240 @@
+openapi: 3.2.0
+info:
+  title: Pluggy Consent API
+  description: Pluggy's main API to review data and execute connectors
+  license:
+    name: MIT
+  contact:
+    email: hello@pluggy.ai
+    name: Pluggy
+    url: https://pluggy.ai
+  version: 1.0.0
+servers:
+- url: https://api.pluggy.ai
+  description: Pluggy API
+tags:
+- name: Consent
+  description: User consent management for data access
+paths:
+  /consents:
+    get:
+      operationId: consents-list
+      summary: List
+      description: Recovers all consents given to the item provided
+      responses:
+        '200':
+          description: Retrieve a list of all consents given to an item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageResponseConsents'
+              examples:
+                response:
+                  value:
+                    total: 1
+                    totalPages: 1
+                    page: 1
+                    results:
+                    - id: 71996b6d-8991-450c-8542-ae59069d1a9d
+                      itemId: 9aab8d24-c89b-4b0e-8974-7dd5614686e4
+                      products:
+                      - ACCOUNTS
+                      - IDENTITY
+                      openFinancePermissionsGranted:
+                      - ACCOUNTS_ALL
+                      - REGISTRATION_ALL
+                      createdAt: '2023-10-02T03:00:00.000Z'
+                      expiresAt: '2024-10-02T03:00:00.000Z'
+                      revokedAt: null
+        '400':
+          description: Missing parameter
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+              example:
+                message: itemId should not be null or undefined,itemId must be a UUID
+                code: 400
+        '500':
+          description: Server Internal Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+      tags:
+      - Consent
+      security:
+      - default: []
+      parameters:
+      - description: Item primary identifier
+        in: query
+        name: itemId
+        required: true
+        schema:
+          type: string
+          format: uuid
+        example: d0f8a8c0-e8e3-11e9-b210-d663bd873d93
+  /consents/{id}:
+    get:
+      operationId: consent-retrieve
+      summary: Retrieve
+      description: Recovers the consent resource by it's id
+      responses:
+        '200':
+          description: Retrieve a consent.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Consent'
+        '404':
+          description: Consent not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+              example:
+                code: 404
+                codeDescription: CONSENT_NOT_FOUND
+                message: Consent not found
+        '500':
+          description: Server Internal Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+      tags:
+      - Consent
+      security:
+      - default: []
+      parameters:
+      - description: Consent primary identifier
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+          format: uuid
+        example: 6ec156fe-e8ac-4d9a-a4b3-7770529ab01c
+components:
+  schemas:
+    Consent:
+      description: Item consent information
+      properties:
+        id:
+          type: string
+          description: Consent primary identifier
+        itemId:
+          type: string
+          description: Primary identifier of the item associated to the consent
+        products:
+          type: array
+          items:
+            type: string
+            enum:
+            - ACCOUNTS
+            - CREDIT_CARDS
+            - TRANSACTIONS
+            - PAYMENT_DATA
+            - INVESTMENTS
+            - INVESTMENTS_TRANSACTIONS
+            - IDENTITY
+            - BROKERAGE_NOTE
+            - MOVE_SECURITY
+            - LOANS
+          description: Products to be collected in the connection
+        openFinancePermissionsGranted:
+          type: array
+          items:
+            type: string
+            enum:
+            - REGISTRATION_ALL
+            - REGISTRATION_IDENTIFICATIONS
+            - REGISTRATION_QUALIFICATIONS
+            - REGISTRATION_FINANCIAL_RELATIONS
+            - ACCOUNTS_ALL
+            - ACCOUNTS_LIST
+            - ACCOUNTS_BALANCES
+            - ACCOUNTS_LIMITS
+            - ACCOUNTS_TRANSACTIONS
+            - CREDIT_CARDS_ALL
+            - CREDIT_CARDS_LIST
+            - CREDIT_CARDS_LIMITS
+            - CREDIT_CARDS_TRANSACTIONS
+            - CREDIT_CARDS_BILLS
+            - CREDIT_OPERATIONS_ALL
+            - INVESTMENTS_ALL
+            - EXCHANGES_ALL
+          description: Products consented by the user to be collected
+        createdAt:
+          type: string
+          format: date-time
+          description: Date when the consent was given
+        expiresAt:
+          type: string
+          format: date-time
+          description: Date when the consent expires. Null if the consent doesn't expire
+        revokedAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: Date when the consent was revoked
+      type: object
+      required:
+      - id
+      - itemId
+      - products
+      - createdAt
+    PageResponseConsents:
+      description: ''
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Consent'
+          description: ''
+        page:
+          type: number
+          format: double
+          description: ''
+        total:
+          type: number
+          format: double
+          description: ''
+        totalPages:
+          type: number
+          format: double
+          description: ''
+      type: object
+      required:
+      - results
+      - page
+      - total
+      - totalPages
+    GlobalErrorResponse:
+      title: Global Error Response Schema
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: number
+        message:
+          type: string
+        codeDescription:
+          type: string
+          description: Distinctive code description, useful to distinguish the error.
+        data:
+          type: object
+          description: Additional data related to the error, if any
+          properties: {}
+      example:
+        code: 500
+        codeDescription: INTERNAL_SERVER_ERROR
+        message: Internal Server Error
+  securitySchemes:
+    default:
+      type: apiKey
+      name: X-API-KEY
+      in: header

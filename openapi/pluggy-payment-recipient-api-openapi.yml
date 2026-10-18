@@ -1,0 +1,534 @@
+openapi: 3.2.0
+info:
+  title: Pluggy Payment Recipient API
+  description: Pluggy's main API to review data and execute connectors
+  license:
+    name: MIT
+  contact:
+    email: hello@pluggy.ai
+    name: Pluggy
+    url: https://pluggy.ai
+  version: 1.0.0
+servers:
+- url: https://api.pluggy.ai
+  description: Pluggy API
+tags:
+- name: Payment Recipient
+  description: Payment recipient management
+paths:
+  /payments/recipients:
+    get:
+      operationId: payment-recipients-list
+      summary: List
+      description: Recovers all created payment recipients
+      responses:
+        '200':
+          description: Retrieve a list of all payment recipients
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  page:
+                    type: number
+                    format: double
+                    description: ''
+                  total:
+                    type: number
+                    format: double
+                    description: ''
+                  totalPages:
+                    type: number
+                    format: double
+                    description: ''
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PaymentRecipient'
+                    description: List of payment recipients
+      tags:
+      - Payment Recipient
+      security:
+      - default: []
+      parameters:
+      - description: 'Page size for the paging request, default: 500'
+        in: query
+        name: pageSize
+        required: false
+        schema:
+          type: number
+          format: double
+        example: '50'
+      - description: 'Page number for the paging request, default: 1'
+        in: query
+        name: page
+        required: false
+        schema:
+          type: number
+          format: double
+        example: '1'
+      - description: Filter connectors by the `isDefault` attribute. If not sent, it won't filter.
+        in: query
+        name: isDefault
+        required: false
+        schema:
+          type: boolean
+      - description: Filter payment recipient by Pix key
+        in: query
+        name: pixKey
+        required: false
+        schema:
+          type: string
+        example: '11111111111'
+      - description: Filter payment recipient by name
+        in: query
+        name: name
+        required: false
+        schema:
+          type: string
+        example: John
+      - description: Filter payment recipient by tax number (CPF or CNPJ)
+        in: query
+        name: taxNumber
+        required: false
+        schema:
+          type: string
+        example: '11111111111'
+    post:
+      operationId: payment-recipient-create
+      summary: Create
+      responses:
+        '200':
+          description: Create a payment recipient.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentRecipient'
+        '400':
+          description: Payment Recipient its Invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+              example:
+                code: 400
+                message: taxNumber is required
+      description: Creates the payment recipient resource
+      tags:
+      - Payment Recipient
+      security:
+      - default: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePaymentRecipient'
+        required: true
+  /payments/recipients/{id}:
+    get:
+      operationId: payment-recipient-retrieve
+      summary: Retrieve
+      responses:
+        '200':
+          description: Retrieve a recipient.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentRecipient'
+        '404':
+          description: Payment Recipient not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+              example:
+                code: 404
+                codeDescription: PAYMENT_RECIPIENT_NOT_FOUND
+                message: Payment recipient not found
+      description: Recovers the payment recipient resource by its id
+      tags:
+      - Payment Recipient
+      security:
+      - default: []
+      parameters:
+      - description: Payment recipient primary identifier
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+          format: uuid
+        example: d0e8a7f0-6d86-11ea-b77f-2e728ce88125
+    patch:
+      operationId: payment-recipient-update
+      summary: Update
+      responses:
+        '200':
+          description: Update a payment recipient.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentRecipient'
+      description: Updates the payment recipient resource
+      tags:
+      - Payment Recipient
+      security:
+      - default: []
+      parameters:
+      - description: Payment recipient primary identifier
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+          format: uuid
+        example: d0f8a8c0-e8e3-11e9-b210-d663bd873d93
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePaymentRecipient'
+        required: true
+    delete:
+      operationId: payment-recipient-delete
+      summary: Delete
+      responses:
+        '200':
+          description: Delete a recipient.
+        '404':
+          description: Payment recipient not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+              example:
+                code: 404
+                codeDescription: PAYMENT_RECIPIENT_NOT_FOUND
+                message: Payment recipient not found
+      description: Deletes the payment recipient resource by its id
+      tags:
+      - Payment Recipient
+      security:
+      - default: []
+      parameters:
+      - description: Payment recipient primary identifier
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+          format: uuid
+        example: d0e8a7f0-6d86-11ea-b77f-2e728ce88125
+  /payments/recipients/institutions:
+    get:
+      operationId: payment-recipients-institution-list
+      summary: List Institutions
+      description: Recovers all created payment institutions
+      responses:
+        '200':
+          description: Retrieve a list of all payment institutions
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  page:
+                    type: number
+                    format: double
+                    description: ''
+                  total:
+                    type: number
+                    format: double
+                    description: ''
+                  totalPages:
+                    type: number
+                    format: double
+                    description: ''
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PaymentInstitution'
+                    description: List of payment institutions
+      tags:
+      - Payment Recipient
+      security:
+      - default: []
+      parameters:
+      - description: 'Page size for the paging request, default: 500'
+        in: query
+        name: pageSize
+        required: false
+        schema:
+          type: number
+          format: double
+        example: '50'
+      - description: 'Page number for the paging request, default: 1'
+        in: query
+        name: page
+        required: false
+        schema:
+          type: number
+          format: double
+        example: '1'
+      - description: Filter institutions by name
+        in: query
+        name: name
+        required: false
+        schema:
+          type: string
+        example: Itau
+  /payments/recipients/institutions/{id}:
+    get:
+      operationId: payment-recipient-institutions-retrieve
+      summary: Retrieve Institution
+      responses:
+        '200':
+          description: Retrieve a payment institution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentInstitution'
+        '404':
+          description: Payment Institution not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+              example:
+                code: 404
+                codeDescription: PAYMENT_INSTITUTION_NOT_FOUND
+                message: Payment institution not found
+      description: Recovers the payment institution resource by its id
+      tags:
+      - Payment Recipient
+      security:
+      - default: []
+      parameters:
+      - description: Payment institution primary identifier
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+          format: uuid
+        example: d0e8a7f0-6d86-11ea-b77f-2e728ce88125
+components:
+  schemas:
+    PaymentRecipientAccount:
+      description: Payment receiver bank account information
+      properties:
+        branch:
+          type: string
+          description: Receiver bank account branch (agency)
+        number:
+          type: string
+          description: Receiver bank account number
+        type:
+          type: string
+          description: 'Receiver bank account type, could be: ''CHECKING_ACCOUNT'', ''SAVINGS_ACCOUNT'' or ''GUARANTEED_ACCOUNT'''
+      type: object
+      example:
+        branch: '0001'
+        number: '123456'
+        type: CHECKING_ACCOUNT
+      required:
+      - branch
+      - number
+      - type
+    PaymentRecipient:
+      description: Bank-account payment recipient. Returned by `/payments/recipients` endpoints and embedded inside payment requests when the request targets a registered recipient.
+      properties:
+        type:
+          type: string
+          enum:
+          - BANK_ACCOUNT
+          description: Recipient discriminator. Always `BANK_ACCOUNT` for this schema.
+        id:
+          type: string
+          description: Primary identifier
+        taxNumber:
+          type: string
+          description: Account owner tax number. Can be CPF or CNPJ (only numbers).
+        name:
+          type: string
+          description: Account owner name.
+        paymentInstitution:
+          allOf:
+          - $ref: '#/components/schemas/PaymentInstitution'
+          description: Institution that holds the recipient's bank account.
+        isDefault:
+          type: boolean
+          description: Indicates if the recipient is the default one
+        account:
+          $ref: '#/components/schemas/PaymentRecipientAccount'
+        pixKey:
+          type:
+          - string
+          - 'null'
+          description: Pix key associated with the payment recipient
+        createdAt:
+          type: string
+          format: date-time
+          description: Date when the payment recipient was created
+        updatedAt:
+          type: string
+          format: date-time
+          description: Date when the payment recipient was last updated
+      type: object
+      required:
+      - type
+      - id
+      - name
+      - taxNumber
+      - paymentInstitution
+      - isDefault
+      - account
+      - createdAt
+      - updatedAt
+      example:
+        type: BANK_ACCOUNT
+        id: 5e9f8f8f-f8f8-4f8f-8f8f-8f8f8f8f8f8f
+        name: Conta empresa
+        taxNumber: '22222222222'
+        paymentInstitution:
+          id: 00000000-0000-0000-0000-000000000000
+          name: Banco J. Safra S.A.
+          ispb: '03017677'
+          tradeName: Banco Safra
+          compe: '074'
+          createdAt: '2020-04-21T15:00:00.000Z'
+          updatedAt: '2020-04-21T15:00:00.000Z'
+        account:
+          branch: '0001'
+          number: '123456'
+          type: CHECKING_ACCOUNT
+        isDefault: false
+        pixKey: null
+        createdAt: '2024-01-15T10:30:00.000Z'
+        updatedAt: '2024-01-15T10:30:00.000Z'
+    GlobalErrorResponse:
+      title: Global Error Response Schema
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: number
+        message:
+          type: string
+        codeDescription:
+          type: string
+          description: Distinctive code description, useful to distinguish the error.
+        data:
+          type: object
+          description: Additional data related to the error, if any
+          properties: {}
+      example:
+        code: 500
+        codeDescription: INTERNAL_SERVER_ERROR
+        message: Internal Server Error
+    UpdatePaymentRecipient:
+      description: Request with information to update a payment recipient
+      properties:
+        taxNumber:
+          type: string
+          description: Account owner tax number. Can be CPF or CNPJ (only numbers)
+        name:
+          type: string
+          description: Account owner name.
+        paymentInstitutionId:
+          type: string
+          format: uuid
+          description: Primary identifier of the institution associated to the payment recipient.
+        account:
+          allOf:
+          - $ref: '#/components/schemas/PaymentRecipientAccount'
+          description: Recipient's bank account destination.
+      type: object
+      example:
+        taxNumber: 123456789-00
+        name: Conta empresa
+        paymentInstitutionId: 00000000-0000-0000-0000-000000000000
+        account:
+          branch: '0001'
+          number: '123456'
+          type: CHECKING_ACCOUNT
+    CreatePaymentRecipient:
+      description: Request with information to create a payment recipient.
+      properties:
+        taxNumber:
+          type: string
+          description: Account owner tax number. Can be CPF or CNPJ (only numbers)
+        name:
+          type: string
+          description: Account owner name.
+        paymentInstitutionId:
+          type: string
+          format: uuid
+          description: Primary identifier of the institution associated to the payment recipient.
+        account:
+          allOf:
+          - $ref: '#/components/schemas/PaymentRecipientAccount'
+          description: Recipient's bank account destination.
+      required:
+      - taxNumber
+      - name
+      - paymentInstitutionId
+      - account
+      type: object
+      example:
+        taxNumber: 123456789-00
+        name: Conta empresa
+        paymentInstitutionId: 00000000-0000-0000-0000-000000000000
+        account:
+          branch: '0001'
+          number: '123456'
+          type: CHECKING_ACCOUNT
+    PaymentInstitution:
+      description: Response with information related to a payment institution
+      properties:
+        id:
+          type: string
+          description: Primary identifier
+        name:
+          type: string
+          description: Payment institution name
+        tradeName:
+          type: string
+          description: Payment institution trade name
+        ispb:
+          type: string
+          description: Payment institution ISPB
+        compe:
+          type: string
+          description: Payment institution COMPE
+        createdAt:
+          type: string
+          format: date-time
+          description: Date when the payment institution was created
+        updatedAt:
+          type: string
+          format: date-time
+          description: Date when the payment institution was updated
+      type: object
+      required:
+      - id
+      - name
+      - ispb
+      - tradeName
+      - createdAt
+      - updatedAt
+      example:
+        id: 5e9f8f8f-f8f8-4f8f-8f8f-8f8f8f8f8f8f
+        name: Banco J. Safra S.A.
+        ispb: '03017677'
+        tradeName: Banco Safra
+        compe: '074'
+        createdAt: '2020-04-21T15:00:00.000Z'
+        updatedAt: '2020-04-21T15:00:00.000Z'
+  securitySchemes:
+    default:
+      type: apiKey
+      name: X-API-KEY
+      in: header

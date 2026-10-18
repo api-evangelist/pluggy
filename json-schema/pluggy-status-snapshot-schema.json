@@ -1,0 +1,421 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/pluggy/main/json-schema/pluggy-status-snapshot-schema.json",
+  "title": "StatusSnapshot",
+  "x-generated": "2026-10-18",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/pluggy-status-api-openapi.yml#/components/schemas/StatusSnapshot",
+  "type": "object",
+  "properties": {
+    "generatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "institutions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Institution"
+      }
+    },
+    "incidents": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Incident"
+      },
+      "description": "Open incidents plus the last 90 days of resolved ones. Anything whose state is not 'resolved' is happening right now."
+    },
+    "observations": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Observation"
+      },
+      "description": "Approved high-confidence monitoring observations, active plus recent outcomes. They are not incidents and do not imply component degradation."
+    },
+    "components": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Component"
+      }
+    },
+    "productStatus": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/ProductStatus"
+      }
+    }
+  },
+  "$defs": {
+    "Component": {
+      "type": "object",
+      "description": "A Pluggy infrastructure component (API, webhooks, Connect widget).",
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "operational",
+            "degraded",
+            "partial_outage",
+            "major_outage",
+            "maintenance"
+          ]
+        },
+        "sort_order": {
+          "type": "integer"
+        }
+      }
+    },
+    "Incident": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "incident",
+            "maintenance"
+          ]
+        },
+        "product": {
+          "type": "string",
+          "enum": [
+            "dados",
+            "pis",
+            "pis-agendado",
+            "pixauto",
+            "smart",
+            "infra",
+            "pagamentos"
+          ],
+          "description": "Affected product. 'pagamentos' is legacy and only appears on historical incidents."
+        },
+        "pluggy_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Primary affected connector. Null for product-wide or infrastructure incidents."
+        },
+        "institution_name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "institutions": {
+          "type": "array",
+          "description": "Every affected institution. An incident can span several connectors; the primary one is pluggy_id.",
+          "items": {
+            "$ref": "#/$defs/IncidentInstitution"
+          }
+        },
+        "component_key": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Infrastructure component (api, webhooks or connect) for incidents whose product is infra."
+        },
+        "severity": {
+          "type": "string",
+          "enum": [
+            "degraded",
+            "partial_outage",
+            "major_outage",
+            "maintenance"
+          ]
+        },
+        "state": {
+          "type": "string",
+          "enum": [
+            "investigating",
+            "identified",
+            "monitoring",
+            "resolved",
+            "scheduled"
+          ],
+          "description": "Anything other than 'resolved' is an open incident."
+        },
+        "scheduled_kind": {
+          "type": "string",
+          "enum": [
+            "programada",
+            "nao-programada",
+            "upcoming"
+          ]
+        },
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "apis": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Affected APIs or journey phases, e.g. Cartão de crédito, Investimentos, Consentimento."
+        },
+        "started_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "resolved_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "window_starts_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time",
+          "description": "Maintenance window start."
+        },
+        "window_ends_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time",
+          "description": "Maintenance window end."
+        },
+        "postmortem": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Published post-mortem, when there is one."
+        },
+        "source": {
+          "type": "string",
+          "enum": [
+            "manual",
+            "webhook",
+            "statuspage"
+          ]
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/IncidentUpdate"
+          },
+          "description": "Timeline of the incident, oldest first."
+        }
+      }
+    },
+    "IncidentInstitution": {
+      "type": "object",
+      "properties": {
+        "pluggy_id": {
+          "type": "string",
+          "description": "Pluggy connector id, matches the id in GET /connectors."
+        },
+        "institution_name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "IncidentUpdate": {
+      "type": "object",
+      "description": "One entry of an incident timeline, newest last.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "incident_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "state": {
+          "type": "string",
+          "enum": [
+            "investigating",
+            "identified",
+            "monitoring",
+            "resolved",
+            "scheduled",
+            "update"
+          ]
+        },
+        "body": {
+          "type": "string",
+          "description": "Update text (small markdown subset: bold, italic, code, links, lists)."
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "Institution": {
+      "type": "object",
+      "properties": {
+        "pluggy_id": {
+          "type": "string",
+          "description": "Pluggy connector id, matches the id in GET /connectors."
+        },
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "logo_url": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "is_open_finance": {
+          "type": "boolean",
+          "description": "True for regulated Open Finance connectors, false for Pluggy's direct connectors."
+        },
+        "open_finance_participant_url": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "online",
+            "degraded",
+            "offline",
+            "maintenance"
+          ],
+          "description": "Current health of the data connection. It does not describe payment rails — see components for those."
+        },
+        "bars": {
+          "type": "string",
+          "description": "90 characters, one per day, oldest first: o online, d degraded, x offline, m maintenance."
+        },
+        "uptime": {
+          "type": "number",
+          "description": "Uptime over the last 90 days, as a percentage."
+        },
+        "supports_data": {
+          "type": "boolean"
+        },
+        "supports_pis": {
+          "type": "boolean"
+        },
+        "supports_pis_scheduled": {
+          "type": "boolean"
+        },
+        "supports_pix_auto": {
+          "type": "boolean"
+        },
+        "supports_smart_transfer": {
+          "type": "boolean"
+        }
+      }
+    },
+    "Observation": {
+      "type": "object",
+      "description": "A high-confidence situation Pluggy is investigating. It is not a confirmed incident and does not change component availability.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "institution_name": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "body": {
+          "type": "string",
+          "description": "Customer-facing update. It never includes internal metrics, customer data or a root-cause hypothesis."
+        },
+        "state": {
+          "type": "string",
+          "enum": [
+            "active",
+            "resolved",
+            "dismissed"
+          ]
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "resolved_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        }
+      }
+    },
+    "ProductStatus": {
+      "type": "object",
+      "description": "Manual per-institution status for the payment products. Payment rails have no automatic health check, so a row only appears here when Pluggy sets it.",
+      "properties": {
+        "pluggy_id": {
+          "type": "string"
+        },
+        "institution_name": {
+          "type": "string"
+        },
+        "product": {
+          "type": "string",
+          "enum": [
+            "pis",
+            "pis-agendado",
+            "pixauto",
+            "smart"
+          ]
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "operational",
+            "degraded",
+            "partial_outage",
+            "major_outage",
+            "maintenance"
+          ]
+        }
+      }
+    }
+  }
+}

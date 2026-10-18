@@ -1,0 +1,206 @@
+generated: '2026-10-18'
+method: derived
+source: mcp/pluggy-mcp-tools-list.json (live anonymous tools/list, 2026-10-18) aligned with openapi/pluggy-api-openapi.yml,
+  openapi/pluggy-status-api-openapi.yml and openapi/pluggy-enrichment-api-openapi.yml
+surfaces:
+  rest_openapi:
+  - openapi/pluggy-api-openapi.yml
+  - openapi/pluggy-enrichment-api-openapi.yml
+  - openapi/pluggy-status-api-openapi.yml
+  graphql: null
+  mcp: https://mcp.pluggy.ai/mcp (tools/list open anonymously; dev-portal tools need OAuth sign-in to execute)
+crosswalk:
+- tool: check_incidents
+  category: dev-portal
+  rest:
+  - status-connector-incidents
+  - status-snapshot
+  binding: rest
+  spec: openapi/pluggy-status-api-openapi.yml
+  confidence: medium
+  note: Tool description says it reads the same source as status.pluggy.ai; the Status API serves that page as public JSON.
+- tool: get_item
+  category: dev-portal
+  rest:
+  - items-retrieve
+  binding: semantic
+  confidence: low
+  note: Same resource (an Item by id) but the tool is scoped by dashboard teamId via OAuth sign-in, not the X-API-KEY REST
+    call, and adds executions.
+- tool: list_connectors
+  category: dev-portal
+  rest:
+  - connectors-list
+  binding: semantic
+  confidence: low
+  note: Scoped to a team application via dashboard sign-in.
+- tool: list_webhooks
+  category: dev-portal
+  rest:
+  - webhooks-list
+  binding: semantic
+  confidence: low
+  note: Takes applicationId (dashboard) rather than the REST API key.
+meta_tools:
+- tool: execute_request
+  reason: generic live HTTP proxy to the Pluggy API (GET); can invoke any operation in the main or enrichment spec by path,
+    so it binds to no single operationId
+- tool: create_request
+  reason: generic live HTTP proxy to the Pluggy API (create); can invoke any operation in the main or enrichment spec by path,
+    so it binds to no single operationId
+- tool: update_request
+  reason: generic live HTTP proxy to the Pluggy API (update); can invoke any operation in the main or enrichment spec by path,
+    so it binds to no single operationId
+- tool: delete_request
+  reason: generic live HTTP proxy to the Pluggy API (delete); can invoke any operation in the main or enrichment spec by path,
+    so it binds to no single operationId
+mcp_only:
+- tool: query
+  reason: documentation/search tool over docs, changelog, recipes, Q&A or the OpenAPI index; no backing product REST operation
+- tool: search_docs
+  reason: documentation/search tool over docs, changelog, recipes, Q&A or the OpenAPI index; no backing product REST operation
+- tool: search_changelog
+  reason: documentation/search tool over docs, changelog, recipes, Q&A or the OpenAPI index; no backing product REST operation
+- tool: list_changelog_changes
+  reason: documentation/search tool over docs, changelog, recipes, Q&A or the OpenAPI index; no backing product REST operation
+- tool: search_recipes
+  reason: documentation/search tool over docs, changelog, recipes, Q&A or the OpenAPI index; no backing product REST operation
+- tool: search_qa
+  reason: documentation/search tool over docs, changelog, recipes, Q&A or the OpenAPI index; no backing product REST operation
+- tool: get_guide
+  reason: documentation/search tool over docs, changelog, recipes, Q&A or the OpenAPI index; no backing product REST operation
+- tool: list_guides
+  reason: documentation/search tool over docs, changelog, recipes, Q&A or the OpenAPI index; no backing product REST operation
+- tool: get_api_endpoint
+  reason: documentation/search tool over docs, changelog, recipes, Q&A or the OpenAPI index; no backing product REST operation
+- tool: list_endpoints
+  reason: documentation/search tool over docs, changelog, recipes, Q&A or the OpenAPI index; no backing product REST operation
+- tool: list_specs
+  reason: documentation/search tool over docs, changelog, recipes, Q&A or the OpenAPI index; no backing product REST operation
+- tool: search_endpoints
+  reason: documentation/search tool over docs, changelog, recipes, Q&A or the OpenAPI index; no backing product REST operation
+- tool: list_teams
+  reason: dev-portal (dashboard) tool behind optional OAuth sign-in; no public REST operation in the captured OpenAPI
+- tool: list_applications
+  reason: dev-portal (dashboard) tool behind optional OAuth sign-in; no public REST operation in the captured OpenAPI
+- tool: select_application
+  reason: dev-portal (dashboard) tool behind optional OAuth sign-in; no public REST operation in the captured OpenAPI
+- tool: get_application
+  reason: dev-portal (dashboard) tool behind optional OAuth sign-in; no public REST operation in the captured OpenAPI
+- tool: get_stats
+  reason: dev-portal (dashboard) tool behind optional OAuth sign-in; no public REST operation in the captured OpenAPI
+- tool: debug_item
+  reason: dev-portal (dashboard) tool behind optional OAuth sign-in; no public REST operation in the captured OpenAPI
+- tool: get_execution_reports
+  reason: dev-portal (dashboard) tool behind optional OAuth sign-in; no public REST operation in the captured OpenAPI
+- tool: get_billing_url
+  reason: dev-portal (dashboard) tool behind optional OAuth sign-in; no public REST operation in the captured OpenAPI
+- tool: get_reports
+  reason: dev-portal (dashboard) tool behind optional OAuth sign-in; no public REST operation in the captured OpenAPI
+- tool: list_webhook_events
+  reason: dev-portal (dashboard) tool behind optional OAuth sign-in; no public REST operation in the captured OpenAPI
+- tool: get_webhook_event
+  reason: dev-portal (dashboard) tool behind optional OAuth sign-in; no public REST operation in the captured OpenAPI
+- tool: dev_portal_tools_introduction
+  reason: dev-portal (dashboard) tool behind optional OAuth sign-in; no public REST operation in the captured OpenAPI
+- tool: create_support_ticket
+  reason: dev-portal (dashboard) tool behind optional OAuth sign-in; no public REST operation in the captured OpenAPI
+rest_only:
+- auth-create
+- connect-token-create
+- connector-retrieve
+- connectors-validate
+- items-create
+- items-update
+- items-delete
+- items-resources
+- items-send-mfa
+- items-disable-autosync
+- items-retrieve-scr
+- consents-list
+- consent-retrieve
+- accounts-list
+- accounts-retrieve
+- account-statements-list
+- account-balance-get
+- transactions-list
+- items-list-by-cursor
+- transactions-list-by-cursor
+- transactions-retrieve
+- transactions-Update
+- investments-list
+- investments-retrieve
+- investment-transactions-list
+- identity-find-by-item
+- identity-retrieve
+- webhooks-create
+- webhooks-retrieve
+- webhooks-update
+- webhooks-delete
+- categories-list
+- categories-retrieve
+- client-category-rules-list
+- client-category-rules-create
+- client-category-rules-delete
+- loans-list
+- loans-retrieve
+- merchants-get-by-cnpj
+- bills-list
+- bills-retrieve
+- payment-customers-list
+- payment-customer-create
+- payment-customer-retrieve
+- payment-customer-delete
+- payment-customer-update
+- payment-recipients-list
+- payment-recipient-create
+- payment-recipient-retrieve
+- payment-recipient-update
+- payment-recipient-delete
+- payment-recipients-institution-list
+- payment-recipient-institutions-retrieve
+- payment-requests-list
+- payment-request-create
+- payment-request-create-automatic-pix
+- payment-request-create-automatic-pix-schedule
+- payment-request-get-automatic-pix-schedules
+- payment-request-get-automatic-pix-schedule
+- payment-request-cancel-automatic-pix-consent
+- cancel-automatic-pix-schedule
+- retry-automatic-pix-schedule
+- payment-request-create-pix-qr
+- payment-request-retrieve
+- payment-request-delete
+- payment-request-update
+- payment-schedules-list
+- payment-schedules-cancel
+- payment-schedules-cancel-specific
+- payment-intent-create
+- payment-intents-list
+- payment-intent-retrieve
+- smart-tranfers-preauthorizations-list
+- smart-transfer-preauthorization-create
+- smart-transfer-preauthorization-retrieve
+- smart-transfer-preauthorization-balance-retrieve
+- smart-transfer-preauthorization-data-consent-delete
+- smart-transfer-preauthorization-payments-list
+- smart-transfer-payment-create
+- smart-transfer-paymentretrieve
+- boleto-connection-create
+- boleto-connection-create-from-item
+- boleto-create
+- boleto-cancel
+- boleto-get
+- status-summary
+- categorize
+- behavior-analysis
+- recurring-payments
+coverage:
+  mcp_tools: 33
+  bound_to_rest: 4
+  meta_tools: 4
+  mcp_only: 25
+  rest_operations: 94
+notes: Pluggy's MCP is primarily a docs + dashboard surface. Product REST operations are reachable from MCP only through the
+  generic request proxy tools (meta_tools), which require the caller to supply Pluggy API credentials in headers. Dev-portal
+  bindings are semantic, not verified against a backend.

@@ -1,0 +1,690 @@
+openapi: 3.2.0
+info:
+  title: Pluggy Webhook API
+  description: Pluggy's main API to review data and execute connectors
+  license:
+    name: MIT
+  contact:
+    email: hello@pluggy.ai
+    name: Pluggy
+    url: https://pluggy.ai
+  version: 1.0.0
+servers:
+- url: https://api.pluggy.ai
+  description: Pluggy API
+tags:
+- name: Webhook
+  description: Webhook configuration and management
+paths:
+  /webhooks:
+    get:
+      operationId: webhooks-list
+      summary: List
+      description: Retrieves all Webhooks associated with your application
+      responses:
+        '200':
+          description: List of Webhooks
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  page:
+                    type: number
+                    format: double
+                    description: ''
+                  total:
+                    type: number
+                    format: double
+                    description: ''
+                  totalPages:
+                    type: number
+                    format: double
+                    description: ''
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Webhook'
+                    description: ''
+              examples:
+                response:
+                  value:
+                    page: 1
+                    total: 2
+                    totalPages: 1
+                    results:
+                    - id: d619cfde-a8d7-4fe0-a10d-6de488bde4e0
+                      event: item/updated
+                      url: https://www.myapi.com/notifications
+                      disabledAt: '2020-06-24T21:29:40.300Z'
+                      createdAt: '2020-06-24T21:29:40.300Z'
+                      updatedAt: '2020-06-24T21:29:40.300Z'
+                      headers:
+                        X-Signature: my-secret
+                    - id: 207f5bcd-312a-439c-abbe-166b6632c980
+                      event: item/all
+                      url: https://www.myapi.com/notifications
+                      disabledAt: null
+                      createdAt: '2020-06-24T21:29:40.300Z'
+                      updatedAt: '2020-06-24T21:29:40.300Z'
+                      headers:
+                        Authorization: Bearer my-webhook-token
+        '204':
+          description: No content
+        '500':
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+              example:
+                code: 500
+                message: Internal Server Error
+      tags:
+      - Webhook
+      security:
+      - default: []
+      x-readme:
+        code-samples:
+        - language: node
+          code: "const pluggy = require('pluggy-sdk');\nconst client = new pluggy.PluggyClient({\n  clientId: 'YOUR_CLIENT_ID',\n  clientSecret: 'YOUR_CLIENT_SECRET',\n});\nclient\n  .fetchWebhooks()\n  .then(({ results: webhooks }) => {\n    console.log(webhook);\n  });"
+        - language: csharp
+          code: 'PluggyClient pluggyClient = new PluggyClient("YOUR_PLUGGY_API_KEY");
+
+            List<Webhook> webhooks = await pluggyClient.FetchWebhooks();'
+    post:
+      operationId: webhooks-create
+      summary: Create
+      description: Creates a webhook attached to the specific event and provides the notification url
+      responses:
+        '201':
+          description: Created webhook
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Webhook'
+        '400':
+          description: Invalid parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemCreationErrorResponse'
+              examples:
+                invalidEvent:
+                  summary: Invalid event type
+                  value:
+                    message: Invalid event type '{event}' for webhook
+                    code: 400
+                invalidUrl:
+                  summary: Webhook URL is malformed or not https
+                  value:
+                    message: Webhook url must be valid URL address and not localhost
+                    code: 400
+                nonHttpsUrl:
+                  summary: Webhook URL must use https
+                  value:
+                    message: Webhook url must be a https secured url
+                    code: 400
+                ipLiteralHost:
+                  summary: Webhook URL host is an IP literal
+                  value:
+                    message: Webhook url host can't be an IP address
+                    code: 400
+                reservedHost:
+                  summary: Webhook URL host is localhost or a reserved/internal name
+                  value:
+                    message: Webhook url host can't be localhost or a reserved/internal name
+                    code: 400
+                privateAddress:
+                  summary: Webhook URL host resolves to a non-public address
+                  value:
+                    message: Webhook url can't resolve to a private, loopback, link-local or reserved address
+                    code: 400
+                unresolvableHost:
+                  summary: Webhook URL host cannot be resolved via DNS
+                  value:
+                    message: Webhook url host could not be resolved
+                    code: 400
+                alreadyExists:
+                  summary: Webhook event already created for the specified url
+                  value:
+                    message: A webhook for event '{event}' and url '{url}' already exists.
+                    code: 400
+                limitReached:
+                  summary: Maximum webhooks per event reached
+                  value:
+                    message: You have reached the maximum of 5 webhooks for event '{event}'.
+                    code: 400
+        '500':
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+              example:
+                code: 500
+                codeDescription: INTERNAL_SERVER_ERROR
+                message: Internal Server Error
+      tags:
+      - Webhook
+      security:
+      - default: []
+      requestBody:
+        $ref: '#/components/requestBodies/CreateWebhook'
+      x-readme:
+        code-samples:
+        - language: node
+          code: "const pluggy = require('pluggy-sdk');\nconst client = new pluggy.PluggyClient({\n  clientId: 'YOUR_CLIENT_ID',\n  clientSecret: 'YOUR_CLIENT_SECRET',\n});\nclient\n  .createWebhook({\n    event: 'item/updated',\n    url: 'https://www.myapi.com/notifications',\n})\n  .then((webhook) => {\n    console.log(webhook);\n  });"
+        - language: csharp
+          code: 'PluggyClient pluggyClient = new PluggyClient("YOUR_PLUGGY_API_KEY");
+
+            Webhook webhook = await pluggyClient.CreateWebhook("https://www.myapi.com/notifications", WebhookEvent.ItemCreated);'
+  /webhooks/{id}:
+    get:
+      operationId: webhooks-retrieve
+      summary: Retrieve
+      description: Retrieves a specific webhook
+      responses:
+        '200':
+          description: Retrieve a webhook.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Webhook'
+        '404':
+          description: Webhook not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+              example:
+                code: 404
+                codeDescription: WEBHOOK_NOT_FOUND
+                message: webhook not found
+        '500':
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+              example:
+                code: 500
+                message: Internal Server Error
+      tags:
+      - Webhook
+      security:
+      - default: []
+      parameters:
+      - description: webhook primary identifier
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        example: d0e8a7f0-6d86-11ea-b77f-2e728ce88125
+      x-readme:
+        code-samples:
+        - language: node
+          code: "const pluggy = require('pluggy-sdk');\nconst client = new pluggy.PluggyClient({\n  clientId: 'YOUR_CLIENT_ID',\n  clientSecret: 'YOUR_CLIENT_SECRET',\n});\nclient\n  .fetchWebhook('YOUR_WEBHOOK_ID')\n  .then((webhook) => {\n    console.log(webhook);\n  });"
+        - language: csharp
+          code: 'PluggyClient pluggyClient = new PluggyClient("YOUR_PLUGGY_API_KEY");
+
+            Webhook webhook = await pluggyClient.FetchWebhook("YOUR_WEBHOOK_ID");'
+    patch:
+      operationId: webhooks-update
+      summary: Update
+      description: Updates a webhook event and/or url listener. Once updated all events that are triggered will replicate the updated logic
+      responses:
+        '200':
+          description: Update the webhook that was sent
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Webhook'
+        '400':
+          description: Invalid parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookCreationErrorResponse'
+              examples:
+                invalidUrl:
+                  summary: Webhook URL is malformed or not https
+                  value:
+                    message: Webhook url must be valid URL address and not localhost
+                    code: 400
+                nonHttpsUrl:
+                  summary: Webhook URL must use https
+                  value:
+                    message: Webhook url must be a https secured url
+                    code: 400
+                ipLiteralHost:
+                  summary: Webhook URL host is an IP literal
+                  value:
+                    message: Webhook url host can't be an IP address
+                    code: 400
+                reservedHost:
+                  summary: Webhook URL host is localhost or a reserved/internal name
+                  value:
+                    message: Webhook url host can't be localhost or a reserved/internal name
+                    code: 400
+                privateAddress:
+                  summary: Webhook URL host resolves to a non-public address
+                  value:
+                    message: Webhook url can't resolve to a private, loopback, link-local or reserved address
+                    code: 400
+                unresolvableHost:
+                  summary: Webhook URL host cannot be resolved via DNS
+                  value:
+                    message: Webhook url host could not be resolved
+                    code: 400
+                alreadyExists:
+                  summary: Webhook event already created for the specified url
+                  value:
+                    message: A webhook for event '{event}' and url '{url}' already exists.
+                    code: 400
+                limitReached:
+                  summary: Maximum webhooks per event reached
+                  value:
+                    message: You have reached the maximum of 5 webhooks for event '{event}'.
+                    code: 400
+        '404':
+          description: Webhook not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+              example:
+                code: 404
+                codeDescription: WEBHOOK_NOT_FOUND
+                message: webhook not found
+        '500':
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+              example:
+                code: 500
+                message: Internal Server Error
+      tags:
+      - Webhook
+      security:
+      - default: []
+      parameters:
+      - description: webhook primary identifier
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+          format: uuid
+        example: d0e8a7f0-6d86-11ea-b77f-2e728ce88125
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateWebhook'
+      x-readme:
+        code-samples:
+        - language: node
+          code: "const pluggy = require('pluggy-sdk');\nconst client = new pluggy.PluggyClient({\n  clientId: 'YOUR_CLIENT_ID',\n  clientSecret: 'YOUR_CLIENT_SECRET',\n});\nclient\n  .updateWebhook('YOUR_WEBHOOK_ID', {\n    event: 'all',\n    url: 'https://www.myapi.com/notifications',\n})\n  .then((webhook) => {\n    console.log(webhook);\n  });"
+        - language: csharp
+          code: 'PluggyClient pluggyClient = new PluggyClient("YOUR_PLUGGY_API_KEY");
+
+            Webhook webhook = await pluggyClient.UpdateWebhook("YOUR_WEBHOOK_ID", "https://www.myapi.com/notifications", WebhookEvent.All);'
+    delete:
+      operationId: webhooks-delete
+      summary: Delete
+      description: Deletes a webhook listener by its id
+      responses:
+        '200':
+          description: Webhook was deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ICountResponse'
+        '404':
+          description: Webhook not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+              example:
+                code: 404
+                codeDescription: WEBHOOK_NOT_FOUND
+                message: webhook not found
+        '500':
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+              example:
+                code: 500
+                message: Internal Server Error
+      tags:
+      - Webhook
+      security:
+      - default: []
+      parameters:
+      - description: webhook primary identifier
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+          format: uuid
+        example: d0e8a7f0-6d86-11ea-b77f-2e728ce88125
+      x-readme:
+        code-samples:
+        - language: node
+          code: "const pluggy = require('pluggy-sdk');\nconst client = new pluggy.PluggyClient({\n  clientId: 'YOUR_CLIENT_ID',\n  clientSecret: 'YOUR_CLIENT_SECRET',\n});\nclient\n  .deleteWebhook('YOUR_WEBHOOK_ID')\n  .then(() => {\n    console.log('deleted!');\n  });"
+        - language: csharp
+          code: 'PluggyClient pluggyClient = new PluggyClient("YOUR_PLUGGY_API_KEY");
+
+            await pluggyClient.deleteWebhook("YOUR_WEBHOOK_ID");'
+components:
+  schemas:
+    CreateWebhook:
+      description: ''
+      properties:
+        url:
+          type: string
+          description: ''
+        event:
+          $ref: '#/components/schemas/WebhookEventType'
+        headers:
+          type: object
+          description: HTTP headers that will be included in the webhook notifications (useful for things like authorization)
+      type: object
+      required:
+      - url
+      - event
+    WebhookEventType:
+      type: string
+      enum:
+      - all
+      - item/created
+      - item/updated
+      - item/error
+      - item/deleted
+      - item/waiting_user_input
+      - item/waiting_user_action
+      - item/login_succeeded
+      - connector/status_updated
+      - transactions/created
+      - transactions/updated
+      - transactions/deleted
+      - payment_intent/created
+      - payment_intent/completed
+      - payment_intent/waiting_payer_authorization
+      - payment_intent/error
+      - payment_request/updated
+      - scheduled_payment/created
+      - scheduled_payment/completed
+      - scheduled_payment/error
+      - scheduled_payment/canceled
+      - scheduled_payment/all_completed
+      - scheduled_payment/all_created
+      - boleto/updated
+      - automatic_pix_payment/created
+      - automatic_pix_payment/completed
+      - automatic_pix_payment/error
+      - automatic_pix_payment/canceled
+      - smart_transfer_preauthorization/completed
+      - smart_transfer_preauthorization/error
+      - smart_transfer_payment/completed
+      - smart_transfer_payment/error
+      description: 'Event the webhook subscribes to. Use `all` to receive every event for the client. Events are grouped by topic:
+
+
+        **item/** – Lifecycle of an item (a connection to a financial institution).
+
+        - `item/created`: a new item was created.
+
+        - `item/updated`: the item finished an execution with new data.
+
+        - `item/error`: the execution finished with an error (see the payload''s `error` field).
+
+        - `item/deleted`: the item was deleted.
+
+        - `item/waiting_user_input`: the item needs additional credentials/MFA from the end user.
+
+        - `item/waiting_user_action`: the item needs the end user to perform an action on the institution side.
+
+        - `item/login_succeeded`: the credentials were accepted by the institution (data may still be syncing).
+
+
+        **connector/** – Connector-level events.
+
+        - `connector/status_updated`: a connector''s health status changed (ONLINE/OFFLINE/UNSTABLE).
+
+
+        **transactions/** – Account transaction lifecycle.
+
+        - `transactions/created` / `transactions/updated` / `transactions/deleted`: a transaction was inserted, modified or removed during an item execution.
+
+
+        **payment_intent/** – Payment Initiation flow (single PIX).
+
+        - `payment_intent/created`: a payment intent was created.
+
+        - `payment_intent/completed`: the payment was confirmed by the institution.
+
+        - `payment_intent/waiting_payer_authorization`: the payer still needs to authorize the payment.
+
+        - `payment_intent/error`: the payment was rejected or failed.
+
+
+        **payment_request/** – Aggregate payment request state.
+
+        - `payment_request/updated`: the overall status of a payment request changed.
+
+
+        **scheduled_payment/** – Scheduled (recurring or future) payments.
+
+        - `scheduled_payment/created` / `completed` / `error` / `canceled`: lifecycle of a single scheduled payment.
+
+        - `scheduled_payment/all_created` / `scheduled_payment/all_completed`: emitted once when every scheduled payment in a series reaches the same terminal state.
+
+
+        **boleto/** – Boleto status updates.
+
+        - `boleto/updated`: the boleto data was updated (e.g. paid, expired, amount changed).
+
+
+        **automatic_pix_payment/** – Recurring PIX (PIX Automático) individual payments.
+
+        - `automatic_pix_payment/created`: a new recurring payment was scheduled.
+
+        - `automatic_pix_payment/completed`: the recurring payment was confirmed.
+
+        - `automatic_pix_payment/error`: the recurring payment failed.
+
+        - `automatic_pix_payment/canceled`: the recurring payment was canceled (by user, expiration or revoked consent).
+
+
+        **smart_transfer_preauthorization/** – Smart Transfer pre-authorization (consent setup).
+
+        - `smart_transfer_preauthorization/completed`: the pre-authorization was accepted.
+
+        - `smart_transfer_preauthorization/error`: the pre-authorization failed.
+
+
+        **smart_transfer_payment/** – Smart Transfer individual payments executed under an active pre-authorization.
+
+        - `smart_transfer_payment/completed`: the transfer was successful.
+
+        - `smart_transfer_payment/error`: the transfer failed.'
+    Webhook:
+      description: ''
+      properties:
+        id:
+          type: string
+          description: UUID identifier for the entity
+        url:
+          type: string
+          description: Url to be notified of item changes
+        event:
+          $ref: '#/components/schemas/WebhookEventType'
+        disabledAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: Date when the webhook was disabled
+        createdAt:
+          type: string
+          format: date-time
+          description: Date when it was created
+        updatedAt:
+          type: string
+          format: date-time
+          description: Date of the last update
+        headers:
+          type: object
+          additionalProperties:
+            type: string
+          description: Custom headers sent with each webhook delivery. Always present; an empty object when none are configured
+      type: object
+      required:
+      - id
+      - url
+      - event
+      - headers
+    WebhookCreationErrorResponse:
+      title: Webhook Creation Error Schema
+      type: object
+      properties:
+        code:
+          type: number
+        message:
+          type: string
+      example:
+        code: 400
+        message: Webhook url must be valid URL address and not localhost'
+    ParameterValidationError:
+      description: ''
+      properties:
+        code:
+          type: string
+          description: ''
+        message:
+          type: string
+          description: ''
+        parameter:
+          type: string
+          description: ''
+      type: object
+      required:
+      - code
+      - message
+      - parameter
+    ICountResponse:
+      description: Deletion response
+      properties:
+        count:
+          type: number
+          description: Amount of items deleted
+      type: object
+      required:
+      - count
+      example:
+        count: 1
+    GlobalErrorResponse:
+      title: Global Error Response Schema
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: number
+        message:
+          type: string
+        codeDescription:
+          type: string
+          description: Distinctive code description, useful to distinguish the error.
+        data:
+          type: object
+          description: Additional data related to the error, if any
+          properties: {}
+      example:
+        code: 500
+        codeDescription: INTERNAL_SERVER_ERROR
+        message: Internal Server Error
+    ItemCreationErrorResponse:
+      title: Item Creation Error Schema
+      type: object
+      properties:
+        code:
+          type: number
+        codeDescription:
+          type: string
+          description: Distinctive code description, useful to identify the error.
+        message:
+          type: string
+        errors:
+          description: List of errors related to parameter validations
+          type: array
+          items:
+            $ref: '#/components/schemas/ParameterValidationError'
+        details:
+          description: Parameter validation failures. This is the field the API actually populates for a 400; `errors` is kept for backwards compatibility.
+          type: array
+          items:
+            $ref: '#/components/schemas/ParameterValidationError'
+        errorId:
+          type: string
+          description: Identifier of the request that produced the error. Quote it when contacting support.
+    UpdateWebhook:
+      description: Partial update of a webhook. All fields are optional.
+      properties:
+        url:
+          type: string
+          description: New https url that will receive the POST of the event
+        event:
+          allOf:
+          - $ref: '#/components/schemas/WebhookEventType'
+          description: New event the webhook should listen to
+        headers:
+          type:
+          - object
+          - 'null'
+          description: HTTP headers to include in webhook notifications. Send null to clear the existing headers.
+        enabled:
+          type: boolean
+          description: Re-enable a webhook that was previously disabled. When set to true, clears the disabledAt timestamp.
+      type: object
+  requestBodies:
+    UpdateWebhook:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UpdateWebhook'
+      description: 'All fields are optional. Send only the ones you want to change.
+
+        event: One of the supported event types.
+
+        url: An https url that will receive the POST of the event.
+
+        headers: optional key-value pairs to send with the POST of the event. Send null to clear them.
+
+        enabled: re-enable a webhook that was previously disabled (after repeated delivery failures or via internal cleanup).'
+      required: true
+    CreateWebhook:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreateWebhook'
+      description: 'Expects the following webhooks parameters:
+
+        event: One of the event types that are supported.
+
+        url: An https url that will receive the POST of the event. The host must be a publicly resolvable domain — IP literals, localhost, *.localhost, *.local, *.internal, and hostnames that resolve to a private/loopback/link-local/reserved range are rejected.
+
+        headers: optional key-value pairs to send with the POST of the event.'
+      required: true
+  securitySchemes:
+    default:
+      type: apiKey
+      name: X-API-KEY
+      in: header

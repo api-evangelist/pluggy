@@ -1,0 +1,36 @@
+generated: '2026-10-18'
+method: searched
+source: https://docs.pluggy.ai/en/docs/connect-widget/introduction.md
+sources:
+- https://docs.pluggy.ai/en/docs/connect-widget/introduction.md
+- https://docs.pluggy.ai/en/docs/connect-widget/customization.md
+families:
+- name: Pluggy Connect Widget
+  description: Drop-in widget for connecting financial accounts within your application
+  loader_libs:
+  - name: JavaScript/TypeScript
+    url: https://docs.pluggy.ai/en/docs/connect-widget/introduction.md
+    note: Available for web applications
+  - name: React Native
+    url: https://docs.pluggy.ai/en/docs/connect-widget/introduction.md
+    note: Available for mobile applications
+  - name: Flutter
+    url: https://docs.pluggy.ai/en/docs/connect-widget/introduction.md
+    note: Available for mobile applications
+  features:
+  - Credential validation
+  - Multi-factor authentication (MFA) handling
+  - Error management
+  - Customizable branding
+  - Event callbacks (onSuccess, onError, onClose, onOpen, onEvent)
+  - Platform support for Web, iOS, Android, React Native, Flutter, Mobile Webviews
+  customization:
+    branding: true
+    colors: true
+    logos: true
+    text: true
+  docs: https://docs.pluggy.ai/en/docs/connect-widget/introduction.md
+note: Pluggy Connect is a hosted UI component that handles the entire financial account connection flow, including credential validation, MFA, and error handling. It can be customized to match your application's branding.
+docs:
+- https://docs.pluggy.ai/en/docs/connect-widget/introduction.md
+- https://docs.pluggy.ai/en/docs/connect-widget/customization.md

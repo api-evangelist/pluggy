@@ -1,0 +1,6 @@
+generated: '2026-10-18'
+method: none
+install: ''
+commands: []
+note: No first-party CLI tool found for Pluggy API. Integration is done through SDKs (Node.js, .NET, Java) or direct HTTP requests.
+docs: https://docs.pluggy.ai/en/docs/developer-tools/server-sdks.md

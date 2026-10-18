@@ -1,0 +1,31 @@
+generated: '2026-10-18'
+method: searched
+generator: extract-docs-artifacts.py (deepseek)
+source: https://docs.pluggy.ai/en/changelog#2026.07
+sources:
+- https://docs.pluggy.ai/en/changelog#2026.07
+- https://docs.pluggy.ai/en/changelog#2026.06
+- https://docs.pluggy.ai/en/changelog#2026.05
+- https://docs.pluggy.ai/en/changelog#2026.03
+entries:
+- version: '2026.07'
+  date: '2026-08-13'
+  breaking: true
+  highlights:
+  - 'Major expansion of payment coverage: 6 new connectors and 30 institutions that already existed for data now support payment initiation.'
+  - Deprecation of direct connectors for individuals (PF), with the affected connections being removed over the coming months.
+  - New billForecastDate and billClosingDate fields on credit card transactions and bills, and a new endpoint to delete categorization rules.
+  - 'New data connector via Open Finance: Celcoin Baas (individuals, in BETA).'
+- version: '2026.03'
+  date: '2026-04-09'
+  breaking: false
+  highlights:
+  - Significant expansion of the payments features, with a complete new section in the dashboard and an evolution of the API.
+  - Progress on Pix Automático and Smart Transfers, with improvements to management, events and the consistency of the flows.
+  - Updates and greater stability in connectors, including BB Prev and CaixaPrev.
+  - Evolution of the dashboard with a new onboarding, more complete analytics and improvements to data visualization.
+scheme: YYYY.MM
+current_version: '2026.07'
+docs: https://docs.pluggy.ai/en/changelog
+note: 'The changelog shows version 2026.07 as the most recent, published August 13, 2026. The versioning scheme appears to be YYYY.MM format.
+  Only two distinct versions are shown in the provided content: 2026.07 and 2026.03.'

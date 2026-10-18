@@ -1,0 +1,87 @@
+generated: '2026-10-18'
+method: searched
+probe: true
+source: https://www.pluggy.ai/legal
+language: pt-BR
+notes: >-
+  Pluggy publishes one consolidated Legal & Compliance page (Termos de Uso, Política de Privacidade,
+  Segurança, LGPD, Licença BCB, Código de Ética, Canal de Denúncias), with PDF versions of the terms and
+  privacy policy at https://www.pluggy.ai/docs/termos-e-condicoes-de-uso.pdf (200) and
+  https://www.pluggy.ai/docs/politica-de-privacidade.pdf (200). The legal entity, Pluggy Brasil Instituição
+  de Pagamento LTDA (CNPJ 37.943.755/0001-30), states it is authorised by the Banco Central do Brasil as an
+  Iniciadora de Transação de Pagamento (ITP) under Resolução BCB nº 80/2021. Quotes are in Portuguese, as published.
+signals:
+  data_subject_request:
+    url: https://www.pluggy.ai/legal
+    section: '04 · Conformidade LGPD / 02 · Política de Privacidade — Correção e Exclusão de Informações'
+    channel: dpo@pluggy.ai
+    stated_sla: 'Respostas em até 15 dias.'
+    rights_named: [access, correction, deletion, portability, withdrawal of consent]
+    legal_basis: LGPD (Lei nº 13.709/2018)
+    evidence:
+    - source: https://www.pluggy.ai/legal
+      http_status: 200
+      fetched: '2026-10-18'
+      quote: 'Para excluir seus dados pessoais, entre em contato com o aplicativo/site solicitando a exclusão. Em seguida, a Pluggy inicia um processo para excluir de forma completa e segura os dados dos sistemas de armazenamento. O processo leva aproximadamente 15 dias.'
+    - source: https://www.pluggy.ai/legal
+      http_status: 200
+      fetched: '2026-10-18'
+      quote: 'Seus direitos como titular Acesso aos seus dados pessoais Correção de informações incompletas Eliminação de dados desnecessários Portabilidade para outro fornecedor Revogação do consentimento Encarregado de Proteção de Dados (DPO) Para exercer seus direitos ou tirar dúvidas sobre o tratamento dos seus dados: dpo@pluggy.ai'
+    note: >-
+      LGPD data-subject rights are listed with a DPO email channel and a stated ~15-day deletion process /
+      15-day response window. Deletion requests are routed first through the client app or site (Pluggy acts
+      for its customers in Open Finance), then executed by Pluggy. The DPO function is outsourced to Silva
+      Lopes Consultoria em Compliance e CIA LTDA (dpo.pluggy@silvalopes.adv.br). No self-service form or API
+      endpoint for requests is documented.
+  data_retention:
+    url: https://www.pluggy.ai/legal
+    section: '02 · Política de Privacidade — Correção e Exclusão de Informações; 03 · Segurança — Tratamento de Dados'
+    evidence:
+    - source: https://www.pluggy.ai/legal
+      http_status: 200
+      fetched: '2026-10-18'
+      quote: 'A empresa poderá reter dados conforme: determinações legais, ordens judiciais, pesquisa regulatória, transferência a terceiros ou uso interno anonimizado.'
+    - source: https://www.pluggy.ai/legal
+      http_status: 200
+      fetched: '2026-10-18'
+      quote: 'Armazenamento criptografado com política de retenção alinhada à LGPD e descarte seguro quando necessário.'
+    note: >-
+      Retention exceptions to deletion are named (legal, judicial, regulatory, anonymised internal use) and a
+      retention policy "aligned with LGPD" is asserted, but no retention periods are published.
+  data_residency:
+    url: https://www.pluggy.ai/legal
+    section: '02 · Política de Privacidade — Armazenamento e Processamento'
+    evidence:
+    - source: https://www.pluggy.ai/legal
+      http_status: 200
+      fetched: '2026-10-18'
+      quote: 'Dados podem ser armazenados e processados no Brasil ou em outros países onde a Pluggy, prestadores de serviços ou parceiros mantenham operações, desde que proporcionem grau de proteção adequado nos termos da Lei. Ao se registrar e usar o serviço, o usuário concorda com essa transferência de informações.'
+    note: >-
+      No residency commitment: data may be stored and processed in Brazil or abroad, conditioned on an
+      adequate level of protection under the law, with transfer consent taken at registration. No regions
+      or customer-selectable residency are stated.
+  incident_notification:
+    url: https://www.pluggy.ai/legal
+    section: '03 · Segurança da Informação — Resposta a Incidentes'
+    evidence:
+    - source: https://www.pluggy.ai/legal
+      http_status: 200
+      fetched: '2026-10-18'
+      quote: 'Nosso processo inclui detecção contínua, contenção imediata, comunicação tempestiva aos afetados e ao regulador conforme exigido pela LGPD, e análise pós-incidente para prevenção.'
+    note: >-
+      Commits to timely notification of affected parties and the regulator as required by LGPD; no specific
+      notification deadline (hours/days) is stated. Vulnerabilities and incidents can be reported to dpo@pluggy.ai.
+  subprocessors:
+    url: https://www.pluggy.ai/legal
+    section: '01 · Termos de Uso — Proteção à Privacidade e Propriedade Intelectual'
+    entries: []
+    list_published: false
+    evidence:
+    - source: https://www.pluggy.ai/legal
+      http_status: 200
+      fetched: '2026-10-18'
+      quote: 'A Pluggy poderá se utilizar de parceiros para a coleta e processamento dos dados. Tais parceiros possuem políticas de uso e de privacidade próprias, sob as quais a Pluggy não possui qualquer controle ou ingerência.'
+    note: >-
+      The terms acknowledge that partners collect and process data, and disclaim control over their policies,
+      but no named subprocessor list is published on the legal page. The security section says hosting is
+      with providers holding SOC 2 and ISO 27001 certifications, without naming them.

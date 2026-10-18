@@ -1,0 +1,1325 @@
+openapi: 3.2.0
+info:
+  title: Pluggy Smart Transfer API
+  description: Pluggy's main API to review data and execute connectors
+  license:
+    name: MIT
+  contact:
+    email: hello@pluggy.ai
+    name: Pluggy
+    url: https://pluggy.ai
+  version: 1.0.0
+servers:
+- url: https://api.pluggy.ai
+  description: Pluggy API
+tags:
+- name: Smart Transfer
+  description: Smart transfer functionality
+paths:
+  /smart-transfers/preauthorizations:
+    get:
+      operationId: smart-tranfers-preauthorizations-list
+      summary: List preauthorizations
+      description: Recovers all created preauthorizations
+      responses:
+        '200':
+          description: Retrieve a list of all preauthorizations
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  page:
+                    type: number
+                    format: double
+                    description: ''
+                  total:
+                    type: number
+                    format: double
+                    description: ''
+                  totalPages:
+                    type: number
+                    format: double
+                    description: ''
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/SmartTransferPreauthorization'
+                    description: List of preauthorizations
+              examples:
+                response:
+                  value:
+                    page: 1
+                    total: 1
+                    totalPages: 1
+                    results:
+                    - id: db97ad98-5b8f-4027-a248-6e112a73ced8
+                      createdAt: '2020-06-24T21:29:40.300Z'
+                      updatedAt: '2020-06-24T21:29:40.300Z'
+                      status: CREATED
+                      consentUrl: https://consenturl.com
+                      clientPreauthorizationId: null
+                      callbackUrls: null
+                      recipients:
+                      - type: BANK_ACCOUNT
+                        id: 7b110544-dfcf-406a-bab7-b14f14e2d0c7
+                        name: John Doe
+                        taxNumber: '22222222222'
+                        isDefault: false
+                        paymentInstitution:
+                          id: abfd2a88-bc7b-407f-9fcc-395548ee6840
+                          name: Banco XP S.A.
+                          tradeName: BCO XP S.A.
+                          ispb: '33264668'
+                          compe: '348'
+                          createdAt: '2023-12-08T17:52:21.001Z'
+                          updatedAt: '2023-12-08T17:52:21.001Z'
+                        account:
+                          type: CHECKING_ACCOUNT
+                          number: '1111111'
+                          branch: '0001'
+                        pixKey: null
+                        createdAt: '2024-07-31T15:55:47.886Z'
+                        updatedAt: '2024-07-31T15:56:23.123Z'
+                      connector:
+                        id: 612
+                        name: Nubank
+                        primaryColor: 8a0fbe
+                        institutionUrl: https://nuapp.nubank.com.br/open-banking/logo.svg
+                        country: BR
+                        type: PERSONAL_BANK
+                        credentials:
+                        - validation: ^\d{3}\.?\d{3}\.?\d{3}-?\d{2}$
+                          validationMessage: CPF deve ter 11 números.
+                          label: CPF
+                          name: cpf
+                          type: number
+                          placeholder: ''
+                          optional: false
+                        imageUrl: https://cdn.pluggy.ai/assets/connector-icons/212.svg
+                        hasMFA: false
+                        oauth: true
+                        health:
+                          status: ONLINE
+                          stage: null
+                        products:
+                        - ACCOUNTS
+                        - TRANSACTIONS
+                        - IDENTITY
+                        - CREDIT_CARDS
+                        - PAYMENT_DATA
+                        - LOANS
+                        - INVESTMENTS
+                        createdAt: '2023-09-01T18:05:09.145Z'
+                        isSandbox: false
+                        isOpenFinance: true
+                        updatedAt: '2024-07-31T15:33:57.512Z'
+                        supportsPaymentInitiation: true
+                        supportsScheduledPayments: true
+                        supportsSmartTransfers: true
+                        supportsBoletoManagement: true
+                        supportsAutomaticPix: true
+      tags:
+      - Smart Transfer
+      security:
+      - default: []
+      parameters:
+      - description: 'Page size for the paging request, default: 500'
+        in: query
+        name: pageSize
+        required: false
+        schema:
+          type: number
+          format: double
+        example: '50'
+      - description: 'Page number for the paging request, default: 1'
+        in: query
+        name: page
+        required: false
+        schema:
+          type: number
+          format: double
+        example: '1'
+    post:
+      operationId: smart-transfer-preauthorization-create
+      summary: Create preauthorization
+      responses:
+        '200':
+          description: Create a Smart Transfer Preauthorization.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SmartTransferPreauthorization'
+        '400':
+          description: Preauthorization is Invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+              example:
+                code: 400
+                message: each value in recipientIds must be a UUID
+      description: Creates the smart transfer preauthorization resource
+      tags:
+      - Smart Transfer
+      security:
+      - default: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSmartTransferPreauthorization'
+        required: true
+  /smart-transfers/preauthorizations/{id}:
+    get:
+      operationId: smart-transfer-preauthorization-retrieve
+      summary: Retrieve preauthorization
+      responses:
+        '200':
+          description: Retrieve a preauthorization
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SmartTransferPreauthorization'
+        '404':
+          description: Smart Transfer Preauthorization not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+              example:
+                code: 404
+                codeDescription: SMART_TRANSFER_PREAUTHORIZATION_NOT_FOUND
+                message: Smart Transfer Preauthorization not found
+      description: Recovers the smart transfer preauthorization resource by its id
+      tags:
+      - Smart Transfer
+      security:
+      - default: []
+      parameters:
+      - description: Preauthorization primary identifier
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+          format: uuid
+        example: d0e8a7f0-6d86-11ea-b77f-2e728ce88125
+  /smart-transfers/preauthorizations/{id}/balance:
+    get:
+      operationId: smart-transfer-preauthorization-balance-retrieve
+      summary: Retrieve source account balance
+      description: Reads the source account balance in real time from the institution. Requires a preauthorization created with `linkedJourney` whose `dataConsent` is `AUTHORISED`. Every call counts toward the institution's monthly Open Finance quota for that account; see Operational Rate Limits.
+      tags:
+      - Smart Transfer
+      security:
+      - default: []
+      parameters:
+      - description: Preauthorization primary identifier
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+          format: uuid
+        example: d0e8a7f0-6d86-11ea-b77f-2e728ce88125
+      responses:
+        '200':
+          description: Source account balance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SmartTransferPreauthorizationBalance'
+              example:
+                balance: 5.48
+                overdraft:
+                  contracted: 1000
+                  used: 0
+                  available: 1000
+        '400':
+          description: The preauthorization was created without linkedJourney
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+              example:
+                code: 400
+                codeDescription: SMART_TRANSFER_DATA_CONSENT_NOT_REQUESTED
+                message: This Smart Transfer Preauthorization has no balance permission. Create it with linkedJourney to request one.
+        '403':
+          description: The balance permission is pending, rejected or revoked
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+              example:
+                code: 403
+                codeDescription: SMART_TRANSFER_DATA_CONSENT_NOT_AVAILABLE
+                message: The balance permission of this Smart Transfer Preauthorization is not available. It may be pending, rejected or revoked.
+        '404':
+          description: Smart Transfer Preauthorization not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+              example:
+                code: 404
+                codeDescription: SMART_TRANSFER_PREAUTHORIZATION_NOT_FOUND
+                message: Smart Transfer Preauthorization not found
+        '429':
+          description: Rate limit reached. The account's monthly balance quota at the institution is the usual cause; try again later
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+              example:
+                code: 429
+                codeDescription: BALANCE_OPEN_FINANCE_RATE_LIMIT
+                message: The financial institution rate-limited the balance request. Please try again later.
+  /smart-transfers/preauthorizations/{id}/data-consent:
+    delete:
+      operationId: smart-transfer-preauthorization-data-consent-delete
+      summary: Cancel balance permission
+      description: Cancels only the balance permission. The preauthorization stays active and its transfers keep working. A permission that already ended (rejected, revoked, cancelled or expired), or one whose preauthorization is `REVOKED`, `REJECTED` or `ERROR`, answers 200 with `dataConsent.status` `REJECTED`, so retrying is safe.
+      tags:
+      - Smart Transfer
+      security:
+      - default: []
+      parameters:
+      - description: Preauthorization primary identifier
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+          format: uuid
+        example: d0e8a7f0-6d86-11ea-b77f-2e728ce88125
+      responses:
+        '200':
+          description: The preauthorization, with the cancelled permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SmartTransferPreauthorization'
+        '400':
+          description: The preauthorization was created without linkedJourney
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+              example:
+                code: 400
+                codeDescription: SMART_TRANSFER_DATA_CONSENT_NOT_REQUESTED
+                message: This Smart Transfer Preauthorization has no balance permission. Create it with linkedJourney to request one.
+        '403':
+          description: The institution did not accept the cancellation, for example because the user has not approved the balance permission yet
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+              example:
+                code: 403
+                codeDescription: SMART_TRANSFER_DATA_CONSENT_NOT_AVAILABLE
+                message: The balance permission of this Smart Transfer Preauthorization is not available. It may be pending, rejected or revoked.
+        '404':
+          description: Smart Transfer Preauthorization not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+              example:
+                code: 404
+                codeDescription: SMART_TRANSFER_PREAUTHORIZATION_NOT_FOUND
+                message: Smart Transfer Preauthorization not found
+        '429':
+          description: Rate limit reached; try again later
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+              example:
+                code: 429
+                codeDescription: BALANCE_OPEN_FINANCE_RATE_LIMIT
+                message: The financial institution rate-limited the balance request. Please try again later.
+  /smart-transfers/preauthorizations/{id}/payments:
+    get:
+      operationId: smart-transfer-preauthorization-payments-list
+      summary: List preauthorization payments
+      description: Recovers all payments for a specific preauthorization, ordered by date descending
+      responses:
+        '200':
+          description: Retrieve a list of all payments for the preauthorization
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  page:
+                    type: number
+                    format: double
+                    description: ''
+                  total:
+                    type: number
+                    format: double
+                    description: ''
+                  totalPages:
+                    type: number
+                    format: double
+                    description: ''
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/SmartTransferPayment'
+                    description: List of payments
+        '404':
+          description: Smart Transfer Preauthorization not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+              example:
+                code: 404
+                codeDescription: SMART_TRANSFER_PREAUTHORIZATION_NOT_FOUND
+                message: Smart Transfer Preauthorization not found
+      tags:
+      - Smart Transfer
+      security:
+      - default: []
+      parameters:
+      - description: Preauthorization primary identifier
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+          format: uuid
+        example: d0e8a7f0-6d86-11ea-b77f-2e728ce88125
+      - description: Filter payments created from this date
+        in: query
+        name: from
+        required: false
+        schema:
+          type: string
+          format: date
+        example: '2024-01-01'
+      - description: Filter payments created until this date
+        in: query
+        name: to
+        required: false
+        schema:
+          type: string
+          format: date
+        example: '2024-12-31'
+      - description: 'Page size for the paging request, default: 500'
+        in: query
+        name: pageSize
+        required: false
+        schema:
+          type: number
+          format: double
+        example: '50'
+      - description: 'Page number for the paging request, default: 1'
+        in: query
+        name: page
+        required: false
+        schema:
+          type: number
+          format: double
+        example: '1'
+  /smart-transfers/payments:
+    post:
+      operationId: smart-transfer-payment-create
+      summary: Create payment
+      responses:
+        '200':
+          description: Create a Smart Transfer Payment.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SmartTransferPayment'
+        '400':
+          description: Payment is Invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+              example:
+                code: 400
+                message: recipientId must be a UUID
+      description: Creates the smart transfer payment resource
+      tags:
+      - Smart Transfer
+      security:
+      - default: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSmartTransferPayment'
+        required: true
+  /smart-transfers/payments/{id}:
+    get:
+      operationId: smart-transfer-paymentretrieve
+      summary: Retrieve payment
+      responses:
+        '200':
+          description: Retrieve a payment
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SmartTransferPayment'
+        '404':
+          description: Smart Transfer Payment not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+              example:
+                code: 404
+                codeDescription: SMART_TRANSFER_PAYMENT_NOT_FOUND
+                message: Smart Transfer Payment not found
+      description: Recovers the smart transfer payment resource by its id
+      tags:
+      - Smart Transfer
+      security:
+      - default: []
+      parameters:
+      - description: Payment primary identifier
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+          format: uuid
+        example: d0e8a7f0-6d86-11ea-b77f-2e728ce88125
+components:
+  schemas:
+    SmartTransferPreauthorizationBalance:
+      type: object
+      required:
+      - balance
+      - overdraft
+      properties:
+        balance:
+          type: number
+          description: Source account balance in BRL.
+        overdraft:
+          description: Overdraft limit of the source account. Null when the institution does not share it.
+          oneOf:
+          - $ref: '#/components/schemas/SmartTransferOverdraft'
+          - type: 'null'
+    PaymentRecipientAccount:
+      description: Payment receiver bank account information
+      properties:
+        branch:
+          type: string
+          description: Receiver bank account branch (agency)
+        number:
+          type: string
+          description: Receiver bank account number
+        type:
+          type: string
+          description: 'Receiver bank account type, could be: ''CHECKING_ACCOUNT'', ''SAVINGS_ACCOUNT'' or ''GUARANTEED_ACCOUNT'''
+      type: object
+      example:
+        branch: '0001'
+        number: '123456'
+        type: CHECKING_ACCOUNT
+      required:
+      - branch
+      - number
+      - type
+    PaymentRecipient:
+      description: Bank-account payment recipient. Returned by `/payments/recipients` endpoints and embedded inside payment requests when the request targets a registered recipient.
+      properties:
+        type:
+          type: string
+          enum:
+          - BANK_ACCOUNT
+          description: Recipient discriminator. Always `BANK_ACCOUNT` for this schema.
+        id:
+          type: string
+          description: Primary identifier
+        taxNumber:
+          type: string
+          description: Account owner tax number. Can be CPF or CNPJ (only numbers).
+        name:
+          type: string
+          description: Account owner name.
+        paymentInstitution:
+          allOf:
+          - $ref: '#/components/schemas/PaymentInstitution'
+          description: Institution that holds the recipient's bank account.
+        isDefault:
+          type: boolean
+          description: Indicates if the recipient is the default one
+        account:
+          $ref: '#/components/schemas/PaymentRecipientAccount'
+        pixKey:
+          type:
+          - string
+          - 'null'
+          description: Pix key associated with the payment recipient
+        createdAt:
+          type: string
+          format: date-time
+          description: Date when the payment recipient was created
+        updatedAt:
+          type: string
+          format: date-time
+          description: Date when the payment recipient was last updated
+      type: object
+      required:
+      - type
+      - id
+      - name
+      - taxNumber
+      - paymentInstitution
+      - isDefault
+      - account
+      - createdAt
+      - updatedAt
+      example:
+        type: BANK_ACCOUNT
+        id: 5e9f8f8f-f8f8-4f8f-8f8f-8f8f8f8f8f8f
+        name: Conta empresa
+        taxNumber: '22222222222'
+        paymentInstitution:
+          id: 00000000-0000-0000-0000-000000000000
+          name: Banco J. Safra S.A.
+          ispb: '03017677'
+          tradeName: Banco Safra
+          compe: '074'
+          createdAt: '2020-04-21T15:00:00.000Z'
+          updatedAt: '2020-04-21T15:00:00.000Z'
+        account:
+          branch: '0001'
+          number: '123456'
+          type: CHECKING_ACCOUNT
+        isDefault: false
+        pixKey: null
+        createdAt: '2024-01-15T10:30:00.000Z'
+        updatedAt: '2024-01-15T10:30:00.000Z'
+    ConnectorHealth:
+      description: Connector health status
+      properties:
+        status:
+          type: string
+          description: '''ONLINE'' | ''OFFLINE'' | ''UNSTABLE'''
+        stage:
+          type:
+          - string
+          - 'null'
+        incidents:
+          type: array
+          description: 'Incidents currently affecting this connector, as published on https://status.pluggy.ai. Absent when the connector has none, so a healthy connector''s payload is unchanged. Ordered worst-first, so the first entry is the one to show if you only show one. Note this is about the institution, not about your own connections: use it to warn a user before they pick a bank that is known to be failing right now.'
+          items:
+            $ref: '#/components/schemas/ConnectorIncident'
+        details:
+          type: object
+          description: Statistics about your recent connections on the connector and recent connection rate (percentage of healthy connections). This field is only present if you include the parameter healthDetails=true. This will be null if there was an error obtaining health details.
+          properties:
+            connectionRateLast6Hours:
+              type: number
+              description: 'A number from 0 to 100: the percentage of executions that succesfully connect to the institution: status of CONNECTION_ERROR,ERROR,SITE_NOT_AVAILABLE decrease the percentage. Any other status (like SUCCESS/LOGIN_ERROR) increase the percentage. The value will be null if there were no connections'
+            connectionsLast6Hours:
+              type: number
+              description: Amount of your connections for this connector during the last 6 hours. 0 if there were no connections
+    SmartTransferPreauthorizationConfiguration:
+      description: Smart transfer preauthorization configuration
+      properties:
+        totalAllowedAmount:
+          type: number
+          description: Maximum amount to be reached by the sum of all transactions that use the consent authorized by the customer.
+        transactionLimit:
+          type: number
+          description: Maximum amount for each payment transaction associated with this consent.
+        periodicLimits:
+          $ref: '#/components/schemas/SmartTransferPreauthorizationConfigurationPeriodicLimits'
+      type: object
+    SmartTransferPreauthorizationParameter:
+      description: Credentials neccesary to create a smart transfer preauthorization
+      properties:
+        cpf:
+          type: string
+          description: CPF of the payer
+        cnpj:
+          type: string
+          description: CNPJ of the payer
+      type: object
+      example:
+        cpf: 333.333.333-33
+        cnpj: 33.333.333/0001-33
+      required:
+      - cpf
+    SmartTransferDataConsent:
+      description: Balance permission granted with the preauthorization. Its status is refreshed from the institution when the preauthorization is retrieved by id (`GET /smart-transfers/preauthorizations/{id}`); the list returns the last known status.
+      type: object
+      required:
+      - status
+      - rejectionReason
+      - updatedAt
+      properties:
+        status:
+          type: string
+          enum:
+          - AWAITING_AUTHORISATION
+          - AUTHORISED
+          - REJECTED
+          description: 'AWAITING_AUTHORISATION: the user has not approved yet. AUTHORISED: the balance can be read. REJECTED: the permission was rejected, revoked, cancelled or expired; it does not come back.'
+        rejectionReason:
+          type:
+          - string
+          - 'null'
+          description: Why the permission is REJECTED, for example CUSTOMER_MANUALLY_REJECTED, CUSTOMER_MANUALLY_REVOKED, CONSENT_EXPIRED or CONSENT_MAX_DATE_REACHED. Null otherwise. New values may appear.
+        updatedAt:
+          type: string
+          format: date-time
+          description: When Pluggy last saw the status change.
+    SmartTransferPreauthorization:
+      description: Smart transfer preauthorization
+      properties:
+        id:
+          type: string
+          description: Preauthorization primary identifier
+        status:
+          type: string
+          description: 'Preauthorization lifecycle status.
+
+            - `CREATED`: the preauthorization was created and is awaiting the payer''s consent (see `consentUrl`).
+
+            - `COMPLETED`: the payer authorized the consent. The preauthorization can now be used to execute payments.
+
+            - `REJECTED`: the payer rejected the consent.
+
+            - `REVOKED`: the consent was revoked after being authorized.
+
+            - `ERROR`: the preauthorization flow failed unexpectedly (see `errorDetail`).'
+          enum:
+          - CREATED
+          - COMPLETED
+          - REVOKED
+          - REJECTED
+          - ERROR
+          example: COMPLETED
+        consentUrl:
+          type: string
+          description: Url to give the consent in the institution
+        clientPreauthorizationId:
+          type:
+          - string
+          - 'null'
+          description: Client preauthorization identifier
+        callbackUrls:
+          anyOf:
+          - $ref: '#/components/schemas/SmartTransferCallbackUrls'
+          - type: 'null'
+        recipients:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentRecipient'
+        connector:
+          $ref: '#/components/schemas/Connector'
+        createdAt:
+          type: string
+          format: date-time
+          description: Date when the preauthorization was created
+        updatedAt:
+          type: string
+          format: date-time
+          description: Date when the preauthorization was updated
+        configuration:
+          $ref: '#/components/schemas/SmartTransferPreauthorizationConfiguration'
+        errorDetail:
+          type: object
+          description: Error detail
+          properties:
+            code:
+              type: string
+              description: Error code
+            description:
+              type: string
+              description: Error description
+            detail:
+              type: string
+              description: Error detail
+        dataConsent:
+          description: Balance permission requested with `linkedJourney`. Null when it was not requested. Its status is refreshed from the institution when the preauthorization is retrieved by id; the list returns the last known status.
+          oneOf:
+          - $ref: '#/components/schemas/SmartTransferDataConsent'
+          - type: 'null'
+      type: object
+      required:
+      - id
+      - status
+      - recipients
+      - connector
+      - createdAt
+      - updatedAt
+      - dataConsent
+    CreateSmartTransferPreauthorization:
+      description: Create smart transfer preauthorization request data
+      properties:
+        connectorId:
+          type: number
+          description: Primary identifier of the connector
+        parameters:
+          $ref: '#/components/schemas/SmartTransferPreauthorizationParameter'
+        recipientIds:
+          type: array
+          items:
+            type: string
+            description: Primary identifier of the payment recipient
+        callbackUrls:
+          $ref: '#/components/schemas/SmartTransferCallbackUrls'
+        clientPreauthorizationId:
+          type: string
+          description: Client preauthorization identifier
+        configuration:
+          $ref: '#/components/schemas/SmartTransferPreauthorizationConfiguration'
+        linkedJourney:
+          type: boolean
+          default: false
+          description: When true, the user is also asked, in the same approval at the bank, for a permission to read the source account balance. Check `dataConsent` on the preauthorization and use the balance endpoint once it is `AUTHORISED`.
+      required:
+      - connectorId
+      - parameters
+      - recipientIds
+    SmartTransferOverdraft:
+      type: object
+      required:
+      - contracted
+      - used
+      - available
+      properties:
+        contracted:
+          type: number
+          description: Overdraft limit contracted, in BRL.
+        used:
+          type: number
+          description: Part of the overdraft limit in use, in BRL.
+        available:
+          type: number
+          description: Part of the overdraft limit still available, in BRL.
+    ConnectorIncident:
+      description: 'An incident affecting a connector right now, as published on the Pluggy status page. Only incidents active at this moment are listed: a scheduled maintenance appears once its window opens, not when it is announced, and disappears when the window closes.'
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Status page identifier of the incident
+        title:
+          type: string
+          description: Short, customer-facing summary, for example 'XP Banking - Compras parceladas não sendo retornadas'
+        description:
+          type:
+          - string
+          - 'null'
+          description: Longer explanation, when there is one
+        type:
+          enum:
+          - CONNECTOR_UNAVAILABLE
+          - CONNECTOR_DEGRADED
+          - INSTITUTION_OUTAGE
+          - SCHEDULED_MAINTENANCE
+          - CONSENT_ERROR
+          - CONNECTION_NOT_UPDATING
+          - PARTIAL_SUCCESS
+          - ACCOUNTS_MISSING
+          - BALANCE_INCORRECT
+          - TRANSACTIONS_MISSING
+          - TRANSACTIONS_INCORRECT
+          - TRANSACTIONS_INSTALLMENTS_ISSUE
+          - INVESTMENTS_MISSING
+          - INVESTMENTS_INCORRECT
+          - IDENTITY_MISSING
+          - HISTORICAL_DATA_MISSING
+          - WEBHOOK_DELAY
+          - PAYMENT_FAILURE
+          - OTHER
+          type: string
+          description: 'What is broken, as opposed to how badly (severity) or how far along we are (state). Use it to group the same problem across institutions, and to decide which incidents are worth showing your own users: a SCHEDULED_MAINTENANCE and a TRANSACTIONS_MISSING both read as ''degraded'' otherwise. OTHER means Pluggy has not classified it, not that nothing is wrong'
+        product:
+          enum:
+          - dados
+          - pis
+          - pis-agendado
+          - pixauto
+          - smart
+          - infra
+          type: string
+          description: Which Pluggy product line the incident affects
+        kind:
+          enum:
+          - INCIDENT
+          - MAINTENANCE
+          type: string
+          description: Whether this is an unplanned incident or a planned maintenance window
+        severity:
+          enum:
+          - DEGRADED
+          - PARTIAL_OUTAGE
+          - MAJOR_OUTAGE
+          - MAINTENANCE
+          type: string
+          description: How badly the institution is affected
+        state:
+          enum:
+          - INVESTIGATING
+          - IDENTIFIED
+          - MONITORING
+          - SCHEDULED
+          type: string
+          description: Where the incident is in its lifecycle. Resolved incidents are not listed
+        startedAt:
+          type: string
+          format: date-time
+          description: When the incident began
+        updatedAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: When the incident was last updated
+        url:
+          type: string
+          description: Permalink to the incident on the status page, with its full timeline and postmortem. Safe to show to your own users
+      type: object
+      required:
+      - id
+      - title
+      - type
+      - product
+      - kind
+      - severity
+      - state
+      - startedAt
+      - url
+    SmartTransferPreauthorizationConfigurationPeriodicLimits:
+      description: Transactional limits per period as determined by the paying user.
+      properties:
+        day:
+          description: Daily transactional limit.
+          $ref: '#/components/schemas/SmartTransferPreauthorizationConfigurationPeriodicLimit'
+        week:
+          description: Weekly transactional limit.
+          $ref: '#/components/schemas/SmartTransferPreauthorizationConfigurationPeriodicLimit'
+        month:
+          description: Monthly transactional limit.
+          $ref: '#/components/schemas/SmartTransferPreauthorizationConfigurationPeriodicLimit'
+        year:
+          description: Yearly transactional limit.
+          $ref: '#/components/schemas/SmartTransferPreauthorizationConfigurationPeriodicLimit'
+    SmartTransferPayment:
+      description: Smart transfer payment
+      properties:
+        id:
+          type: string
+          description: Payment primary identifier
+        preauthorizationId:
+          type: string
+          description: Payment primary identifier
+        status:
+          $ref: '#/components/schemas/SmartTransferPaymentStatus'
+        amount:
+          type: number
+          description: Payment amount
+        description:
+          type: string
+          description: Payment description
+        recipient:
+          description: Recipient of the transfer. May be null until the payment is associated with one.
+          anyOf:
+          - $ref: '#/components/schemas/PaymentRecipient'
+          - type: 'null'
+        clientPaymentId:
+          type: string
+          description: Client payment identifier
+        createdAt:
+          type: string
+          format: date-time
+          description: Date when the payment was created
+        updatedAt:
+          type: string
+          format: date-time
+          description: Date when the payment was updated
+        errorDetail:
+          type: object
+          description: Error detail
+          properties:
+            code:
+              type: string
+              enum:
+              - INFRASTRUCTURE_FAILURE
+              - PAYMENT_DIFFERENT_FROM_CONSENT
+              - UNKNOWN_ERROR
+              - INVALID_PAYMENT_DETAIL
+              - PAYMENT_REJECTED_BY_HOLDER
+              - PAYMENT_REJECTED_BY_SPI
+              description: "Error code. \n- INFRASTRUCTURE_FAILURE: Indicates a failure in the infrastructure of the institution holding the information or resources.\n- PAYMENT_DIFFERENT_FROM_CONSENT: Payment data differs from consent data.\n- UNKNOWN_ERROR: Unknown error.\n- INVALID_PAYMENT_DETAIL: The payment detail is invalid.\n- PAYMENT_REJECTED_BY_HOLDER: The payment was rejected by the account holder.\n- PAYMENT_REJECTED_BY_SPI: The payment was rejected by the SPI."
+            description:
+              type: string
+              description: Error description
+            detail:
+              type: string
+              description: Error detail
+      type: object
+      required:
+      - id
+      - preauthorizationId
+      - status
+      - amount
+      - createdAt
+      - updatedAt
+    PaymentInstitution:
+      description: Response with information related to a payment institution
+      properties:
+        id:
+          type: string
+          description: Primary identifier
+        name:
+          type: string
+          description: Payment institution name
+        tradeName:
+          type: string
+          description: Payment institution trade name
+        ispb:
+          type: string
+          description: Payment institution ISPB
+        compe:
+          type: string
+          description: Payment institution COMPE
+        createdAt:
+          type: string
+          format: date-time
+          description: Date when the payment institution was created
+        updatedAt:
+          type: string
+          format: date-time
+          description: Date when the payment institution was updated
+      type: object
+      required:
+      - id
+      - name
+      - ispb
+      - tradeName
+      - createdAt
+      - updatedAt
+      example:
+        id: 5e9f8f8f-f8f8-4f8f-8f8f-8f8f8f8f8f8f
+        name: Banco J. Safra S.A.
+        ispb: '03017677'
+        tradeName: Banco Safra
+        compe: '074'
+        createdAt: '2020-04-21T15:00:00.000Z'
+        updatedAt: '2020-04-21T15:00:00.000Z'
+    SmartTransferPreauthorizationConfigurationPeriodicLimit:
+      description: Transactional limit per period. If sent, at least one of the fields (quantityLimit or transactionLimit) must be filled in.
+      properties:
+        quantityLimit:
+          type: number
+          description: Maximum number of transactions allowed to occur in the period.
+        transactionLimit:
+          type: number
+          description: Maximum amount to be transacted in the period.
+    GlobalErrorResponse:
+      title: Global Error Response Schema
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: number
+        message:
+          type: string
+        codeDescription:
+          type: string
+          description: Distinctive code description, useful to distinguish the error.
+        data:
+          type: object
+          description: Additional data related to the error, if any
+          properties: {}
+      example:
+        code: 500
+        codeDescription: INTERNAL_SERVER_ERROR
+        message: Internal Server Error
+    CredentialSelectOption:
+      description: Option for ConnectorCredential of type select
+      properties:
+        value:
+          type: string
+          description: Value for the option
+        label:
+          type: string
+          description: Label for the option
+      type: object
+      required:
+      - value
+      - label
+    Connector:
+      description: Connector object
+      properties:
+        id:
+          type: number
+          format: integer
+          description: Primary identifier
+        name:
+          type: string
+          description: Name of the institution
+        institutionUrl:
+          type: string
+          description: Homepage of the institution
+        imageUrl:
+          type: string
+          description: Image of the logo hosted by Pluggy
+        primaryColor:
+          type: string
+          description: Primary color
+        type:
+          type: string
+          description: Type of institution
+        country:
+          type: string
+          description: Country located
+        credentials:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConnectorCredential'
+          description: Parameters required to start the connection
+        hasMFA:
+          type: boolean
+          description: Does the connector require an MFA to execute?
+        products:
+          type: array
+          items:
+            type: string
+            enum:
+            - ACCOUNTS
+            - CREDIT_CARDS
+            - TRANSACTIONS
+            - PAYMENT_DATA
+            - INVESTMENTS
+            - INVESTMENTS_TRANSACTIONS
+            - IDENTITY
+            - BROKERAGE_NOTE
+            - MOVE_SECURITY
+            - LOANS
+          description: Products supported by the connector
+        productCoverage:
+          type: array
+          items:
+            type: string
+          description: 'Which sub-products the institution serves, in the Open Finance directory''s own vocabulary (for example INVESTMENTS:TREASURE_TITLES, CREDIT_OPERATIONS:INVOICE_FINANCINGS). Where products says whether the connector serves investments at all, this says which ones: a connector listing INVESTMENTS may serve one of the five investment resources or all five. Absent for direct connectors, which have no Open Finance participant.'
+        oauth:
+          type: boolean
+          description: If 'true', the connector requires an Oauth flow to execute
+        oauthUrl:
+          type: string
+          description: URL to perform Oauth flow if needed
+        resetPasswordUrl:
+          type: string
+          description: URL to the financial institution to reset the password
+        health:
+          $ref: '#/components/schemas/ConnectorHealth'
+        isOpenFinance:
+          type: boolean
+          description: Indicates if the connector uses the regulated Open Finance APIs
+        isSandbox:
+          type: boolean
+          description: Indicates if the connector is a sandbox connector, meant for testing rather than a real institution
+        supportsPaymentInitiation:
+          type: boolean
+          description: Indicates if the connector supports the payment initiation API
+        supportsScheduledPayments:
+          type: boolean
+          description: Indicates if the connector supports scheduled payments
+        supportsSmartTransfers:
+          type: boolean
+          description: Indicates if the connector supports smart transfers
+        supportsBoletoManagement:
+          type: boolean
+          description: Indicates if the connector supports boleto management
+        supportsAutomaticPix:
+          type: boolean
+          description: Indicates if the connector supports automatic Pix
+        createdAt:
+          type: string
+          format: date-time
+          description: Date of creation
+        updatedAt:
+          type: string
+          format: date-time
+          description: Date of last modification
+      type: object
+      required:
+      - id
+      example:
+        id: 601
+        name: Itaú
+        primaryColor: EC7000
+        institutionUrl: https://www.itau.com.br
+        country: BR
+        type: PERSONAL_BANK
+        credentials:
+        - validation: ^\d{3}\.?\d{3}\.?\d{3}-?\d{2}$
+          validationMessage: CPF deve ter 11 números.
+          label: CPF
+          name: cpf
+          type: number
+          placeholder: ''
+          optional: false
+        imageUrl: https://cdn.pluggy.ai/assets/connector-icons/201.svg
+        hasMFA: false
+        oauth: true
+        health:
+          status: ONLINE
+          stage: null
+        products:
+        - ACCOUNTS
+        - TRANSACTIONS
+        - IDENTITY
+        - CREDIT_CARDS
+        - PAYMENT_DATA
+        - LOANS
+        - INVESTMENTS
+        createdAt: '2023-09-01T18:05:09.145Z'
+        isSandbox: false
+        isOpenFinance: true
+        updatedAt: '2024-07-16T15:34:08.028Z'
+        supportsPaymentInitiation: true
+        supportsScheduledPayments: true
+        supportsSmartTransfers: true
+        supportsBoletoManagement: true
+        supportsAutomaticPix: true
+    SmartTransferCallbackUrls:
+      description: Redirect urls after the preauthorization flow was completed or ended in error status
+      properties:
+        success:
+          type: string
+          description: Url to be redirected after the preauthorization was completed
+        error:
+          type: string
+          description: Url to be redirected after the preauthorization ended in error status
+      type: object
+      example:
+        success: https://merchant.example.com/smart-transfers/4821/success
+        error: https://merchant.example.com/smart-transfers/4821/error
+    CreateSmartTransferPayment:
+      description: Create smart transfer payment request data
+      properties:
+        preauthorizationId:
+          type: string
+          description: Primary identifier of the preauthorization
+        recipientId:
+          type: string
+          description: Primary identifier of the paymen recipient
+        amount:
+          type: number
+          description: Payment amount
+        description:
+          type: string
+          description: Payment description
+        clientPaymentId:
+          type: string
+          description: Client payment identifier
+      required:
+      - preauthorizationId
+      - recipientId
+      - amount
+    SmartTransferPaymentStatus:
+      type: string
+      description: 'Lifecycle of a Smart Transfer payment. Narrower than `PaymentIntentStatus`: Smart Transfer payments operate under an already-authorized preauthorization, so consent-collection statuses (`STARTED`, `ENQUEUED`, `CONSENT_AWAITING_AUTHORIZATION`) and consent-revocation statuses (`REJECTED`, `REVOKED`, `CONSUMED`) do not apply.
+
+        - `CONSENT_AUTHORIZED`: the payment was accepted under the preauthorization and is ready to be processed.
+
+        - `CONSENT_REJECTED`: the preauthorization was rejected at execution time.
+
+        - `PAYMENT_PENDING`: the payment was submitted to the institution and is awaiting confirmation.
+
+        - `PAYMENT_PARTIALLY_ACCEPTED`: the payment was accepted but still needs an additional authorization.
+
+        - `PAYMENT_SETTLEMENT_PROCESSING`: the settlement is being processed.
+
+        - `PAYMENT_SETTLEMENT_DEBTOR_ACCOUNT`: the funds were debited from the payer account; awaiting clearing.
+
+        - `PAYMENT_COMPLETED`: the payment was confirmed by the institution.
+
+        - `PAYMENT_REJECTED`: the payment was rejected after consent was authorized.
+
+        - `ERROR`: an unexpected error occurred during the flow.
+
+        - `CANCELED`: the payment was canceled.'
+      enum:
+      - CONSENT_AUTHORIZED
+      - CONSENT_REJECTED
+      - PAYMENT_PENDING
+      - PAYMENT_PARTIALLY_ACCEPTED
+      - PAYMENT_SETTLEMENT_PROCESSING
+      - PAYMENT_SETTLEMENT_DEBTOR_ACCOUNT
+      - PAYMENT_COMPLETED
+      - PAYMENT_REJECTED
+      - ERROR
+      - CANCELED
+    ConnectorCredential:
+      description: Credential details for a connector
+      properties:
+        name:
+          type: string
+          description: Name of the key
+        label:
+          type: string
+          description: Label for input
+        type:
+          enum:
+          - text
+          - password
+          - number
+          - image
+          - select
+          type: string
+          description: Type of credential required
+        assistiveText:
+          type: string
+          description: Text to help the user when completing the input
+        data:
+          type: string
+          description: Used to return base64 images
+        placeholder:
+          type: string
+          description: Placeholder text for the input
+        validation:
+          type: string
+          description: Regex validation for the user's input
+        validationMessage:
+          type: string
+          description: Validation message when input doesn't match the regex
+        mfa:
+          type: boolean
+          description: Credential is an MFA parameter and must be refreshed on each execution
+        options:
+          type: array
+          items:
+            $ref: '#/components/schemas/CredentialSelectOption'
+          description: List of possible values for the input
+        optional:
+          type: boolean
+          description: Whether the credential can be left empty. Always present; defaults to false
+        instructions:
+          type: string
+          description: Instructions to help the user obtain this credential
+        expiresAt:
+          type: string
+          format: date-time
+          description: Expiration date of the credential value, when the institution sets one
+      type: object
+      required:
+      - name
+      - label
+      - type
+      - optional
+  securitySchemes:
+    default:
+      type: apiKey
+      name: X-API-KEY
+      in: header

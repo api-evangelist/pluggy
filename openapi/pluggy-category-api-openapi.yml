@@ -1,0 +1,385 @@
+openapi: 3.2.0
+info:
+  title: Pluggy Category API
+  description: Pluggy's main API to review data and execute connectors
+  license:
+    name: MIT
+  contact:
+    email: hello@pluggy.ai
+    name: Pluggy
+    url: https://pluggy.ai
+  version: 1.0.0
+servers:
+- url: https://api.pluggy.ai
+  description: Pluggy API
+tags:
+- name: Category
+  description: Transaction categorization and rules
+paths:
+  /categories:
+    get:
+      operationId: categories-list
+      summary: List
+      description: 'Recovers all categories active from the data categorization.
+
+        Can be filtered by the parentId of the category.'
+      responses:
+        '200':
+          description: Retrieve a list of all categories
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageResponseCategories'
+              example:
+                page: 1
+                total: 2
+                totalPages: 1
+                results:
+                - id: '01000000'
+                  description: Income
+                  descriptionTranslated: Renda
+                - id: '01010000'
+                  description: Salary/pro-labore
+                  descriptionTranslated: Salário
+                  parentId: '01000000'
+                  parentDescription: Income
+      tags:
+      - Category
+      security:
+      - default: []
+      parameters:
+      - description: Parent's primary identifier
+        in: query
+        name: parentId
+        required: false
+        schema:
+          type: string
+        example: '01000000'
+      x-readme:
+        code-samples:
+        - language: node
+          code: "const pluggy = require('pluggy-sdk');\nconst client = new pluggy.PluggyClient({\n  clientId: 'YOUR_CLIENT_ID',\n  clientSecret: 'YOUR_CLIENT_SECRET',\n});\nclient\n  .fetchCategories()\n  .then(({ results: categories }) => {\n    console.log(categories);\n  });"
+        - language: java
+          code: "PluggyClient pluggyClient = PluggyClient.builder()\n  .clientIdAndSecret('your_client_id', 'your_secret')\n  .baseUrl('https://api.pluggy.ai')\n  .build();\nResponse<CategoriesResponse> categoriesResponse = pluggyClient.service().getCategories().execute();"
+        - language: csharp
+          code: 'PluggyClient pluggyClient = new PluggyClient(''YOUR_PLUGGY_API_KEY'');
+
+            PageResults<Category> categoriesResponse = await pluggyClient.FetchCategories();'
+  /categories/{id}:
+    get:
+      operationId: categories-retrieve
+      summary: Retrieve
+      description: Recovers the category resource by its id
+      responses:
+        '200':
+          description: Retrieve a category.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+        '404':
+          description: Category not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+              example:
+                code: 404
+                codeDescription: CATEGORY_NOT_FOUND
+                message: category not found
+      tags:
+      - Category
+      security:
+      - default: []
+      parameters:
+      - description: category primary identifier
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        example: '01000000'
+      x-readme:
+        code-samples:
+        - language: node
+          code: "const pluggy = require('pluggy-sdk');\nconst client = new pluggy.PluggyClient({\n  clientId: 'YOUR_CLIENT_ID',\n  clientSecret: 'YOUR_CLIENT_SECRET',\n});\nclient\n  .fetchCategory('CATEGORY_ID')\n  .then((category) => {\n    console.log(category);\n  });"
+        - language: java
+          code: "PluggyClient pluggyClient = PluggyClient.builder()\n  .clientIdAndSecret('your_client_id', 'your_secret')\n  .baseUrl('https://api.pluggy.ai')\n  .build();\nCategory category = pluggyClient.service().getCategory(\"CATEGORY_ID\").execute();"
+        - language: csharp
+          code: 'PluggyClient pluggyClient = new PluggyClient(''YOUR_PLUGGY_API_KEY'');
+
+            Category category = await pluggyClient.FetchCategory("CATEGORY_ID");'
+  /categories/rules:
+    get:
+      operationId: client-category-rules-list
+      summary: List Category Rules
+      description: Recovers category rules
+      responses:
+        '200':
+          description: Retrieve a list of all client category rules.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PageResponseCategoryRules'
+      tags:
+      - Category
+      security:
+      - default: []
+    post:
+      operationId: client-category-rules-create
+      summary: Create Category Rule
+      description: Create a single category rule
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateClientCategoryRule'
+        required: true
+      responses:
+        '200':
+          description: Creates a Category Rule and recover the result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientCategoryRule'
+        '400':
+          description: Invalid description
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+              example:
+                code: 400
+                message: description must be a string
+        '404':
+          description: Category not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+              example:
+                code: 404
+                codeDescription: CATEGORY_NOT_FOUND
+                message: category not found
+      tags:
+      - Category
+      security:
+      - default: []
+  /categories/rules/{id}:
+    delete:
+      operationId: client-category-rules-delete
+      summary: Delete Category Rule
+      description: Deletes a category rule by its id. Clients can only delete their own rules.
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: Category rule primary identifier
+      responses:
+        '204':
+          description: Category rule deleted successfully
+        '400':
+          description: Invalid category rule id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+              example:
+                code: 400
+                message: id must be a UUID
+        '403':
+          description: Rule belongs to another client
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+              example:
+                code: 403
+                codeDescription: CATEGORY_RULE_FORBIDDEN
+                message: You do not have permission to delete this category rule
+        '404':
+          description: Category rule not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+              example:
+                code: 404
+                codeDescription: CATEGORY_RULE_NOT_FOUND
+                message: Category rule not found
+      tags:
+      - Category
+      security:
+      - default: []
+components:
+  schemas:
+    Category:
+      description: Cateogry response
+      properties:
+        id:
+          type: string
+          description: Identifier for the category
+        description:
+          type: string
+          description: Description of the category
+        descriptionTranslated:
+          type: string
+          description: Description of the category, translated to portuguese
+        parentId:
+          type: string
+          description: Parent's identifier
+        parentDescription:
+          type: string
+          description: Parent's category description
+      type: object
+      required:
+      - id
+      - description
+      example:
+        id: '01010000'
+        description: Salary/pro-labore
+        parentId: '01000000'
+        parentDescription: Income
+    PageResponseCategories:
+      description: Paginated list of transaction categories
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Category'
+          description: Categories for the current page
+        page:
+          type: number
+          format: double
+          description: ''
+        total:
+          type: number
+          format: double
+          description: ''
+        totalPages:
+          type: number
+          format: double
+          description: ''
+      type: object
+      required:
+      - results
+      - page
+      - total
+      - totalPages
+    GlobalErrorResponse:
+      title: Global Error Response Schema
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: number
+        message:
+          type: string
+        codeDescription:
+          type: string
+          description: Distinctive code description, useful to distinguish the error.
+        data:
+          type: object
+          description: Additional data related to the error, if any
+          properties: {}
+      example:
+        code: 500
+        codeDescription: INTERNAL_SERVER_ERROR
+        message: Internal Server Error
+    CreateClientCategoryRule:
+      description: Create client category rule
+      properties:
+        description:
+          type: string
+          description: Description of the transaction rule.
+        categoryId:
+          type: string
+          description: Identifier of the category
+        transactionType:
+          type: string
+          description: Transaction type (DEBIT/CREDIT)
+        accountType:
+          type: string
+          description: Account type (CHECKING_ACCOUNT/CREDIT_CARD)
+        matchType:
+          type: string
+          description: Type of match used to identify the rule (exact/contains/startsWith/endsWith), if not provided, defaults to 'exact'
+      type: object
+      required:
+      - description
+      - categoryId
+      example:
+        description: uber payment
+        categoryId: '05000000'
+        transactionType: DEBIT
+        accountType: CHECKING_ACCOUNT
+    ClientCategoryRule:
+      description: Category rule by client id
+      properties:
+        description:
+          type: string
+          description: Description of the transaction rule.
+        categoryId:
+          type: string
+          description: Identifier of the category
+        category:
+          type: string
+          description: Description of the category
+        clientId:
+          type: string
+          description: Identifier of the client
+        transactionType:
+          type: string
+          description: Transaction type (DEBIT/CREDIT)
+        accountType:
+          type: string
+          description: Account type (CHECKING_ACCOUNT/CREDIT_CARD)
+      type: object
+      required:
+      - description
+      - category
+      example:
+        description: uber payment
+        category: Salary/pro-labore
+        categoryId: '05000000'
+        clientId: 03cc0eff-4ec5-495c-adb3-1ef9611624fc
+        transactionType: DEBIT
+        accountType: CHECKING_ACCOUNT
+    PageResponseCategoryRules:
+      description: ''
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClientCategoryRule'
+          description: ''
+        page:
+          type: number
+          format: double
+          description: ''
+        total:
+          type: number
+          format: double
+          description: ''
+        totalPages:
+          type: number
+          format: double
+          description: ''
+      type: object
+      required:
+      - results
+      - page
+      - total
+      - totalPages
+  securitySchemes:
+    default:
+      type: apiKey
+      name: X-API-KEY
+      in: header

@@ -1,0 +1,27 @@
+generated: '2026-10-18'
+method: searched
+generator: extract-docs-artifacts.py (deepseek)
+source: https://docs.pluggy.ai/en/docs/authentication.md
+sources:
+- https://docs.pluggy.ai/en/docs/authentication.md
+- https://docs.pluggy.ai/en/docs/connect-widget/authentication.md
+- https://docs.pluggy.ai/en/docs/connect-widget/oauth-support.md
+- https://docs.pluggy.ai/en/docs/developer-tools/authentication-failures.md
+description: Pluggy uses API keys for server-side requests and Connect Tokens for client-side applications. API keys provide full access to all
+  endpoints, while Connect Tokens have limited scope to specific Item and Account data.
+schemes:
+- type: apiKey
+  name: API Key
+  evidence: 'Pluggy uses two kinds of credentials, depending on where the request is made from: - **API Key** -- used for server-side requests.'
+  header: X-API-KEY
+  location: header
+  how_to_obtain: First, you'll need to authenticate with the Pluggy API, using your `CLIENT_ID` and `CLIENT_SECRET`, to [create an API Key](/reference/auth-create)
+    via `POST /auth`.
+- type: other
+  name: Connect Token
+  evidence: '- **Connect Token** -- used from client-side applications (i.e. the [Connect Widget](/docs/connect-widget/introduction)).'
+  location: header
+  how_to_obtain: Then, with your API Key, you'll have to make a call to [POST /connect_token](/reference/connect-token-create).
+docs: https://docs.pluggy.ai/en/docs/authentication.md
+note: The pages mention CLIENT_ID and CLIENT_SECRET credentials but don't specify a specific authentication scheme for them. They are used to
+  obtain API keys via POST /auth.

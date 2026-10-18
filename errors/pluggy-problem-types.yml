@@ -1,0 +1,68 @@
+generated: '2026-10-18'
+method: searched
+source: https://docs.pluggy.ai/en/docs/connections/errors-validations.md
+sources:
+- https://docs.pluggy.ai/en/docs/connections/errors-validations.md
+- https://docs.pluggy.ai/en/docs/connections/warnings-status-codes.md
+- https://docs.pluggy.ai/en/docs/developer-tools/authentication-failures.md
+format: application/json
+envelope:
+  code: number
+  message: string
+  codeDescription: string
+  data: object
+problems:
+- status: 400
+  title: MFA Parameter Error
+  type: MFA_PARAMERTER_WAS_ALREADY_USED_ERROR
+  description: MFA parameter has to be updated from last execution
+  remediation: Update the MFA parameter value
+- status: 401
+  title: Client Keys Unauthorized
+  type: CLIENT_KEYS_UNAUTHORIZED
+  description: Client keys are invalid
+  remediation: Check your CLIENT_ID and CLIENT_SECRET credentials
+- status: 401
+  title: Client Disabled
+  type: CLIENT_DISABLED
+  description: Client is disabled
+  remediation: Contact Pluggy support to re-enable your client
+- status: 404
+  title: Item Not Found
+  type: ITEM_NOT_FOUND
+  description: item not found
+  remediation: Check the item ID and ensure it exists
+- status: 404
+  title: Connector Not Found
+  type: CONNECTOR_NOT_FOUND
+  description: connector not found
+  remediation: Check the connector ID
+- status: 409
+  title: Item Creation Limit Exceeded
+  type: ITEM_CREATION_LIMIT_EXCEEDED
+  description: Client exceeded item creation limit for the current subscription level
+  remediation: Upgrade your plan or wait for limit reset
+- status: 409
+  title: Client Updating Before Allowed Frequency
+  type: CLIENT_IS_UPDATING_BEFORE_ALLOWED_FREQUENCY
+  description: Client updates on this item are allowed at most every specified hours
+  remediation: Wait for the minimum update frequency period to pass
+- status: 423
+  title: Open Finance Rate Limit Exceeded
+  type: OPEN_FINANCE_RATE_LIMIT_EXCEEDED
+  description: Operational rate limit imposed by financial institution reached
+  remediation: Wait until next month for limit reset or use different credentials
+- status: 429
+  title: Rate Limit Exceeded
+  type: RATE_LIMIT_EXCEEDED
+  description: Pluggy API rate limit exceeded
+  remediation: Wait for rate limit window to reset (60 seconds)
+- status: 500
+  title: Internal Server Error
+  type: INTERNAL_SERVER_ERROR
+  description: Internal Server Error
+  remediation: Contact Pluggy support if issue persists
+note: Error codes from OpenAPI examples and documentation. The API uses a consistent error envelope with code (HTTP status), codeDescription (stable identifier), and message fields. Some errors include additional data object with context-specific information.
+docs:
+- https://docs.pluggy.ai/en/docs/connections/errors-validations.md
+- https://docs.pluggy.ai/en/docs/connections/warnings-status-codes.md

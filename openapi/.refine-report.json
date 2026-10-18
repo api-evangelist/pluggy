@@ -1,0 +1,52 @@
+{
+  "provider": "pluggy",
+  "sources": [
+    "_original/pluggy-api.json",
+    "_original/pluggy-enrichment-api.json",
+    "_original/pluggy-status-api.json"
+  ],
+  "outputs": [
+    "pluggy-account-api-openapi.yml",
+    "pluggy-auth-api-openapi.yml",
+    "pluggy-automatic-pix-api-openapi.yml",
+    "pluggy-bill-api-openapi.yml",
+    "pluggy-boleto-management-api-openapi.yml",
+    "pluggy-category-api-openapi.yml",
+    "pluggy-connector-api-openapi.yml",
+    "pluggy-consent-api-openapi.yml",
+    "pluggy-identity-api-openapi.yml",
+    "pluggy-investment-api-openapi.yml",
+    "pluggy-items-api-openapi.yml",
+    "pluggy-loan-api-openapi.yml",
+    "pluggy-merchant-api-openapi.yml",
+    "pluggy-payment-customer-api-openapi.yml",
+    "pluggy-payment-intent-api-openapi.yml",
+    "pluggy-payment-recipient-api-openapi.yml",
+    "pluggy-payment-request-api-openapi.yml",
+    "pluggy-payment-schedule-api-openapi.yml",
+    "pluggy-scr-api-openapi.yml",
+    "pluggy-smart-transfer-api-openapi.yml",
+    "pluggy-transaction-api-openapi.yml",
+    "pluggy-webhook-api-openapi.yml",
+    "pluggy-enrichment-api-openapi.yml",
+    "pluggy-status-api-openapi.yml"
+  ],
+  "archived": [
+    "deleted 1 superseded output(s) from the previous generation"
+  ],
+  "errors": [],
+  "warnings": [],
+  "notes": [
+    "sourced from openapi/_original/ (3 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "pluggy-api.json: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "pluggy-enrichment-api.json: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "pluggy-status-api.json: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
+    "superseded outputs removed: pluggy-api-openapi.yml",
+    "apis.yml register: written (+22 apis, 24 total)"
+  ],
+  "skipped": [
+    "pluggy-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "pluggy-enrichment-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "pluggy-status-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
+}

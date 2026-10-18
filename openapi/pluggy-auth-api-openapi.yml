@@ -1,0 +1,229 @@
+openapi: 3.2.0
+info:
+  title: Pluggy Auth API
+  description: Pluggy's main API to review data and execute connectors
+  license:
+    name: MIT
+  contact:
+    email: hello@pluggy.ai
+    name: Pluggy
+    url: https://pluggy.ai
+  version: 1.0.0
+servers:
+- url: https://api.pluggy.ai
+  description: Pluggy API
+tags:
+- name: Auth
+  description: Authentication endpoints for API key generation and connect tokens
+paths:
+  /auth:
+    post:
+      operationId: auth-create
+      summary: Create API Key
+      description: Validate clientId and clientSecret and return an API Key
+      tags:
+      - Auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthRequest'
+        required: true
+      responses:
+        '200':
+          description: API Key generated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+              examples:
+                clientKeysUnauthorized:
+                  summary: Client id and secret are invalid
+                  value:
+                    code: 401
+                    codeDescription: CLIENT_KEYS_UNAUTHORIZED
+                    message: Client keys are invalid
+                clientDisabled:
+                  summary: Client is disabled
+                  value:
+                    code: 401
+                    codeDescription: CLIENT_DISABLED
+                    message: Client is disabled
+        '500':
+          description: Server Internal Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+  /connect_token:
+    post:
+      operationId: connect-token-create
+      summary: Create Connect Token
+      responses:
+        '200':
+          description: Created connect token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectTokenResponse'
+        '403':
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotAuthenticatedResponse'
+        '404':
+          description: Related itemId to update not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+              example:
+                code: 404
+                codeDescription: ITEM_NOT_FOUND
+                message: item not found
+        '500':
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+      description: Creates a connect token
+      tags:
+      - Auth
+      requestBody:
+        description: Create connect token payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConnectTokenRequest'
+      security:
+      - default: []
+      x-readme:
+        code-samples:
+        - language: node
+          code: "const pluggy = require('pluggy-sdk');\nconst client = new pluggy.PluggyClient({\n  clientId: 'YOUR_CLIENT_ID',\n  clientSecret: 'YOUR_CLIENT_SECRET',\n});\nclient\n  .createConnectToken()\n  .then(({ accessToken }) => {\n    console.log(accessToken);\n  });"
+        - language: java
+          code: "PluggyClient pluggyClient = PluggyClient.builder()\n  .clientIdAndSecret('your_client_id', 'your_secret')\n  .baseUrl('https://api.pluggy.ai')\n  .build();\nResponse<ConnectTokenResponse> connectTokenResponse = pluggyClient.service().createConnectToken().execute();"
+        - language: csharp
+          code: 'PluggyClient pluggyClient = new PluggyClient(''YOUR_PLUGGY_API_KEY'');
+
+            ConnectTokenResponse tokenResponse = await pluggyClient.CreateConnectToken();'
+components:
+  schemas:
+    AuthRequest:
+      description: Authentication parameters required to get access to Pluggy's API
+      properties:
+        clientId:
+          type: string
+          description: Client id
+          format: uuid
+        clientSecret:
+          type: string
+          description: Client secret
+      type: object
+      required:
+      - clientId
+      - clientSecret
+      example:
+        clientId: f8c9b8f0-b8e2-4f0f-b8e2-4f0f8e2f0f8e2
+        clientSecret: UZzp2n7eMThpfZ74Xf7
+    AuthResponse:
+      description: Authentication confirmed response to interact with the api
+      properties:
+        apiKey:
+          type: string
+          description: Authentication key for the API
+      type: object
+      required:
+      - apiKey
+      example:
+        apiKey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+    ItemOptions:
+      description: Item options available to send through connect tokens
+      properties:
+        clientUserId:
+          type: string
+          description: Client's external identifier for the user, it can be a ID, UUID or even an email. This is free for clients to use.
+        webhookUrl:
+          type: string
+          description: Url to be notified of this specific item changes
+        oauthRedirectUri:
+          type: string
+          description: Url to redirect the user after the connect flow
+        avoidDuplicates:
+          type: boolean
+          description: Avoids creating a new item if there is already one with the same credentials
+      type: object
+    NotAuthenticatedResponse:
+      title: Unauthenticated response
+      type: object
+      properties:
+        code:
+          type: number
+        message:
+          type: string
+      example:
+        code: 403
+        message: Missing or invalid authorization token
+    ConnectTokenResponse:
+      description: Connect token response
+      properties:
+        accessToken:
+          type: string
+          description: Connect token that's used to initialize Pluggy's Connect widget
+      type: object
+      required:
+      - accessToken
+      example:
+        accessToken: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGllbnRJZCI6IjI3MzY0YjRhLTM1NGUtNDc5ZC04OWJkLTA1Y2VmNDc2ZTFmNCIsImRhdGEiOiI4NmYyMjIwNDVkNjc3NDJjZjI5MjhjMGNmNjBlZjFkZjo5MjRmNGZlNjg5YWM1NGI2ZmVmMzkzZDc2ZTExNjAxZTI1MjliNmUyNDY1Y2I4ZDkxMWI3ZDY0ZjA5Y2NkYzBiMzg4YWFjZWNkZmQzMGMzZGZiNTBkNzk1OTA1Y2QyNWZlZmEyODZhMWQ0NDc5YzYyNzgwZDZiMzBlNDZiYTY3YjUyZDRkMmIwNWU0ODVjYzk5NjZiYzJjMDUyNDE5OTgzNjBjYTVkM2M4MTJhODQ0ODI1NDI2NDJhNWNkNjhjMTU3YjUzYThkOGEyOGZlMWM4ZDkxNmYzZjZlOTQ0MzEyYjBjNzNmZDBhYmIyYTk0MDU2MzZhYjMxM2RkMmY0OTE0IiwiaWF0IjoxNjQwNjk3MjUwLCJleHAiOjE2NDA2OTkwNTB9.i9DpZ_sOW_I9yGUUXqUWcB9zqCJEXQnjaUrwmcVOXX3F1-he3LjT2f8mHbt7DOvxHtxqAagZkW8BT3J2OBYDOzmHuBgKbbSUmb4YLfC8PaKf2p7fY0fKVu30iIFqiM5CgDQ048dIWzWSlGAYZq00edD0BYlfOkU3ll7OofzmDUAG6KBRDx68FrtYxboNJa8sXli7WSAI3nzZDhcVyPJvqlMHG6VXbJboQrxnSEBGdpGBQ7n_-2G5Oa3-MHCR-Z5cKx1pi4NwqorGFg1c2uRj3F4GdRs94UkqlvdH6FRxAUD3SVDiegvQ6vkOWCHpD1-wZELOmenkJ7ecjg9CChPavx
+    GlobalErrorResponse:
+      title: Global Error Response Schema
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: number
+        message:
+          type: string
+        codeDescription:
+          type: string
+          description: Distinctive code description, useful to distinguish the error.
+        data:
+          type: object
+          description: Additional data related to the error, if any
+          properties: {}
+      example:
+        code: 500
+        codeDescription: INTERNAL_SERVER_ERROR
+        message: Internal Server Error
+    ConnectTokenRequest:
+      description: Create a connect token request payload
+      properties:
+        itemId:
+          type: string
+          description: Item identifier to allow Connect Widget to performan an update on it.
+          format: uuid
+        options:
+          $ref: '#/components/schemas/ItemOptions'
+      example:
+        itemId: 5e9f8f8f-f8f8-4f8f-8f8f-8f8f8f8f8f8f
+        options:
+          webhookUrl: https://example.com/webhook
+          clientUserId: My App UserId
+          oauthRedirectUri: https://pluggy.ai/demo
+          avoidDuplicates: true
+      type: object
+  securitySchemes:
+    default:
+      type: apiKey
+      name: X-API-KEY
+      in: header

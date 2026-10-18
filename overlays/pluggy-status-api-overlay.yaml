@@ -1,0 +1,33 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist agent-surfaces overlay for Pluggy Status API
+  version: 1.0.0
+extends: openapi/pluggy-status-api-openapi.yml
+x-generated: '2026-10-18'
+x-method: generated
+x-source: openapi/pluggy-status-api-openapi.yml
+x-rationale: 'Source for no-auth: https://docs.pluggy.ai/en/docs/developer-tools/status-page-api.md. Links check_incidents
+  MCP tool.'
+actions:
+- target: $
+  description: The Status API docs state "No authentication ... no API key"; the original declares no security, so make that
+    explicit.
+  update:
+    security: []
+- target: $.info
+  description: Link agent surfaces.
+  update:
+    x-mcp-server:
+      url: https://mcp.pluggy.ai/mcp
+      manifest: mcp/pluggy-mcp.yml
+      crosswalk: mcp/pluggy-tool-crosswalk.yml
+    x-llms-txt: https://docs.pluggy.ai/llms.txt
+    x-agent-skills:
+      official: https://github.com/pluggyai/agent-skills
+      install: npx skills add pluggyai/agent-skills
+      index: skills/_index.yml
+- target: $.paths['/api/connectors-incidents'].get
+  description: Backs the check_incidents MCP tool (medium confidence).
+  update:
+    x-mcp-tool-related:
+    - check_incidents

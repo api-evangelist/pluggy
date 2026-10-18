@@ -1,0 +1,832 @@
+openapi: 3.2.0
+info:
+  title: Pluggy Account API
+  description: Pluggy's main API to review data and execute connectors
+  license:
+    name: MIT
+  contact:
+    email: hello@pluggy.ai
+    name: Pluggy
+    url: https://pluggy.ai
+  version: 1.0.0
+servers:
+- url: https://api.pluggy.ai
+  description: Pluggy API
+tags:
+- name: Account
+  description: Bank account information and management
+paths:
+  /accounts:
+    get:
+      operationId: accounts-list
+      summary: List
+      description: Recovers all accounts collected for the item provided
+      responses:
+        '200':
+          description: Retrieve a list of all accounts
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  page:
+                    type: number
+                    format: double
+                    description: ''
+                  total:
+                    type: number
+                    format: double
+                    description: ''
+                  totalPages:
+                    type: number
+                    format: double
+                    description: ''
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Account'
+                    description: List of retrieved accounts
+              examples:
+                response:
+                  value:
+                    page: 1
+                    total: 2
+                    totalPages: 1
+                    results:
+                    - id: a658c848-e475-457b-8565-d1fffba127c4
+                      createdAt: '2020-06-24T21:29:40.300Z'
+                      updatedAt: '2020-06-24T21:29:40.300Z'
+                      type: BANK
+                      subtype: CHECKING_ACCOUNT
+                      number: 0001/12345-0
+                      name: Conta Corrente
+                      marketingName: GOLD Conta Corrente
+                      balance: 120950
+                      itemId: a0922d6f-2007-4169-a181-b961500608db
+                      taxNumber: 333.333.333-33
+                      owner: John Doe
+                      currencyCode: BRL
+                      bankData:
+                        transferNumber: 0001/12345-0
+                        closingBalance: 120950
+                        automaticallyInvestedBalance: 100
+                        overdraftContractedLimit: 0
+                        overdraftUsedLimit: 0
+                        unarrangedOverdraftAmount: 0
+                    - id: a658c848-e475-457b-8565-d1fffba127c4
+                      type: CREDIT
+                      subtype: CREDIT_CARD
+                      number: xxxx8670
+                      name: Mastercard Black
+                      marketingName: PLUGGY UNICLASS MASTERCARD BLACK
+                      balance: 120950
+                      itemId: a0922d6f-2007-4169-a181-b961500608db
+                      taxNumber: 333.333.333-33
+                      owner: John Doe
+                      currencyCode: BRL
+                      creditData:
+                        level: BLACK
+                        brand: MASTERCARD
+                        balanceCloseDate: '2022-01-03'
+                        balanceDueDate: '2022-01-03'
+                        availableCreditLimit: 200000
+                        balanceForeignCurrency: 0
+                        minimumPayment: 16190
+                        creditLimit: 300000
+                        status: ACTIVE
+                        holderType: MAIN
+      tags:
+      - Account
+      security:
+      - default: []
+      parameters:
+      - description: Item primary identifier
+        in: query
+        name: itemId
+        required: true
+        schema:
+          type: string
+          format: uuid
+        example: d0f8a8c0-e8e3-11e9-b210-d663bd873d93
+      - description: Parameter to filter between bank accounts and credit accounts
+        in: query
+        name: type
+        required: false
+        schema:
+          type: string
+          enum:
+          - BANK
+          - CREDIT
+        example: BANK
+      x-readme:
+        code-samples:
+        - language: node
+          code: "const pluggy = require('pluggy-sdk');\nconst client = new pluggy.PluggyClient({\n  clientId: 'YOUR_CLIENT_ID',\n  clientSecret: 'YOUR_CLIENT_SECRET',\n});\n\nclient\n  .fetchAccounts('YOUR_ITEM_ID')\n  .then(({ results: accounts }) => {\n    console.log(accounts);\n  });"
+        - language: java
+          code: "PluggyClient pluggyClient = PluggyClient.builder()\n  .clientIdAndSecret('your_client_id', 'your_secret')\n  .baseUrl('https://api.pluggy.ai')\n  .build();\nResponse<AccountsResponse> accountsResponse = pluggyClient.service().getAccounts('your_item_id').execute();"
+        - language: csharp
+          code: 'PluggyClient pluggyClient = new PluggyClient(''YOUR_PLUGGY_API_KEY'');
+
+            PageResults<Account> accountsResponse = await pluggyClient.FetchAccounts(''YOUR_ITEM_ID'');'
+  /accounts/{id}:
+    get:
+      operationId: accounts-retrieve
+      summary: Retrieve
+      description: Recovers the account resource by its id
+      responses:
+        '200':
+          description: Retrieve an account.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+              examples:
+                bank:
+                  value:
+                    id: a658c848-e475-457b-8565-d1fffba127c4
+                    createdAt: '2020-06-24T21:29:40.300Z'
+                    updatedAt: '2020-06-24T21:29:40.300Z'
+                    type: BANK
+                    subtype: CHECKING_ACCOUNT
+                    number: 0001/12345-0
+                    name: Conta Corrente
+                    marketingName: GOLD Conta Corrente
+                    balance: 120950
+                    itemId: a0922d6f-2007-4169-a181-b961500608db
+                    taxNumber: 333.333.333-33
+                    owner: John Doe
+                    currencyCode: BRL
+                    bankData:
+                      transferNumber: 0001/12345-0
+                      closingBalance: 120950
+                      automaticallyInvestedBalance: null
+                      overdraftContractedLimit: 0
+                      overdraftUsedLimit: 0
+                      unarrangedOverdraftAmount: 0
+                credit:
+                  value:
+                    id: a658c848-e475-457b-8565-d1fffba127c4
+                    type: CREDIT
+                    subtype: CREDIT_CARD
+                    number: xxxx8670
+                    name: Mastercard Black
+                    marketingName: PLUGGY UNICLASS MASTERCARD BLACK
+                    balance: 120950
+                    itemId: a0922d6f-2007-4169-a181-b961500608db
+                    taxNumber: 333.333.333-33
+                    owner: John Doe
+                    currencyCode: BRL
+                    creditData:
+                      level: BLACK
+                      brand: MASTERCARD
+                      balanceCloseDate: '2022-01-03'
+                      balanceDueDate: '2022-01-03'
+                      availableCreditLimit: 200000
+                      balanceForeignCurrency: 0
+                      minimumPayment: 16190
+                      creditLimit: 300000
+                      status: ACTIVE
+                      holderType: MAIN
+        '404':
+          description: Account not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+              example:
+                code: 404
+                codeDescription: ACCOUNT_NOT_FOUND
+                message: account not found
+        '500':
+          description: Server Internal Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+      tags:
+      - Account
+      security:
+      - default: []
+      parameters:
+      - description: Account primary identifier
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        example: a658c848-e475-457b-8565-d1fffba127c4
+      x-readme:
+        code-samples:
+        - language: node
+          code: "const pluggy = require('pluggy-sdk');\nconst client = new pluggy.PluggyClient({\n  clientId: 'YOUR_CLIENT_ID',\n  clientSecret: 'YOUR_CLIENT_SECRET',\n});\n\nclient\n  .fetchAccount('ACCOUNT_ID')\n  .then((account) => {\n    console.log(account);\n  });"
+        - language: java
+          code: "PluggyClient pluggyClient = PluggyClient.builder()\n  .clientIdAndSecret('your_client_id', 'your_secret')\n  .baseUrl('https://api.pluggy.ai')\n  .build();\nAccount account = pluggyClient.service().getAccount(\"ACCOUNT_ID\").execute();"
+        - language: csharp
+          code: 'PluggyClient pluggyClient = new PluggyClient(''YOUR_PLUGGY_API_KEY'');
+
+            Account account = await pluggyClient.FetchAccount("ACCOUNT_ID");'
+  /accounts/{id}/statements:
+    get:
+      operationId: account-statements-list
+      summary: List account statements
+      description: Recovers all statements collected for the account provided
+      responses:
+        '200':
+          description: Retrieve a list of all statements for an account
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - total
+                - totalPages
+                - page
+                - results
+                properties:
+                  total:
+                    type: number
+                  totalPages:
+                    type: number
+                  page:
+                    type: number
+                  results:
+                    type: array
+                    items:
+                      type: object
+                      required:
+                      - id
+                      - monthYear
+                      - url
+                      properties:
+                        id:
+                          type: string
+                          format: uuid
+                        monthYear:
+                          type: string
+                        url:
+                          type: string
+                          description: Signed URL to the statement file, this url is valid for 30 minutes
+              examples:
+                response:
+                  value:
+                    total: 2
+                    totalPages: 1
+                    page: 1
+                    results:
+                    - id: a8534c85-53ce-4f21-94d7-50e9d2ee4957
+                      monthYear: 01-2025
+                      url: signed-aws-url
+                    - id: 05c693bf-c196-47ea-a28c-8251d6bb8a06
+                      monthYear: 02-2025
+                      url: signed-aws-url
+        '400':
+          description: Missing parameter
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+              example:
+                message: accountId should not be null or undefined,accountId must be a UUID
+                code: 400
+        '500':
+          description: Server Internal Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+      tags:
+      - Account
+      security:
+      - default: []
+      parameters:
+      - description: Account primary identifier
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        example: a658c848-e475-457b-8565-d1fffba127c4
+      x-readme:
+        code-samples:
+        - language: node
+          code: "const pluggy = require('pluggy-sdk');\nconst client = new pluggy.PluggyClient({\n  clientId: 'YOUR_CLIENT_ID',\n  clientSecret: 'YOUR_CLIENT_SECRET',\n});\n\nclient\n  .fetchAccountStatements('ACCOUNT_ID')\n  .then(({ results: statements }) => {\n    console.log(statements);\n  });"
+  /accounts/{id}/balance:
+    get:
+      operationId: account-balance-get
+      summary: Get real-time balance
+      description: Fetches the real-time balance for the account directly from the financial institution connector, without requiring a full item sync.
+      responses:
+        '200':
+          description: Real-time account balance
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - balance
+                - currencyCode
+                - updateDateTime
+                properties:
+                  balance:
+                    type: number
+                    description: The available balance of the account, same as balance in the account resource.
+                  blockedBalance:
+                    type: number
+                    description: Amount currently blocked or held on the account. Only present when the institution reports it.
+                  automaticallyInvestedBalance:
+                    type: number
+                    description: Amount held in the account's automatic investment facility. Only present when the institution reports it.
+                  currencyCode:
+                    type: string
+                    description: The currency code of the balance amounts
+                  updateDateTime:
+                    type: string
+                    description: The date and time when the balance was last updated
+              examples:
+                response:
+                  value:
+                    balance: 1500.5
+                    blockedBalance: 0
+                    automaticallyInvestedBalance: 200
+                    currencyCode: BRL
+                    updateDateTime: '2024-01-15T10:30:00Z'
+        '400':
+          description: The balance request was rejected as invalid by the financial institution
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+              example:
+                message: The balance request was rejected as invalid by the financial institution.
+                code: 400
+                codeDescription: BALANCE_INVALID_REQUEST
+        '403':
+          description: The financial institution denied access to the account balance (consent expired or missing the required permission)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+              example:
+                message: The financial institution denied access to the account balance. The consent may be expired or missing the required permission.
+                code: 403
+                codeDescription: BALANCE_CONSENT_ERROR
+        '404':
+          description: Account not found, or the balance was not found at the financial institution
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+              examples:
+                accountNotFound:
+                  value:
+                    message: account not found for the given id
+                    code: 404
+                balanceNotFound:
+                  value:
+                    message: The account balance was not found at the financial institution.
+                    code: 404
+                    codeDescription: BALANCE_NOT_FOUND
+        '429':
+          description: Rate limited by the financial institution
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+              example:
+                message: The financial institution rate-limited the balance request. Please try again later.
+                code: 429
+                codeDescription: BALANCE_OPEN_FINANCE_RATE_LIMIT
+        '500':
+          description: Unexpected error fetching balance from connector
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+              example:
+                message: An error occurred while fetching the account balance from the connector
+                code: 500
+                codeDescription: BALANCE_FETCH_ERROR
+        '502':
+          description: The financial institution is temporarily unavailable to provide the balance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+              example:
+                message: The financial institution is temporarily unavailable to provide the balance. Please try again later.
+                code: 502
+                codeDescription: BALANCE_CONNECTOR_UNAVAILABLE
+      tags:
+      - Account
+      security:
+      - default: []
+      parameters:
+      - description: Account primary identifier
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        example: a658c848-e475-457b-8565-d1fffba127c4
+components:
+  schemas:
+    ReservedBalance:
+      description: Funds reserved/earmarked on a bank account (for example, goal-based savings or judicial holds)
+      properties:
+        name:
+          type: string
+          description: User-given name for the reservation (for example, 'Caixinha Para Férias')
+        identification:
+          type: string
+          description: Unique identifier of the reservation
+        availableAmounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReservedBalanceAmount'
+          description: Available amount(s) in the reservation, one entry per remuneration band
+      type: object
+      required:
+      - identification
+      - availableAmounts
+    BankData:
+      description: Bank account additional fields
+      properties:
+        transferNumber:
+          type:
+          - string
+          - 'null'
+          description: Complete number of the bank account `(agency code / account number)`
+        closingBalance:
+          type:
+          - number
+          - 'null'
+          format: double
+          description: Balance including not posted transactions
+        automaticallyInvestedBalance:
+          type:
+          - number
+          - 'null'
+          format: double
+          description: Balance automatically invested in the account by the FI
+        overdraftContractedLimit:
+          type:
+          - number
+          - 'null'
+          format: double
+          description: Overdraft contracted limit
+        overdraftUsedLimit:
+          type:
+          - number
+          - 'null'
+          format: double
+          description: Overdraft used limit
+        unarrangedOverdraftAmount:
+          type:
+          - number
+          - 'null'
+          format: double
+          description: Valor de operação contratada em caráter emergencial para cobertura de saldo devedor em conta de depósitos à vista e de excesso sobre o limite pactuado de cheque especial.
+        hasReservedBalance:
+          type:
+          - boolean
+          - 'null'
+          description: Whether the account has any active reserved balances ("saldo reservado"), such as goal-based savings ("caixinhas") or judicial holds
+        reservedBalances:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ReservedBalance'
+          description: Funds reserved/earmarked on the account. Only present when hasReservedBalance is true and the institution exposes the data
+      type: object
+    GlobalErrorResponse:
+      title: Global Error Response Schema
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: number
+        message:
+          type: string
+        codeDescription:
+          type: string
+          description: Distinctive code description, useful to distinguish the error.
+        data:
+          type: object
+          description: Additional data related to the error, if any
+          properties: {}
+      example:
+        code: 500
+        codeDescription: INTERNAL_SERVER_ERROR
+        message: Internal Server Error
+    DisaggregatedCreditLimit:
+      description: Disaggregated credit card limit
+      properties:
+        creditLineLimitType:
+          type: string
+          description: Limit type (LIMITE_CREDITO_TOTAL or LIMITE_CREDITO_MODALIDADE_OPERACAO)
+        consolidationType:
+          type: string
+          description: Indicates if the limit is consolidated or individual
+        identificationNumber:
+          type: string
+          description: Identification number of the additional credit card
+        isLimitFlexible:
+          type: boolean
+          description: Indicates if the limit is flexible
+        usedAmount:
+          type: number
+          format: double
+          description: Used amount of the additional credit card
+        usedAmountCurrencyCode:
+          type: string
+          description: Used amount currency code (for example, BRL)
+        lineName:
+          enum:
+          - CREDITO_A_VISTA
+          - CREDITO_PARCELADO
+          - SAQUE_CREDITO_BRASIL
+          - SAQUE_CREDITO_EXTERIOR
+          - EMPRESTIMO_CARTAO_CONSIGNADO
+          - OUTROS
+          type: string
+          description: Name of the credit limit line
+        lineNameAdditionalInfo:
+          type: string
+          description: Free text describing the line name when lineName is 'OUTROS'
+        limitAmount:
+          type: number
+          format: double
+          description: Limit amount of the additional credit card
+        limitAmountCurrencyCode:
+          type: string
+          description: Limit amount currency code (for example, BRL)
+        limitAmountReason:
+          type: string
+          description: Reason why the reported total limit amount is equal to zero
+        customizedLimitAmount:
+          type: number
+          format: double
+          description: Total limit amount customized by the customer through the institution's electronic channels
+        customizedLimitAmountCurrencyCode:
+          type: string
+          description: Customized limit amount currency code (for example, BRL)
+        availableAmount:
+          type: number
+          format: double
+          description: Available amount of the additional credit card
+        availableAmountCurrencyCode:
+          type: string
+          description: Available amount currency code (for example, BRL)
+      type: object
+      required:
+      - creditLineLimitType
+      - consolidationType
+      - identificationNumber
+      - isLimitFlexible
+      - usedAmount
+      - usedAmountCurrencyCode
+    Account:
+      description: Account of type bank
+      properties:
+        id:
+          type: string
+          description: Primary account identifier
+          example: a658c848-e475-457b-8565-d1fffba127c4
+        type:
+          enum:
+          - BANK
+          - CREDIT
+          type: string
+          description: 'Top-level account category.
+
+            - `BANK`: deposit accounts (checking, savings). The `bankData` object is populated.
+
+            - `CREDIT`: credit-card accounts. The `creditData` object is populated.'
+          example: BANK
+        subtype:
+          enum:
+          - SAVINGS_ACCOUNT
+          - CHECKING_ACCOUNT
+          - CREDIT_CARD
+          type: string
+          description: 'Account subtype within its `type`.
+
+            - `CHECKING_ACCOUNT`: conta corrente (`type=BANK`).
+
+            - `SAVINGS_ACCOUNT`: conta poupança (`type=BANK`).
+
+            - `CREDIT_CARD`: credit card account (`type=CREDIT`). For these the `number` field is masked to the last 4 digits.'
+          example: SAVINGS_ACCOUNT
+        number:
+          type: string
+          description: External identifier of the account
+          example: 40114687/1234
+        name:
+          type: string
+          description: Name of the account in a descriptive format
+          example: Conta Corrente
+        marketingName:
+          type: string
+          description: Name of the account as defined externally
+          example: SIGNATURE CJA. AHORRO PESOS
+        balance:
+          type: number
+          format: double
+          description: Funds of the account
+          example: 120950
+        itemId:
+          type: string
+          description: Attached item's primary identifier
+          format: uuid
+          example: a0922d6f-2007-4169-a181-b961500608db
+        taxNumber:
+          type: string
+          description: Tax ID of the corresponding owner
+          example: 333.333.333-33
+        owner:
+          type: string
+          description: Name of the owner of the account
+          example: John Doe
+        currencyCode:
+          type: string
+          description: Code referencing the currency of the balance
+          example: BRL
+        bankData:
+          $ref: '#/components/schemas/BankData'
+        creditData:
+          $ref: '#/components/schemas/CreditData'
+        createdAt:
+          type: string
+          format: date-time
+          description: Date when the account was first created in Pluggy
+          example: '2024-01-15T13:21:08.456Z'
+        updatedAt:
+          type: string
+          format: date-time
+          description: Date of the last update of the account data
+          example: '2024-07-22T18:05:11.328Z'
+      type: object
+      required:
+      - id
+      - type
+      - subtype
+      - number
+      - name
+      - balance
+      - itemId
+      - currencyCode
+      - createdAt
+      - updatedAt
+    ReservedBalanceRemuneration:
+      description: Remuneration applied to a reserved balance
+      properties:
+        preFixedRate:
+          type: number
+          format: double
+          description: Pre-fixed remuneration rate, as a fraction (for example, 0.3 = 30%)
+        postFixedIndexerPercentage:
+          type: number
+          format: double
+          description: Post-fixed indexer percentage, as a fraction (for example, 1.1 = 110% of the indexer)
+        rateType:
+          type: string
+          description: Rate type (LINEAR or EXPONENCIAL)
+        indexer:
+          type: string
+          description: Indexer used as remuneration reference (for example, CDI, IPCA, SELIC)
+        calculation:
+          type: string
+          description: Calculation basis (DIAS_UTEIS or DIAS_CORRIDOS)
+        ratePeriodicity:
+          type: string
+          description: Rate periodicity (MENSAL, ANUAL, DIARIO or SEMESTRAL)
+        indexerAdditionalInfo:
+          type: string
+          description: Additional indexer info, required when indexer is OUTROS
+      type: object
+    ReservedBalanceAmount:
+      description: A single amount within a reserved balance, optionally with its remuneration
+      properties:
+        amount:
+          type: number
+          format: double
+          description: Reserved amount
+        currencyCode:
+          type: string
+          description: Amount currency code (for example, BRL)
+        remuneration:
+          $ref: '#/components/schemas/ReservedBalanceRemuneration'
+      type: object
+      required:
+      - amount
+      - currencyCode
+    AdditionalCard:
+      description: Additional credit card data
+      properties:
+        number:
+          type: string
+          description: Number of the additional credit card
+      type: object
+      required:
+      - number
+    CreditData:
+      description: Credit account additional fields
+      properties:
+        level:
+          type:
+          - string
+          - 'null'
+          description: Card level (Black, Signature)
+        brand:
+          type:
+          - string
+          - 'null'
+          description: Card Brand (Visa, Mastercard, Elo)
+        brandAdditionalInfo:
+          type:
+          - string
+          - 'null'
+          description: Free text describing the brand category when brand is 'OTHER'
+        balanceCloseDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: Date when the balance was closed
+        balanceDueDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: Date when the balance is dued
+        availableCreditLimit:
+          type:
+          - number
+          - 'null'
+          format: double
+          description: Credit limit available to spent
+        balanceForeignCurrency:
+          type:
+          - number
+          - 'null'
+          format: double
+          description: Balance in USD
+        minimumPayment:
+          type:
+          - number
+          - 'null'
+          format: double
+          description: Minimum payment due
+        creditLimit:
+          type:
+          - number
+          - 'null'
+          format: double
+          description: Maximum amount that can be spent
+        isLimitFlexible:
+          type:
+          - boolean
+          - 'null'
+          description: Indicates whether the credit limit can be adjusted (e.g. a customer can request an increase). Only returned when reported by the institution.
+        status:
+          enum:
+          - ACTIVE
+          - BLOCKED
+          - CANCELLED
+          - null
+          type:
+          - string
+          - 'null'
+          description: Credit card status
+        holderType:
+          enum:
+          - MAIN
+          - ADDITIONAL
+          - null
+          type:
+          - string
+          - 'null'
+          description: Credit card holder type
+        disaggregatedCreditLimits:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/DisaggregatedCreditLimit'
+          description: Disaggregated credit card limits
+        additionalCards:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/AdditionalCard'
+          description: Additional credit cards associated with the main one
+      type: object
+  securitySchemes:
+    default:
+      type: apiKey
+      name: X-API-KEY
+      in: header

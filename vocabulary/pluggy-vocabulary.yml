@@ -1,0 +1,420 @@
+generated: '2026-10-18'
+method: derived
+generator: derive-vocabulary.py
+source:
+- openapi/pluggy-api-openapi.yml
+- openapi/pluggy-enrichment-api-openapi.yml
+- openapi/pluggy-status-api-openapi.yml
+vocabulary:
+  name: Pluggy Domain Vocabulary
+  description: 'Terms declared by Pluggy''s own API contract: its resource groups, objects and enumerations, with the contract''s definitions.
+    Derived, not authored.'
+  version: '2026-10-18'
+  terms:
+  - term: Auth
+    definition: Authentication endpoints for API key generation and connect tokens
+    tags:
+    - Resource Group
+    source: openapi/pluggy-api-openapi.yml
+  - term: Connector
+    definition: Financial institution connector management
+    tags:
+    - Resource Group
+    source: openapi/pluggy-api-openapi.yml
+  - term: Items
+    definition: Item management for syncing financial data
+    tags:
+    - Resource Group
+    source: openapi/pluggy-api-openapi.yml
+  - term: Consent
+    definition: User consent management for data access
+    tags:
+    - Resource Group
+    source: openapi/pluggy-api-openapi.yml
+  - term: Account
+    definition: Bank account information and management
+    tags:
+    - Resource Group
+    source: openapi/pluggy-api-openapi.yml
+  - term: Transaction
+    definition: Financial transaction data and operations
+    tags:
+    - Resource Group
+    source: openapi/pluggy-api-openapi.yml
+  - term: Investment
+    definition: Investment portfolio and asset management
+    tags:
+    - Resource Group
+    source: openapi/pluggy-api-openapi.yml
+  - term: Identity
+    definition: User identity verification and data
+    tags:
+    - Resource Group
+    source: openapi/pluggy-api-openapi.yml
+  - term: Webhook
+    definition: Webhook configuration and management
+    tags:
+    - Resource Group
+    source: openapi/pluggy-api-openapi.yml
+  - term: Category
+    definition: Transaction categorization and rules
+    tags:
+    - Resource Group
+    source: openapi/pluggy-api-openapi.yml
+  - term: Loan
+    definition: Loan information and management
+    tags:
+    - Resource Group
+    source: openapi/pluggy-api-openapi.yml
+  - term: SCR
+    definition: Bacen's credit information system, consulted through a connected Open Finance item
+    tags:
+    - Resource Group
+    source: openapi/pluggy-api-openapi.yml
+  - term: Merchant
+    definition: Merchant and company information by CNPJ
+    tags:
+    - Resource Group
+    source: openapi/pluggy-api-openapi.yml
+  - term: Bill
+    definition: Credit card bill information
+    tags:
+    - Resource Group
+    source: openapi/pluggy-api-openapi.yml
+  - term: Payment Customer
+    definition: Payment customer management
+    tags:
+    - Resource Group
+    source: openapi/pluggy-api-openapi.yml
+  - term: Payment Recipient
+    definition: Payment recipient management
+    tags:
+    - Resource Group
+    source: openapi/pluggy-api-openapi.yml
+  - term: Payment Request
+    definition: Payment request creation and management
+    tags:
+    - Resource Group
+    source: openapi/pluggy-api-openapi.yml
+  - term: Automatic PIX
+    definition: Automatic PIX payment scheduling and management
+    tags:
+    - Resource Group
+    source: openapi/pluggy-api-openapi.yml
+  - term: Payment Schedule
+    definition: Payment scheduling operations
+    tags:
+    - Resource Group
+    source: openapi/pluggy-api-openapi.yml
+  - term: Payment Intent
+    definition: Payment intent processing
+    tags:
+    - Resource Group
+    source: openapi/pluggy-api-openapi.yml
+  - term: Smart Transfer
+    definition: Smart transfer functionality
+    tags:
+    - Resource Group
+    source: openapi/pluggy-api-openapi.yml
+  - term: Boleto Management
+    definition: Boleto payment management
+    tags:
+    - Resource Group
+    source: openapi/pluggy-api-openapi.yml
+  - term: Enrichment
+    definition: Transaction categorization, behavior analysis and recurring-payment detection. Documented on docs.pluggy.ai/reference until the
+      v2 migration; served from enrichment-api.pluggy.ai with its own credentials.
+    tags:
+    - Resource Group
+    source: openapi/pluggy-enrichment-api-openapi.yml
+  - term: Status
+    definition: Public health and incident data for Pluggy connectors, products and infrastructure. No authentication required.
+    tags:
+    - Resource Group
+    source: openapi/pluggy-status-api-openapi.yml
+  - term: SCR Maturity Balances
+    definition: 'Balance of the operation group split across Bacen''s maturity vertices, in BRL. Each key is a vertex code and belongs to one
+      of three families: amounts not yet due (a payment up to 14 days late still counts here), amounts overdue graded by how old the delay is,
+      and a few categories that are not time windows at all. The window behind each individual code is defined by Bacen''s DOC3040 reference —
+      rea'
+    tags:
+    - Object
+    source: openapi/pluggy-api-openapi.yml#/components/schemas/ScrMaturityBalances
+  - term: SCR Guarantee
+    definition: 'Object declared by the contract with fields: tp, qtd.'
+    tags:
+    - Object
+    source: openapi/pluggy-api-openapi.yml#/components/schemas/ScrGuarantee
+  - term: SCR Additional Info
+    definition: 'Object declared by the contract with fields: tp, cd, qtd.'
+    tags:
+    - Object
+    source: openapi/pluggy-api-openapi.yml#/components/schemas/ScrAdditionalInfo
+  - term: SCR Operation
+    definition: 'A group of credit operations. The SCR does not return contracts one by one: it aggregates them by the combination of modality,
+      source of funds, index and exchange variation.'
+    tags:
+    - Object
+    source: openapi/pluggy-api-openapi.yml#/components/schemas/ScrOperation
+  - term: SCR Base Date
+    definition: One consulted base date, and what the SCR holds for the client in it
+    tags:
+    - Object
+    source: openapi/pluggy-api-openapi.yml#/components/schemas/ScrDatabase
+  - term: SCR Validation Message
+    definition: 'Object declared by the contract with fields: codigo, mensagem.'
+    tags:
+    - Object
+    source: openapi/pluggy-api-openapi.yml#/components/schemas/ScrValidationMessage
+  - term: SCR
+    definition: Bacen's SCR response, forwarded exactly as the Banco Central returns it — field names, codes and all. Nothing is renamed or normalised,
+      so a value read here is the same value an institution reads at the source.
+    tags:
+    - Object
+    source: openapi/pluggy-api-openapi.yml#/components/schemas/ScrResponse
+  - term: BankData
+    definition: Bank account additional fields
+    tags:
+    - Object
+    source: openapi/pluggy-api-openapi.yml#/components/schemas/BankData
+  - term: ReservedBalance
+    definition: Funds reserved/earmarked on a bank account (for example, goal-based savings or judicial holds)
+    tags:
+    - Object
+    source: openapi/pluggy-api-openapi.yml#/components/schemas/ReservedBalance
+  - term: ReservedBalanceAmount
+    definition: A single amount within a reserved balance, optionally with its remuneration
+    tags:
+    - Object
+    source: openapi/pluggy-api-openapi.yml#/components/schemas/ReservedBalanceAmount
+  - term: ReservedBalanceRemuneration
+    definition: Remuneration applied to a reserved balance
+    tags:
+    - Object
+    source: openapi/pluggy-api-openapi.yml#/components/schemas/ReservedBalanceRemuneration
+  - term: CreditData
+    definition: Credit account additional fields
+    tags:
+    - Object
+    source: openapi/pluggy-api-openapi.yml#/components/schemas/CreditData
+  - term: AdditionalCard
+    definition: Additional credit card data
+    tags:
+    - Object
+    source: openapi/pluggy-api-openapi.yml#/components/schemas/AdditionalCard
+  - term: DisaggregatedCreditLimit
+    definition: Disaggregated credit card limit
+    tags:
+    - Object
+    source: openapi/pluggy-api-openapi.yml#/components/schemas/DisaggregatedCreditLimit
+  - term: CredentialSelectOption
+    definition: Option for ConnectorCredential of type select
+    tags:
+    - Object
+    source: openapi/pluggy-api-openapi.yml#/components/schemas/CredentialSelectOption
+  - term: ConnectorCredential
+    definition: Credential details for a connector
+    tags:
+    - Object
+    source: openapi/pluggy-api-openapi.yml#/components/schemas/ConnectorCredential
+  - term: ConnectorUserAction
+    definition: User action details for an item
+    tags:
+    - Object
+    source: openapi/pluggy-api-openapi.yml#/components/schemas/ConnectorUserAction
+  - term: ConnectorListResponse
+    definition: Connector List Response
+    tags:
+    - Object
+    source: openapi/pluggy-api-openapi.yml#/components/schemas/ConnectorListResponse
+  - term: ConnectorHealth
+    definition: Connector health status
+    tags:
+    - Object
+    source: openapi/pluggy-api-openapi.yml#/components/schemas/ConnectorHealth
+  - term: ConnectorIncident
+    definition: 'An incident affecting a connector right now, as published on the Pluggy status page. Only incidents active at this moment are
+      listed: a scheduled maintenance appears once its window opens, not when it is announced, and disappears when the window closes.'
+    tags:
+    - Object
+    source: openapi/pluggy-api-openapi.yml#/components/schemas/ConnectorIncident
+  - term: Item
+    definition: Item object
+    tags:
+    - Object
+    source: openapi/pluggy-api-openapi.yml#/components/schemas/Item
+  - term: CreateItem
+    definition: Create Item Request
+    tags:
+    - Object
+    source: openapi/pluggy-api-openapi.yml#/components/schemas/CreateItem
+  - term: UpdateItem
+    definition: Update Item Request
+    tags:
+    - Object
+    source: openapi/pluggy-api-openapi.yml#/components/schemas/UpdateItem
+  - term: StatusDetail
+    definition: Detailed status of the item. This field will be present when the status is PARTIAL_SUCCESS or when a product in the item has warnings
+    tags:
+    - Object
+    source: openapi/pluggy-api-openapi.yml#/components/schemas/StatusDetail
+  - term: StatusDetailProduct
+    definition: Detailed status of the product
+    tags:
+    - Object
+    source: openapi/pluggy-api-openapi.yml#/components/schemas/StatusDetailProduct
+  - term: StatusDetailProductWarning
+    definition: 'Object declared by the contract with fields: code, message, providerMessage.'
+    tags:
+    - Object
+    source: openapi/pluggy-api-openapi.yml#/components/schemas/StatusDetailProductWarning
+  - term: ICountResponse
+    definition: Deletion response
+    tags:
+    - Object
+    source: openapi/pluggy-api-openapi.yml#/components/schemas/ICountResponse
+  - term: CreateWebhook
+    definition: 'Object declared by the contract with fields: url, event, headers.'
+    tags:
+    - Object
+    source: openapi/pluggy-api-openapi.yml#/components/schemas/CreateWebhook
+  - term: UpdateWebhook
+    definition: Partial update of a webhook. All fields are optional.
+    tags:
+    - Object
+    source: openapi/pluggy-api-openapi.yml#/components/schemas/UpdateWebhook
+  - term: ParameterValidationError
+    definition: 'Object declared by the contract with fields: code, message, parameter.'
+    tags:
+    - Object
+    source: openapi/pluggy-api-openapi.yml#/components/schemas/ParameterValidationError
+  - term: ItemParameter
+    definition: Key-Value credentials neccesary to create an item
+    tags:
+    - Object
+    source: openapi/pluggy-api-openapi.yml#/components/schemas/ItemParameter
+  - term: PaymentIntentParameter
+    definition: Credentials neccesary to create a payment intent
+    tags:
+    - Object
+    source: openapi/pluggy-api-openapi.yml#/components/schemas/PaymentIntentParameter
+  - term: ParameterValidationResponse
+    definition: Response to parameter's validations
+    tags:
+    - Object
+    source: openapi/pluggy-api-openapi.yml#/components/schemas/ParameterValidationResponse
+  - term: Document
+    definition: Document object containing type & value
+    tags:
+    - Object
+    source: openapi/pluggy-api-openapi.yml#/components/schemas/Document
+  - term: PaymentDataParticipant
+    definition: Participant of the payment data
+    tags:
+    - Object
+    source: openapi/pluggy-api-openapi.yml#/components/schemas/PaymentDataParticipant
+  - term: PaymentData
+    definition: Payment or Transfer participant's data
+    tags:
+    - Object
+    source: openapi/pluggy-api-openapi.yml#/components/schemas/PaymentData
+  - term: CreditCardMetadata
+    definition: Data of a transaction specific to credit card transactions
+    tags:
+    - Object
+    source: openapi/pluggy-api-openapi.yml#/components/schemas/CreditCardMetadata
+  - term: PageResponseTransactions
+    definition: 'Object declared by the contract with fields: results, page, total, totalPages.'
+    tags:
+    - Object
+    source: openapi/pluggy-api-openapi.yml#/components/schemas/PageResponseTransactions
+  - term: CursorPageResponseItems
+    definition: Cursor-based paginated response for items
+    tags:
+    - Object
+    source: openapi/pluggy-api-openapi.yml#/components/schemas/CursorPageResponseItems
+  - term: CursorPageResponseTransactions
+    definition: Cursor-based paginated response for transactions
+    tags:
+    - Object
+    source: openapi/pluggy-api-openapi.yml#/components/schemas/CursorPageResponseTransactions
+  - term: UpdateTransaction
+    definition: Update transaction category request body
+    tags:
+    - Object
+    source: openapi/pluggy-api-openapi.yml#/components/schemas/UpdateTransaction
+  - term: ClientCategoryRule
+    definition: Category rule by client id
+    tags:
+    - Object
+    source: openapi/pluggy-api-openapi.yml#/components/schemas/ClientCategoryRule
+  - term: CreateClientCategoryRule
+    definition: Create client category rule
+    tags:
+    - Object
+    source: openapi/pluggy-api-openapi.yml#/components/schemas/CreateClientCategoryRule
+  - term: InvestmentExpenses
+    definition: Taxes and fees that applied to the transaction
+    tags:
+    - Object
+    source: openapi/pluggy-api-openapi.yml#/components/schemas/InvestmentExpenses
+  - term: InvestmentInstitution
+    definition: Financial institution holding the investment
+    tags:
+    - Object
+    source: openapi/pluggy-api-openapi.yml#/components/schemas/InvestmentInstitution
+  - term: InvestmentTransaction
+    definition: Movement of the investment
+    tags:
+    - Object
+    source: openapi/pluggy-api-openapi.yml#/components/schemas/InvestmentTransaction
+  - term: PageResponseInvestmentTransactions
+    definition: 'Object declared by the contract with fields: results, page, total, totalPages.'
+    tags:
+    - Object
+    source: openapi/pluggy-api-openapi.yml#/components/schemas/PageResponseInvestmentTransactions
+  - term: PageResponseCategories
+    definition: Paginated list of transaction categories
+    tags:
+    - Object
+    source: openapi/pluggy-api-openapi.yml#/components/schemas/PageResponseCategories
+  - term: PageResponseCategoryRules
+    definition: 'Object declared by the contract with fields: results, page, total, totalPages.'
+    tags:
+    - Object
+    source: openapi/pluggy-api-openapi.yml#/components/schemas/PageResponseCategoryRules
+  - term: InvestmentMetadata
+    definition: Investment metadata for Previdencia migrations
+    tags:
+    - Object
+    source: openapi/pluggy-api-openapi.yml#/components/schemas/InvestmentMetadata
+  - term: Company
+    definition: Company object that holds the company's information
+    tags:
+    - Object
+    source: openapi/pluggy-api-openapi.yml#/components/schemas/Company
+  - term: PhoneNumber
+    definition: The phone number object contains data related to contact information.
+    tags:
+    - Object
+    source: openapi/pluggy-api-openapi.yml#/components/schemas/PhoneNumber
+  - term: Email
+    definition: The email object contains emails associated with the owner of the account
+    tags:
+    - Object
+    source: openapi/pluggy-api-openapi.yml#/components/schemas/Email
+  - term: Address
+    definition: The address object contains data related to an specific owner's location.
+    tags:
+    - Object
+    source: openapi/pluggy-api-openapi.yml#/components/schemas/Address
+  - term: IdentityRelation
+    definition: The relation object contains name and relation to the owner of the account
+    tags:
+    - Object
+    source: openapi/pluggy-api-openapi.yml#/components/schemas/IdentityRelation
+  - term: GeographicCoordinates
+    definition: Geographic coordinates in decimal degrees, WGS84 reference system
+    tags:
+    - Object
+    source: openapi/pluggy-api-openapi.yml#/components/schemas/GeographicCoordinates

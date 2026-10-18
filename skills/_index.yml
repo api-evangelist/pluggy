@@ -1,0 +1,59 @@
+name: Pluggy agent skills
+generated: '2026-10-18'
+method: generated
+source: Generated from the openapi/ contracts; official provider skills saved verbatim from https://github.com/pluggyai/agent-skills
+  under skills/_original/.
+skills:
+- file: pluggy-connect-and-sync-an-item.md
+  name: Connect a bank account (Item) and keep it synced
+  api: openapi/pluggy-api-openapi.yml
+  operations:
+  - auth-create
+  - connect-token-create
+  - items-retrieve
+  - items-send-mfa
+  - items-update
+  - webhooks-create
+- file: pluggy-read-open-finance-data.md
+  name: Read accounts, transactions, investments and identity for an Item
+  api: openapi/pluggy-api-openapi.yml
+  operations:
+  - accounts-list
+  - account-balance-get
+  - transactions-list-by-cursor
+  - investments-list
+  - loans-list
+  - identity-find-by-item
+- file: pluggy-initiate-a-pix-payment.md
+  name: Initiate a PIX payment
+  api: openapi/pluggy-api-openapi.yml
+  operations:
+  - payment-recipient-create
+  - payment-request-create
+  - payment-intent-create
+  - payment-request-retrieve
+  - payment-request-create-pix-qr
+- file: pluggy-enrich-transactions.md
+  name: Categorize and analyse transactions with the Enrichment API
+  api: openapi/pluggy-enrichment-api-openapi.yml
+  operations:
+  - categorize
+  - behavior-analysis
+  - recurring-payments
+- file: pluggy-check-connector-health.md
+  name: Check Pluggy connector and platform health
+  api: openapi/pluggy-status-api-openapi.yml
+  operations:
+  - status-snapshot
+  - status-connector-incidents
+  - status-summary
+official:
+  repo: https://github.com/pluggyai/agent-skills
+  install: npx skills add pluggyai/agent-skills
+  docs: https://docs.pluggy.ai/en/docs/developer-tools/ai-skills.md
+  saved:
+  - skills/_original/pluggy-integration/SKILL.md
+  - skills/_original/pluggy-open-finance/SKILL.md
+  - skills/_original/pluggy-payments/SKILL.md
+  - skills/_original/pluggy-doctor/SKILL.md
+  - skills/_original/AGENTS.md

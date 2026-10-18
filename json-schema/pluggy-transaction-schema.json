@@ -1,0 +1,381 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/pluggy/main/json-schema/pluggy-transaction-schema.json",
+  "title": "Transaction",
+  "description": "Transaction product",
+  "x-generated": "2026-10-18",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/pluggy-api-openapi.yml#/components/schemas/Transaction",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Primary identifier of the transaction"
+    },
+    "description": {
+      "type": "string",
+      "description": "Clean description of the transaction"
+    },
+    "descriptionRaw": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Original transaction description as returned by the institution, before any cleanup or normalization. May be null when not provided by the institution."
+    },
+    "currencyCode": {
+      "type": "string",
+      "description": "Currency ISO code"
+    },
+    "amount": {
+      "type": "number",
+      "format": "double",
+      "description": "Transaction amount"
+    },
+    "amountInAccountCurrency": {
+      "type": "number",
+      "format": "double",
+      "description": "Transaction amount in Account's Currency. Only present if the transaction is in a different currency than the account's currency"
+    },
+    "date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Date when the transaction was made"
+    },
+    "type": {
+      "type": "string",
+      "description": "Direction of the movement from the account holder's perspective.\n- `CREDIT`: money entered the account (deposits, incoming transfers, refunds).\n- `DEBIT`: money left the account (payments, withdrawals, outgoing transfers, credit-card purchases).\n\nNote: for credit-card accounts the convention is inverted at the institution but Pluggy normalizes the value so purchases are always `DEBIT` and payments to the card statement are `CREDIT`.",
+      "enum": [
+        "DEBIT",
+        "CREDIT"
+      ]
+    },
+    "balance": {
+      "type": "number",
+      "format": "double",
+      "description": "Account balance immediately after the transaction was posted. May be null when the institution does not return a running balance."
+    },
+    "providerCode": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Institution-provided identifier or code for the transaction (e.g. NSU, transaction number on the bank statement). Format varies per institution."
+    },
+    "status": {
+      "type": "string",
+      "description": "Settlement status of the movement.\n- `POSTED`: the transaction is confirmed/settled at the institution.\n- `PENDING`: the transaction is not settled yet. On credit cards, a purchase not yet included in a closed bill. On checking accounts, a transaction the institution is still processing or a scheduled payment: Open Finance institutions that expose scheduled payments (`LANCAMENTO_FUTURO`) return them as `PENDING` with a `date` in the future, up to the window each institution allows (90 days on Itaú). When the payment settles the transaction becomes `POSTED`; it keeps its `id` when the institution keeps the `providerId`, otherwise it is matched to the settled one by amount and date.",
+      "enum": [
+        "POSTED",
+        "PENDING"
+      ]
+    },
+    "category": {
+      "type": "string",
+      "description": "Category of the transaction (e.g. Restaurants, Education). See the Transaction Categorization section in our guides."
+    },
+    "categoryId": {
+      "type": "string",
+      "description": "Id of the transaction category. Can be used to identify the category in the Categories endpoint"
+    },
+    "paymentData": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/PaymentData"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "creditCardMetadata": {
+      "$ref": "#/$defs/CreditCardMetadata"
+    },
+    "merchant": {
+      "$ref": "#/$defs/Merchant"
+    },
+    "operationType": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Type of operation classified by the institution. For bank account transactions it carries values such as 'PIX' or 'TED'; for credit card transactions it carries the Open Finance transaction type ('PAGAMENTO', 'PAGAMENTO_FATURA' for a partial or full bill payment, 'TARIFA', 'OPERACOES_CREDITO_CONTRATADAS_CARTAO', 'ESTORNO', 'CASHBACK', 'OUTROS'). The one exception is the credit card bill payment Pluggy builds from the bill data when the institution does not report the payment as a transaction (described as 'Pagamento recebido'): it carries 'PAGAMENTO_FATURA', set by Pluggy rather than by the institution. Only returned for Open Finance connectors."
+    },
+    "operationTypeAdditionalInfo": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Complementary, free-form information about the operation type, as provided by the institution. Varies by institution (a sub-type code or a description). For credit card transactions it carries the Open Finance 'transactionalAdditionalInfo'. Open Finance requires it when operationType is 'OUTROS', but not every institution fills it. Only returned for Open Finance connectors."
+    },
+    "providerId": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Provider's identifier for the transaction. Only returned for Open Finance connectors."
+    },
+    "accountId": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Identifier of the account this transaction belongs to."
+    },
+    "order": {
+      "type": "number",
+      "format": "integer",
+      "description": "Sequential position of the transaction within the same day, used to preserve ordering when multiple transactions share the same date."
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Date when the transaction was first ingested by Pluggy."
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Date of the last update of the transaction data."
+    }
+  },
+  "type": "object",
+  "required": [
+    "id",
+    "description",
+    "currencyCode",
+    "amount",
+    "date",
+    "accountId",
+    "createdAt",
+    "updatedAt"
+  ],
+  "$defs": {
+    "CreditCardMetadata": {
+      "description": "Data of a transaction specific to credit card transactions",
+      "properties": {
+        "installmentNumber": {
+          "type": "number",
+          "description": "Number of the current installment of the purchase"
+        },
+        "totalInstallments": {
+          "type": "number",
+          "description": "Total number of installments of the purchase"
+        },
+        "totalAmount": {
+          "type": "number",
+          "description": "Total amount of the purchase. Only available on direct connectors; Open Finance connectors do not return this field"
+        },
+        "feeType": {
+          "enum": [
+            "ANNUAL_FEE",
+            "ATM_WITHDRAWAL_DOMESTIC",
+            "ATM_WITHDRAWAL_INTERNATIONAL",
+            "EMERGENCY_CREDIT_EVALUATION",
+            "CARD_REISSUE",
+            "BILL_PAYMENT_FEE",
+            "SMS",
+            "OTHER"
+          ],
+          "type": "string",
+          "description": "Type of fee charged. Present when the operation is a fee (TARIFA)"
+        },
+        "feeTypeAdditionalInfo": {
+          "type": "string",
+          "description": "Free text describing the fee type when feeType is 'OTHER'"
+        },
+        "otherCreditsType": {
+          "enum": [
+            "REVOLVING_CREDIT",
+            "BILL_INSTALLMENT",
+            "LOAN",
+            "OTHER"
+          ],
+          "type": "string",
+          "description": "Other type of credit contracted on the card. Present when the operation is a contracted credit operation"
+        },
+        "otherCreditsAdditionalInfo": {
+          "type": "string",
+          "description": "Free text describing the other credit type when otherCreditsType is 'OTHER'"
+        },
+        "purchaseDate": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Original Date of the purchase"
+        },
+        "payeeMCC": {
+          "type": "integer",
+          "description": "Merchant Category Code of the merchant"
+        },
+        "cardNumber": {
+          "type": "string",
+          "description": "Credit Card Number associated with transaction, can be different from the account if its done by an additional or virtual card."
+        },
+        "billId": {
+          "type": "string",
+          "description": "Id of the bill associated to this transaction"
+        },
+        "billForecastDate": {
+          "type": "string",
+          "description": "Forecasted bill period (formatted as YYYY-MM) in which this transaction is expected to be charged. Unlike billId, it is provided for pending and future transactions too. Only returned for Open Finance connectors"
+        },
+        "paymentType": {
+          "enum": [
+            "SINGLE",
+            "INSTALLMENT"
+          ],
+          "type": "string",
+          "description": "How the purchase is charged: 'SINGLE' when it is charged in full on one bill, 'INSTALLMENT' when it is split into installments. Only returned for Open Finance connectors. Populated from the release of this field onwards, not retroactively: transactions synced before it do not carry the key until they are synced again"
+        },
+        "billPostDate": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date",
+          "description": "Date (YYYY-MM-DD) the institution posted the transaction to a bill, exactly as the institution reports it. Unlike the transaction 'date', it is never adjusted by Pluggy. null when the transaction is not posted to a bill yet or the institution does not report it. A missing key means the same as null: the field is populated from its release onwards, not retroactively. Only returned for Open Finance connectors"
+        },
+        "transactionDateTime": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Date and time of the transaction as reported by the institution. Normalized to a valid ISO-8601 string: some institutions append a zone id suffix (e.g. '2026-04-09T16:43:35.203Z[GMT]'), which Pluggy removes. Absent when the institution sends a placeholder. Only returned for Open Finance connectors. Populated from the release of this field onwards, not retroactively"
+        }
+      },
+      "type": "object"
+    },
+    "Document": {
+      "description": "Document object containing type & value",
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Type of document",
+          "enum": [
+            "CPF",
+            "CNPJ"
+          ]
+        },
+        "value": {
+          "type": "string",
+          "description": "Formatted value of the document"
+        }
+      },
+      "type": "object"
+    },
+    "Merchant": {
+      "description": "Merchant extracted from the transaction data",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Merchants name"
+        },
+        "businessName": {
+          "type": "string",
+          "description": "Merchant legal business name"
+        },
+        "cnpj": {
+          "type": "string",
+          "description": "Document number related to the merchant"
+        },
+        "cnae": {
+          "type": "string",
+          "description": "Economic activity classification number related to the merchant"
+        },
+        "category": {
+          "type": "string",
+          "description": "Category derived from the merchant's CNAE, when one can be resolved"
+        }
+      },
+      "type": "object"
+    },
+    "PaymentData": {
+      "description": "Payment or Transfer participant's data",
+      "properties": {
+        "payer": {
+          "$ref": "#/$defs/PaymentDataParticipant"
+        },
+        "receiver": {
+          "$ref": "#/$defs/PaymentDataParticipant"
+        },
+        "reason": {
+          "type": "string",
+          "description": "User's motive submitted while making the transfer"
+        },
+        "referenceNumber": {
+          "type": "string",
+          "description": "Reference number for the transfer/payment"
+        },
+        "receiverReferenceId": {
+          "type": "string",
+          "description": "String submitted by the receiver associated with the payment when generating the payment request."
+        },
+        "authenticationCode": {
+          "type": "string",
+          "description": "Authentication code of the payment receipt, as printed by the institution on the proof of payment. It identifies the operation itself rather than the payment instrument, so it can be present for any payment method (PIX, TED, DOC, BOLETO)."
+        },
+        "paymentMethod": {
+          "type": "string",
+          "description": "Payment rail used for the transaction.\n- `PIX`: instant transfer over the Brazilian Pix system.\n- `TED`: Transferência Eletrônica Disponível (same-day inter-bank transfer).\n- `DOC`: Documento de Ordem de Crédito (D+1 inter-bank transfer, deprecated by the Central Bank).\n- `TEV`: Transferência Eletrônica de Valores (intra-bank transfer between accounts of the same institution).\n- `BOLETO`: Brazilian bank slip payment."
+        },
+        "boletoMetadata": {
+          "$ref": "#/$defs/PaymentDataBoletoMetadata"
+        }
+      },
+      "type": "object"
+    },
+    "PaymentDataBoletoMetadata": {
+      "description": "Information of the boleto associated with the payment",
+      "properties": {
+        "digitableLine": {
+          "type": "string",
+          "description": "Boleto identifier"
+        },
+        "barcode": {
+          "type": "string",
+          "description": "Boleto barcode number"
+        },
+        "baseAmount": {
+          "type": "number",
+          "description": "Boleto original amount without considering penalties / interests / discounts"
+        },
+        "interestAmount": {
+          "type": "number",
+          "description": "Boleto interest amount"
+        },
+        "penaltyAmount": {
+          "type": "number",
+          "description": "Boleto penalty amount"
+        },
+        "discountAmount": {
+          "type": "number",
+          "description": "Boleto discount amount"
+        }
+      }
+    },
+    "PaymentDataParticipant": {
+      "description": "Participant of the payment data",
+      "properties": {
+        "documentNumber": {
+          "$ref": "#/$defs/Document"
+        },
+        "name": {
+          "type": "string",
+          "description": "Fullname of the participant"
+        },
+        "accountNumber": {
+          "type": "string",
+          "description": "Account number on the branch"
+        },
+        "branchNumber": {
+          "type": "string",
+          "description": "Agency number"
+        },
+        "routingNumber": {
+          "type": "string",
+          "description": "COMPE Bank number"
+        },
+        "routingNumberISPB": {
+          "type": "string",
+          "description": "ISPB Bank number"
+        }
+      },
+      "type": "object"
+    }
+  }
+}

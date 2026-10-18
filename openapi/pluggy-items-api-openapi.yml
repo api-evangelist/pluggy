@@ -1,0 +1,1475 @@
+openapi: 3.2.0
+info:
+  title: Pluggy Items API
+  description: Pluggy's main API to review data and execute connectors
+  license:
+    name: MIT
+  contact:
+    email: hello@pluggy.ai
+    name: Pluggy
+    url: https://pluggy.ai
+  version: 1.0.0
+servers:
+- url: https://api.pluggy.ai
+  description: Pluggy API
+tags:
+- name: Items
+  description: Item management for syncing financial data
+paths:
+  /items:
+    post:
+      operationId: items-create
+      summary: Create
+      responses:
+        '200':
+          description: Created item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+        '400':
+          description: Invalid parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemCreationErrorResponse'
+              examples:
+                missingMainParameter:
+                  summary: Missing main parameter
+                  value:
+                    message: Connector parameters do not match validation rules
+                    code: 400
+                    codeDescription: CONNECTOR_VALIDATION_ERROR
+                    details:
+                    - code: '001'
+                      parameter: user
+                      message: user parameter is required
+                missingMFA:
+                  summary: Missing MFA on parameters
+                  value:
+                    message: Connector parameters do not match validation rules
+                    code: 400
+                    codeDescription: CONNECTOR_VALIDATION_ERROR
+                    details:
+                    - code: '001'
+                      parameter: token
+                      message: token parameter is required
+                itemUserAlreadyExists:
+                  summary: Item user already exists, avoid duplicates detected.
+                  value:
+                    message: There are other items with the same credentials, you can't create a new one
+                    code: 400
+                    codeDescription: ITEM_USER_ALREADY_EXISTS
+                    data:
+                      items:
+                      - d0f8a8c0-e8e3-11e9-b210-d663bd873d93
+                      - d0f8a8c0-e8e3-11e9-b210-d663bd873d94
+        '409':
+          description: There is a conflict creating an item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+              example:
+                code: 409
+                codeDescription: ITEM_CREATION_LIMIT_EXCEEDED
+                message: Client exceeded item creation limit (100 items) for the current subscription level.
+                data:
+                  itemsLimit: 100
+        '500':
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+              example:
+                code: 500
+                codeDescription: INTERNAL_SERVER_ERROR
+                message: Internal Server Error
+      description: Creates a item and syncs all the products with the financial institution, using as credentials the sent parameters.
+      tags:
+      - Items
+      security:
+      - default: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateItem'
+            examples:
+              Plain parameters:
+                value:
+                  connectorId: 2
+                  parameters:
+                    user: user-ok
+                    password: password-ok
+                  webhookUrl: https://example.com/webhook
+              Encrypted parameters:
+                value:
+                  connectorId: 2
+                  parameters: encrypted-parameters
+                  webhookUrl: https://example.com/webhook
+        required: true
+      x-readme:
+        code-samples:
+        - language: node
+          code: "const pluggy = require('pluggy-sdk');\nconst client = new pluggy.PluggyClient({\n  clientId: 'YOUR_CLIENT_ID',\n  clientSecret: 'YOUR_CLIENT_SECRET',\n});\nclient\n  .createItem(2, { user: 'user-ok', password: 'password-ok' })\n  .then((item) => {\n    console.log(item);\n  });"
+        - language: java
+          code: "PluggyClient pluggyClient = PluggyClient.builder()\n  .clientIdAndSecret('your_client_id', 'your_secret')\n  .baseUrl('https://api.pluggy.ai')\n  .build();\nParametersMap parametersMap = ParametersMap.map(\"user\", \"user-ok\")\n  .with(\"password\", \"password-ok\");\nCreateItemRequest createItemRequest = new CreateItemRequest(connectorId, parametersMap);\nResponse<ItemResponse> item = pluggyClient.service().createItem(createItemRequest).execute();"
+        - language: csharp
+          code: 'PluggyClient pluggyClient = new PluggyClient(''YOUR_PLUGGY_API_KEY'');
+
+            ItemParameters createItemRequest = new ItemParameters(connectorId, credentials, options);
+
+            Item item = await pluggyClient.CreateItem(createItemRequest);'
+  /items/{id}:
+    get:
+      operationId: items-retrieve
+      summary: Retrieve
+      responses:
+        '200':
+          description: Item was retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+        '404':
+          description: Item not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+              example:
+                code: 404
+                codeDescription: ITEM_NOT_FOUND
+                message: item not found
+        '500':
+          description: Server Internal Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+      description: Recovers the item resource by its id
+      tags:
+      - Items
+      security:
+      - default: []
+      parameters:
+      - description: Item primary identifier
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+          format: uuid
+        example: d0f8a8c0-e8e3-11e9-b210-d663bd873d93
+      x-readme:
+        code-samples:
+        - language: node
+          code: "const pluggy = require('pluggy-sdk');\nconst client = new pluggy.PluggyClient({\n  clientId: 'YOUR_CLIENT_ID',\n  clientSecret: 'YOUR_CLIENT_SECRET',\n});\nclient\n  .fetchItem('YOUR_ITEM_ID')\n  .then((item) => {\n    console.log(item);\n  });"
+        - language: java
+          code: "PluggyClient pluggyClient = PluggyClient.builder()\n  .clientIdAndSecret('your_client_id', 'your_secret')\n  .baseUrl('https://api.pluggy.ai')\n  .build();\nResponse<ItemResponse> item = pluggyClient.service().getItem(\"YOUR_ITEM_ID\").execute();"
+        - language: csharp
+          code: 'PluggyClient pluggyClient = new PluggyClient(''YOUR_PLUGGY_API_KEY'');
+
+            Item item = await pluggyClient.FetchItem("YOUR_ITEM_ID");'
+    patch:
+      operationId: items-update
+      summary: Update
+      responses:
+        '200':
+          description: Update the item was successful, new sync was triggered
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+        '400':
+          description: Invalid parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+              examples:
+                repeatedMFA:
+                  summary: MFA should be updated
+                  value:
+                    code: 400
+                    codeDescription: MFA_PARAMERTER_WAS_ALREADY_USED_ERROR
+                    message: MFA parameter has to be updated from last execution
+                missingMFA:
+                  summary: MFA parameter was not sent
+                  value:
+                    message: The parameter 'token' is required to be renewed for item update.
+                    code: 400
+                    codeDescription: CONNECTOR_REQUIRED_PARAMETER_VALIDATION_ERROR
+                    details:
+                    - code: '001'
+                      message: Parameter 'token' is required
+                      parameter: token
+                    data:
+                      parameter: token
+                tooManyErrors:
+                  summary: There were more than 5 consecutive errors
+                  value:
+                    code: 400
+                    codeDescription: TOO_MANY_CONSECUTIVE_ERRORS
+                    message: There has been more than 5 failing syncronizations, please contact support
+                tooManyConsecutiveLoginFailures:
+                  summary: There were at least 2 consecutive login errors
+                  value:
+                    code: 400
+                    codeDescription: TOO_MANY_CONSECUTIVE_LOGIN_FAILURES
+                    message: 'must wait at least {readableBackoffTime} after {maxConsecutiveFailedLoginAttempts} consecutive login errors, last attempt was at {lastExecutionEndedAt} (can retry after: {canRetryAfterDate})'
+                    data:
+                      readableBackoffTime: 15 minutes
+                      maxConsecutiveFailedLoginAttempts: 2
+                      lastExecutionEndedAt: '2020-01-01T00:00:00.000Z'
+                      canRetryAfterDate: '2020-01-01T00:15:00.000Z'
+        '404':
+          description: Item not found, or its connector was removed from Pluggy and the item can no longer be updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+              examples:
+                itemNotFound:
+                  summary: Item not found
+                  value:
+                    code: 404
+                    codeDescription: ITEM_NOT_FOUND
+                    message: item not found
+                connectorRemoved:
+                  summary: The item's connector was removed
+                  value:
+                    code: 404
+                    codeDescription: CONNECTOR_NOT_FOUND
+                    message: connector not found
+        '409':
+          description: There is a conflict updating the item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+              example:
+                code: 409
+                codeDescription: CLIENT_IS_UPDATING_BEFORE_ALLOWED_FREQUENCY
+                message: Client updates on this item are allowed at most every {minUpdateFrequencyAllowedInHours} hours. Last update was at {lastUpdatedAt}
+                data:
+                  minUpdateFrequencyAllowedInHours: 24
+                  lastUpdatedAt: '2020-01-01T00:00:00.000Z'
+        '500':
+          description: Server Internal Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+      description: Triggers new syncronization for the Item, optionally updating the stored credentials.
+      tags:
+      - Items
+      security:
+      - default: []
+      parameters:
+      - description: Item primary identifier
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+          format: uuid
+        example: d0f8a8c0-e8e3-11e9-b210-d663bd873d93
+      requestBody:
+        description: Update item request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateItem'
+            examples:
+              Plain parameters:
+                value:
+                  webhookUrl: https://example.com/webhook
+                  clientUserId: My User App Id
+                  parameters:
+                    user: user-ok
+                    password: password-ok
+              Encrypted parameters:
+                value:
+                  webhookUrl: https://example.com/webhook
+                  clientUserId: My User App Id
+                  parameters: encrypted-parameters
+      x-readme:
+        code-samples:
+        - language: node
+          code: "const pluggy = require('pluggy-sdk');\nconst client = new pluggy.PluggyClient({\n  clientId: 'YOUR_CLIENT_ID',\n  clientSecret: 'YOUR_CLIENT_SECRET',\n});\nclient\n  .updateItem('YOUR_ITEM_ID')\n  .then((item) => {\n    console.log(item);\n  });"
+        - language: java
+          code: "PluggyClient pluggyClient = PluggyClient.builder()\n  .clientIdAndSecret('your_client_id', 'your_secret')\n  .baseUrl('https://api.pluggy.ai')\n  .build();\nResponse<ItemResponse> item = pluggyClient.service().updateItem(\"YOUR_ITEM_ID\").execute();"
+        - language: csharp
+          code: 'PluggyClient pluggyClient = new PluggyClient(''YOUR_PLUGGY_API_KEY'');
+
+            Item item = await pluggyClient.UpdateItem("YOUR_ITEM_ID");'
+    delete:
+      operationId: items-delete
+      summary: Delete
+      description: Delete the item by its primary identifier
+      responses:
+        '200':
+          description: Item was deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ICountResponse'
+        '404':
+          description: Item not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+              example:
+                code: 404
+                codeDescription: ITEM_NOT_FOUND
+                message: item not found
+        '500':
+          description: Server Internal Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+      tags:
+      - Items
+      security:
+      - default: []
+      parameters:
+      - description: Item primary identifier
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+          format: uuid
+        example: d0f8a8c0-e8e3-11e9-b210-d663bd873d93
+      x-readme:
+        code-samples:
+        - language: node
+          code: "const pluggy = require('pluggy-sdk');\nconst client = new pluggy.PluggyClient({\n  clientId: 'YOUR_CLIENT_ID',\n  clientSecret: 'YOUR_CLIENT_SECRET',\n});\nclient\n  .deleteItem('YOUR_ITEM_ID');"
+        - language: java
+          code: "PluggyClient pluggyClient = PluggyClient.builder()\n  .clientIdAndSecret('your_client_id', 'your_secret')\n  .baseUrl('https://api.pluggy.ai')\n  .build();\nResponse<DeleteItemResponse> item = pluggyClient.service().deleteItem(\"YOUR_ITEM_ID\").execute();"
+        - language: csharp
+          code: 'PluggyClient pluggyClient = new PluggyClient(''YOUR_PLUGGY_API_KEY'');
+
+            await pluggyClient.DeleteItem("YOUR_ITEM_ID");'
+  /items/{id}/resources:
+    get:
+      operationId: items-resources
+      summary: List Item resources
+      description: 'Open Finance only. Lists the resources the financial institution declared for this item''s consent, exactly as the institution reported them.
+
+
+        Use it to answer what a consent actually covers, and what the institution says about each part of it. A resource reported as `PENDING_AUTHORISATION` or `UNAVAILABLE` explains an absent product, and is something the end user can act on at their bank.
+
+
+        Whether Pluggy holds the matching record is a separate question: use the product endpoints (`/accounts`, `/investments`, `/loans`) and the Item''s `statusDetail` for that.
+
+
+        The list is a snapshot from the last execution that reached the institution, so it can be older than the item itself. The Item''s `resourcesCollectedAt` says when it was taken — and an empty list means the institution shared nothing only when that field is set; when it is `null`, the list was never obtained.
+
+
+        Items on non Open Finance connectors return an empty page rather than an error.'
+      responses:
+        '200':
+          description: The resources declared for the item's consent
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  page:
+                    type: number
+                    format: double
+                    description: ''
+                  total:
+                    type: number
+                    format: double
+                    description: ''
+                  totalPages:
+                    type: number
+                    format: double
+                    description: ''
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ItemResource'
+                    description: List of declared resources
+              examples:
+                response:
+                  value:
+                    page: 1
+                    total: 3
+                    totalPages: 1
+                    results:
+                    - resourceId: 1f9a5e0c-3d2b-4a1e-9c7f-2b8d6e4a1c30
+                      type: ACCOUNT
+                      status: AVAILABLE
+                    - resourceId: 6c2d8b41-7e5a-4f03-b19d-8a4e2c7f5b60
+                      type: CREDIT_CARD_ACCOUNT
+                      status: PENDING_AUTHORISATION
+                    - resourceId: a3e71d92-5b48-4c6f-8e20-1d9c3b7a4e50
+                      type: FUND
+                      status: UNAVAILABLE
+        '404':
+          description: Item not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+              example:
+                code: 404
+                codeDescription: ITEM_NOT_FOUND
+                message: item not found
+        '500':
+          description: Server Internal Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+      tags:
+      - Items
+      security:
+      - default: []
+      parameters:
+      - description: Item primary identifier
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+          format: uuid
+        example: d0e8448e-0156-4b4a-ae6c-3e2a6d9bff5c
+      - description: 'Page size for the paging request, default: 500'
+        in: query
+        name: pageSize
+        required: false
+        schema:
+          type: number
+          format: double
+        example: '50'
+      - description: 'Page number for the paging request, default: 1'
+        in: query
+        name: page
+        required: false
+        schema:
+          type: number
+          format: double
+        example: '1'
+      - description: Only resources with this status, spelled as Open Finance reports it. `PENDING_AUTHORISATION` lists what is still awaiting authorization at the institution.
+        in: query
+        name: status
+        required: false
+        schema:
+          type: string
+          enum:
+          - AVAILABLE
+          - UNAVAILABLE
+          - TEMPORARILY_UNAVAILABLE
+          - PENDING_AUTHORISATION
+        example: PENDING_AUTHORISATION
+  /items/{id}/mfa:
+    post:
+      operationId: items-send-mfa
+      summary: Send MFA
+      description: When item is Waiting User Input, this method allows to submit multi-factor authentication value
+      responses:
+        '200':
+          description: Parameter was sent correctly
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+        '404':
+          description: Item not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+              example:
+                code: 404
+                codeDescription: ITEM_NOT_FOUND
+                message: item not found
+        '500':
+          description: Server Internal Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+      tags:
+      - Items
+      security:
+      - default: []
+      parameters:
+      - description: Item primary identifier
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+          format: uuid
+        example: d0e8448e-0156-4b4a-ae6c-3e2a6d9bff5c
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: {}
+              description: Request with the MFA value provided by the user, in the format [name]:[value]
+              additionalProperties:
+                type: string
+        required: true
+      x-readme:
+        code-samples:
+        - language: node
+          code: "const pluggy = require('pluggy-sdk');\nconst client = new pluggy.PluggyClient({\n  clientId: 'YOUR_CLIENT_ID',\n  clientSecret: 'YOUR_CLIENT_SECRET',\n});\nclient\n  .updateItemMFA('YOUR_ITEM_ID', { key: 'value' })\n.then((item) => console.log(item));"
+        - language: java
+          code: "PluggyClient pluggyClient = PluggyClient.builder()\n  .clientIdAndSecret('your_client_id', 'your_secret')\n  .baseUrl('https://api.pluggy.ai')\n  .build();\nResponse<ItemResponse> item = pluggyClient.service().updateItemSendMfa(\"YOUR_ITEM_ID\", new UpdateItemMfaRequest(\"key\", \"value\")).execute();"
+        - language: csharp
+          code: 'PluggyClient pluggyClient = new PluggyClient(''YOUR_PLUGGY_API_KEY'');
+
+            var parameter = new ItemParameter("key", "value");
+
+            Item item = await pluggyClient.UpdateItemMFA("YOUR_ITEM_ID", new List<ItemParameter> { parameter });'
+  /items/{id}/disable-auto-sync:
+    patch:
+      operationId: items-disable-autosync
+      summary: Disable item auto sync
+      description: When client disables auto sync, the item will not be updated automatically anymore, until the client force an item update.
+      responses:
+        '200':
+          description: Item auto sync was disabled
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+        '404':
+          description: Item not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+              example:
+                code: 404
+                codeDescription: ITEM_NOT_FOUND
+                message: item not found
+        '500':
+          description: Server Internal Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+      tags:
+      - Items
+      security:
+      - default: []
+      parameters:
+      - description: Item primary identifier
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+          format: uuid
+        example: d0e8448e-0156-4b4a-ae6c-3e2a6d9bff5c
+  /v2/items:
+    get:
+      operationId: items-list-by-cursor
+      summary: List
+      description: 'Recovers your items using cursor-based pagination, most recently created first.
+
+
+        This endpoint is opt-in: it is disabled by default and must be enabled for your team. Contact support if you want access.'
+      responses:
+        '200':
+          description: Retrieve a list of your items using cursor-based pagination
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CursorPageResponseItems'
+        '400':
+          description: Missing or invalid parameter
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+              examples:
+                invalidCursor:
+                  summary: Invalid cursor
+                  value:
+                    message: Invalid cursor
+                    code: 400
+                    codeDescription: INVALID_CURSOR
+                invalidConnectorId:
+                  summary: Invalid connectorId
+                  value:
+                    message: connectorId must be an integer number
+                    code: 400
+        '403':
+          description: The feature is not enabled for this client
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+              examples:
+                featureNotEnabled:
+                  summary: Listing items is not enabled
+                  value:
+                    message: This client is not enabled to list its items.
+                    code: 403
+                    codeDescription: LIST_ITEMS_FEATURE_NOT_ENABLED
+        '500':
+          description: Server Internal Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+      tags:
+      - Items
+      security:
+      - default: []
+      parameters:
+      - description: Filter by the identifier you assigned to the end user
+        in: query
+        name: clientUserId
+        required: false
+        schema:
+          type: string
+          maxLength: 255
+        example: user-1234
+      - description: Filter by the institution (connector) identifier
+        in: query
+        name: connectorId
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+        example: 201
+      - description: Cursor for the next page. Use the 'next' value of the previous response; do not build it yourself.
+        in: query
+        name: after
+        required: false
+        schema:
+          type: string
+components:
+  schemas:
+    StatusDetailProduct:
+      description: Detailed status of the product
+      type: object
+      properties:
+        lastUpdatedAt:
+          type: string
+          format: date-time
+          description: Date when the product was last updated
+        isUpdated:
+          type: boolean
+          description: Product was updated in the last execution
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/StatusDetailProductWarning'
+          description: Warnings about the product data. For example, a warning about missing permissions for viewing a product
+      example:
+        isUpdated: true
+        lastUpdatedAt: '2022-03-08T22:43:04.796Z'
+    ConnectorIncident:
+      description: 'An incident affecting a connector right now, as published on the Pluggy status page. Only incidents active at this moment are listed: a scheduled maintenance appears once its window opens, not when it is announced, and disappears when the window closes.'
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Status page identifier of the incident
+        title:
+          type: string
+          description: Short, customer-facing summary, for example 'XP Banking - Compras parceladas não sendo retornadas'
+        description:
+          type:
+          - string
+          - 'null'
+          description: Longer explanation, when there is one
+        type:
+          enum:
+          - CONNECTOR_UNAVAILABLE
+          - CONNECTOR_DEGRADED
+          - INSTITUTION_OUTAGE
+          - SCHEDULED_MAINTENANCE
+          - CONSENT_ERROR
+          - CONNECTION_NOT_UPDATING
+          - PARTIAL_SUCCESS
+          - ACCOUNTS_MISSING
+          - BALANCE_INCORRECT
+          - TRANSACTIONS_MISSING
+          - TRANSACTIONS_INCORRECT
+          - TRANSACTIONS_INSTALLMENTS_ISSUE
+          - INVESTMENTS_MISSING
+          - INVESTMENTS_INCORRECT
+          - IDENTITY_MISSING
+          - HISTORICAL_DATA_MISSING
+          - WEBHOOK_DELAY
+          - PAYMENT_FAILURE
+          - OTHER
+          type: string
+          description: 'What is broken, as opposed to how badly (severity) or how far along we are (state). Use it to group the same problem across institutions, and to decide which incidents are worth showing your own users: a SCHEDULED_MAINTENANCE and a TRANSACTIONS_MISSING both read as ''degraded'' otherwise. OTHER means Pluggy has not classified it, not that nothing is wrong'
+        product:
+          enum:
+          - dados
+          - pis
+          - pis-agendado
+          - pixauto
+          - smart
+          - infra
+          type: string
+          description: Which Pluggy product line the incident affects
+        kind:
+          enum:
+          - INCIDENT
+          - MAINTENANCE
+          type: string
+          description: Whether this is an unplanned incident or a planned maintenance window
+        severity:
+          enum:
+          - DEGRADED
+          - PARTIAL_OUTAGE
+          - MAJOR_OUTAGE
+          - MAINTENANCE
+          type: string
+          description: How badly the institution is affected
+        state:
+          enum:
+          - INVESTIGATING
+          - IDENTIFIED
+          - MONITORING
+          - SCHEDULED
+          type: string
+          description: Where the incident is in its lifecycle. Resolved incidents are not listed
+        startedAt:
+          type: string
+          format: date-time
+          description: When the incident began
+        updatedAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: When the incident was last updated
+        url:
+          type: string
+          description: Permalink to the incident on the status page, with its full timeline and postmortem. Safe to show to your own users
+      type: object
+      required:
+      - id
+      - title
+      - type
+      - product
+      - kind
+      - severity
+      - state
+      - startedAt
+      - url
+    UpdateItem:
+      description: Update Item Request
+      properties:
+        parameters:
+          oneOf:
+          - type: object
+          - type: string
+          properties: {}
+          description: Parameters to update on the item stored credentials.
+          additionalProperties:
+            type: string
+        clientUserId:
+          type: string
+          description: Client's external identifier for the user, it can be a ID, UUID or even an email. This is free for clients to use.
+        webhookUrl:
+          type: string
+          format: uri
+          description: Url to be notified of item changes
+        products:
+          type: array
+          items:
+            type: string
+            enum:
+            - ACCOUNTS
+            - CREDIT_CARDS
+            - TRANSACTIONS
+            - PAYMENT_DATA
+            - INVESTMENTS
+            - INVESTMENTS_TRANSACTIONS
+            - IDENTITY
+            - BROKERAGE_NOTE
+            - MOVE_SECURITY
+            - LOANS
+          description: Products to be collected in the connection
+      type: object
+      example:
+        webhookUrl: https://example.com/webhook
+        clientUserId: My User App Id
+        parameters:
+          user: user-ok
+          password: password-ok
+    ConnectorUserAction:
+      description: User action details for an item
+      properties:
+        instructions:
+          type: string
+          description: Instructions related to the user action
+        attributes:
+          type: object
+          description: '''{ [key]:[value] }''. Additional information related to the user action, for exampke in some device authorization flow'
+        expiresAt:
+          type: string
+          format: date-time
+          description: User action expiration date
+        type:
+          enum:
+          - qr
+          - authorize-access
+          type: string
+          description: 'Kind of action the user has to take: scan a QR code, or authorize access in the institution''s app'
+      type: object
+      required:
+      - instructions
+      - type
+    Item:
+      description: Item object
+      properties:
+        id:
+          type: string
+          description: Primary identifier
+        connector:
+          $ref: '#/components/schemas/Connector'
+        status:
+          type: string
+          description: Status of the Item
+        executionStatus:
+          type: string
+          description: Status of the sync execution
+        error:
+          type: object
+          description: Detailed error message
+          properties:
+            code:
+              type: string
+              description: Error code
+            message:
+              type: string
+              description: Detailed error message
+            providerMessage:
+              type: string
+              description: Information provider by the institution mainly when user needs to perform an action
+            attributes:
+              type: object
+              description: '''{ [key]:[value] }''. Additional information necessary for future executions, used for example in some device authorization flow'
+          required:
+          - code
+          - message
+        parameter:
+          $ref: '#/components/schemas/ConnectorCredential'
+        userAction:
+          $ref: '#/components/schemas/ConnectorUserAction'
+        webhookUrl:
+          type: string
+          description: Url to be notified of item changes
+        createdAt:
+          type: string
+          format: date-time
+          description: Date of creation
+        updatedAt:
+          type: string
+          format: date-time
+          description: Date of last modification
+        lastUpdatedAt:
+          type: string
+          format: date-time
+          description: Date of last syncronization
+        statusDetail:
+          $ref: '#/components/schemas/StatusDetail'
+        nextAutoSyncAt:
+          type: string
+          format: date-time
+          description: Date of next auto-sync, or null if auto-sync is disabled for this Item
+        consecutiveFailedLoginAttempts:
+          type: number
+          format: integer
+          description: Consecutives execution that ends up with a LOGIN_ERROR status
+        consentExpiresAt:
+          type: string
+          format: date-time
+          description: Consent expiration date
+        resourcesCollectedAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: 'Open Finance only. When the financial institution''s resources list was last read for this Item, or `null` if it never was. Pairs with `GET /items/{id}/resources`: an empty list there means the institution shared nothing when this is set, and that the list was never obtained when this is `null`.'
+        hasResourcesPendingAuthorization:
+          type:
+          - boolean
+          - 'null'
+          description: 'Open Finance only. Whether the financial institution declares any of this Item''s resources pending authorization, meaning the user still has to approve them at their bank. Read from the same list as `GET /items/{id}/resources`, which returns them with `status=PENDING_AUTHORISATION`.
+
+
+            - `true`: at least one resource is pending authorization.
+
+            - `false`: the resources list was read and none is pending.
+
+            - `null`: always for connectors other than Open Finance. For an Open Finance Item, the resources list has not been read yet (`resourcesCollectedAt` is `null`), for example while its first execution is still running. Read this field once the execution finishes (`item/created` or `item/updated` webhook).'
+        products:
+          type: array
+          items:
+            type: string
+            enum:
+            - ACCOUNTS
+            - CREDIT_CARDS
+            - TRANSACTIONS
+            - PAYMENT_DATA
+            - INVESTMENTS
+            - INVESTMENTS_TRANSACTIONS
+            - IDENTITY
+            - BROKERAGE_NOTE
+            - MOVE_SECURITY
+            - LOANS
+          description: Products collected by the item
+      type: object
+      required:
+      - id
+      - status
+      - executionStatus
+      example:
+        id: e062ab2b-9006-45e8-b689-defabba53647
+        connector:
+          id: 200
+          name: MeuPluggy
+          primaryColor: ef294b
+          institutionUrl: https://meu.pluggy.ai/
+          country: BR
+          type: PERSONAL_BANK
+          credentials:
+          - label: User
+            name: user
+            type: text
+            placeholder: user-ok
+            optional: false
+          - label: Password
+            name: password
+            type: password
+            placeholder: password-ok
+            optional: false
+          imageUrl: https://cdn.pluggy.ai/assets/connector-icons/sandbox.svg
+          hasMFA: false
+          oauth: true
+          health:
+            status: ONLINE
+            stage: null
+          products:
+          - ACCOUNTS
+          - TRANSACTIONS
+          - CREDIT_CARDS
+          - INVESTMENTS
+          - INVESTMENTS_TRANSACTIONS
+          - PAYMENT_DATA
+          - IDENTITY
+          - BROKERAGE_NOTE
+          createdAt: '2023-09-12T16:44:13.900Z'
+          isSandbox: false
+          isOpenFinance: false
+          updatedAt: '2024-11-26T13:33:44.296Z'
+          supportsPaymentInitiation: false
+          supportsScheduledPayments: false
+          supportsSmartTransfers: false
+          supportsBoletoManagement: false
+        createdAt: '2024-09-19T13:10:31.212Z'
+        updatedAt: '2024-09-19T13:11:23.613Z'
+        status: UPDATED
+        executionStatus: SUCCESS
+        lastUpdatedAt: '2024-09-19T13:11:23.595Z'
+        webhookUrl: null
+        error: null
+        clientUserId: user@example.com
+        consecutiveFailedLoginAttempts: 0
+        statusDetail: null
+        parameter: null
+        userAction: null
+        nextAutoSyncAt: null
+        consentExpiresAt: null
+        resourcesCollectedAt: null
+        hasResourcesPendingAuthorization: null
+        products:
+        - ACCOUNTS
+        - CREDIT_CARDS
+        - TRANSACTIONS
+        - INVESTMENTS
+        - IDENTITY
+        - INVESTMENTS_TRANSACTIONS
+        - PAYMENT_DATA
+        oauthRedirectUri: null
+    ParameterValidationError:
+      description: ''
+      properties:
+        code:
+          type: string
+          description: ''
+        message:
+          type: string
+          description: ''
+        parameter:
+          type: string
+          description: ''
+      type: object
+      required:
+      - code
+      - message
+      - parameter
+    ICountResponse:
+      description: Deletion response
+      properties:
+        count:
+          type: number
+          description: Amount of items deleted
+      type: object
+      required:
+      - count
+      example:
+        count: 1
+    GlobalErrorResponse:
+      title: Global Error Response Schema
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: number
+        message:
+          type: string
+        codeDescription:
+          type: string
+          description: Distinctive code description, useful to distinguish the error.
+        data:
+          type: object
+          description: Additional data related to the error, if any
+          properties: {}
+      example:
+        code: 500
+        codeDescription: INTERNAL_SERVER_ERROR
+        message: Internal Server Error
+    ItemCreationErrorResponse:
+      title: Item Creation Error Schema
+      type: object
+      properties:
+        code:
+          type: number
+        codeDescription:
+          type: string
+          description: Distinctive code description, useful to identify the error.
+        message:
+          type: string
+        errors:
+          description: List of errors related to parameter validations
+          type: array
+          items:
+            $ref: '#/components/schemas/ParameterValidationError'
+        details:
+          description: Parameter validation failures. This is the field the API actually populates for a 400; `errors` is kept for backwards compatibility.
+          type: array
+          items:
+            $ref: '#/components/schemas/ParameterValidationError'
+        errorId:
+          type: string
+          description: Identifier of the request that produced the error. Quote it when contacting support.
+    ConnectorHealth:
+      description: Connector health status
+      properties:
+        status:
+          type: string
+          description: '''ONLINE'' | ''OFFLINE'' | ''UNSTABLE'''
+        stage:
+          type:
+          - string
+          - 'null'
+        incidents:
+          type: array
+          description: 'Incidents currently affecting this connector, as published on https://status.pluggy.ai. Absent when the connector has none, so a healthy connector''s payload is unchanged. Ordered worst-first, so the first entry is the one to show if you only show one. Note this is about the institution, not about your own connections: use it to warn a user before they pick a bank that is known to be failing right now.'
+          items:
+            $ref: '#/components/schemas/ConnectorIncident'
+        details:
+          type: object
+          description: Statistics about your recent connections on the connector and recent connection rate (percentage of healthy connections). This field is only present if you include the parameter healthDetails=true. This will be null if there was an error obtaining health details.
+          properties:
+            connectionRateLast6Hours:
+              type: number
+              description: 'A number from 0 to 100: the percentage of executions that succesfully connect to the institution: status of CONNECTION_ERROR,ERROR,SITE_NOT_AVAILABLE decrease the percentage. Any other status (like SUCCESS/LOGIN_ERROR) increase the percentage. The value will be null if there were no connections'
+            connectionsLast6Hours:
+              type: number
+              description: Amount of your connections for this connector during the last 6 hours. 0 if there were no connections
+    CredentialSelectOption:
+      description: Option for ConnectorCredential of type select
+      properties:
+        value:
+          type: string
+          description: Value for the option
+        label:
+          type: string
+          description: Label for the option
+      type: object
+      required:
+      - value
+      - label
+    CreateItem:
+      description: Create Item Request
+      properties:
+        connectorId:
+          type: number
+          description: Primary identifier of the connector
+        parameters:
+          oneOf:
+          - type: object
+          - type: string
+          properties: {}
+          description: Connector's credentials that are required to execute on a Key-Value object or a string if they are encrypted
+          additionalProperties:
+            type: string
+        webhookUrl:
+          type: string
+          format: uri
+          description: Url to be notified of item changes
+        clientUserId:
+          type: string
+          description: Client's external identifier for the user, it can be a ID, UUID or even an email. This is free for clients to use.
+        oauthRedirectUri:
+          type: string
+          format: uri
+          description: Redirect URI required for the Oauth flow
+        products:
+          type: array
+          items:
+            type: string
+            enum:
+            - ACCOUNTS
+            - CREDIT_CARDS
+            - TRANSACTIONS
+            - PAYMENT_DATA
+            - INVESTMENTS
+            - INVESTMENTS_TRANSACTIONS
+            - IDENTITY
+            - BROKERAGE_NOTE
+            - MOVE_SECURITY
+            - LOANS
+          description: Products to be collected in the connection
+        avoidDuplicates:
+          type: boolean
+          description: Avoids creating a new item if there is already one with the same credentials
+      type: object
+      required:
+      - connectorId
+      - parameters
+      example:
+        connectorId: 2
+        parameters:
+          user: user-ok
+          password: password-ok
+        webhookUrl: https://example.com/webhook
+    Connector:
+      description: Connector object
+      properties:
+        id:
+          type: number
+          format: integer
+          description: Primary identifier
+        name:
+          type: string
+          description: Name of the institution
+        institutionUrl:
+          type: string
+          description: Homepage of the institution
+        imageUrl:
+          type: string
+          description: Image of the logo hosted by Pluggy
+        primaryColor:
+          type: string
+          description: Primary color
+        type:
+          type: string
+          description: Type of institution
+        country:
+          type: string
+          description: Country located
+        credentials:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConnectorCredential'
+          description: Parameters required to start the connection
+        hasMFA:
+          type: boolean
+          description: Does the connector require an MFA to execute?
+        products:
+          type: array
+          items:
+            type: string
+            enum:
+            - ACCOUNTS
+            - CREDIT_CARDS
+            - TRANSACTIONS
+            - PAYMENT_DATA
+            - INVESTMENTS
+            - INVESTMENTS_TRANSACTIONS
+            - IDENTITY
+            - BROKERAGE_NOTE
+            - MOVE_SECURITY
+            - LOANS
+          description: Products supported by the connector
+        productCoverage:
+          type: array
+          items:
+            type: string
+          description: 'Which sub-products the institution serves, in the Open Finance directory''s own vocabulary (for example INVESTMENTS:TREASURE_TITLES, CREDIT_OPERATIONS:INVOICE_FINANCINGS). Where products says whether the connector serves investments at all, this says which ones: a connector listing INVESTMENTS may serve one of the five investment resources or all five. Absent for direct connectors, which have no Open Finance participant.'
+        oauth:
+          type: boolean
+          description: If 'true', the connector requires an Oauth flow to execute
+        oauthUrl:
+          type: string
+          description: URL to perform Oauth flow if needed
+        resetPasswordUrl:
+          type: string
+          description: URL to the financial institution to reset the password
+        health:
+          $ref: '#/components/schemas/ConnectorHealth'
+        isOpenFinance:
+          type: boolean
+          description: Indicates if the connector uses the regulated Open Finance APIs
+        isSandbox:
+          type: boolean
+          description: Indicates if the connector is a sandbox connector, meant for testing rather than a real institution
+        supportsPaymentInitiation:
+          type: boolean
+          description: Indicates if the connector supports the payment initiation API
+        supportsScheduledPayments:
+          type: boolean
+          description: Indicates if the connector supports scheduled payments
+        supportsSmartTransfers:
+          type: boolean
+          description: Indicates if the connector supports smart transfers
+        supportsBoletoManagement:
+          type: boolean
+          description: Indicates if the connector supports boleto management
+        supportsAutomaticPix:
+          type: boolean
+          description: Indicates if the connector supports automatic Pix
+        createdAt:
+          type: string
+          format: date-time
+          description: Date of creation
+        updatedAt:
+          type: string
+          format: date-time
+          description: Date of last modification
+      type: object
+      required:
+      - id
+      example:
+        id: 601
+        name: Itaú
+        primaryColor: EC7000
+        institutionUrl: https://www.itau.com.br
+        country: BR
+        type: PERSONAL_BANK
+        credentials:
+        - validation: ^\d{3}\.?\d{3}\.?\d{3}-?\d{2}$
+          validationMessage: CPF deve ter 11 números.
+          label: CPF
+          name: cpf
+          type: number
+          placeholder: ''
+          optional: false
+        imageUrl: https://cdn.pluggy.ai/assets/connector-icons/201.svg
+        hasMFA: false
+        oauth: true
+        health:
+          status: ONLINE
+          stage: null
+        products:
+        - ACCOUNTS
+        - TRANSACTIONS
+        - IDENTITY
+        - CREDIT_CARDS
+        - PAYMENT_DATA
+        - LOANS
+        - INVESTMENTS
+        createdAt: '2023-09-01T18:05:09.145Z'
+        isSandbox: false
+        isOpenFinance: true
+        updatedAt: '2024-07-16T15:34:08.028Z'
+        supportsPaymentInitiation: true
+        supportsScheduledPayments: true
+        supportsSmartTransfers: true
+        supportsBoletoManagement: true
+        supportsAutomaticPix: true
+    StatusDetailProductWarning:
+      type: object
+      properties:
+        code:
+          type: string
+          description: The warning code generated by Pluggy
+        message:
+          type: string
+          description: The warning message in english generated by Pluggy
+        providerMessage:
+          type: string
+          description: The warning message from the FI if provided
+      required:
+      - code
+      - message
+    StatusDetail:
+      description: Detailed status of the item. This field will be present when the status is PARTIAL_SUCCESS or when a product in the item has warnings
+      type: object
+      properties:
+        accounts:
+          $ref: '#/components/schemas/StatusDetailProduct'
+        creditCards:
+          $ref: '#/components/schemas/StatusDetailProduct'
+        transactions:
+          $ref: '#/components/schemas/StatusDetailProduct'
+        investments:
+          $ref: '#/components/schemas/StatusDetailProduct'
+        identity:
+          $ref: '#/components/schemas/StatusDetailProduct'
+        investmentsTransactions:
+          $ref: '#/components/schemas/StatusDetailProduct'
+        paymentData:
+          $ref: '#/components/schemas/StatusDetailProduct'
+        loans:
+          $ref: '#/components/schemas/StatusDetailProduct'
+        accountStatements:
+          $ref: '#/components/schemas/StatusDetailProduct'
+      example:
+        accounts:
+          isUpdated: true
+          lastUpdatedAt: '2022-03-08T22:43:04.796Z'
+        identity:
+          isUpdated: false
+          lastUpdatedAt: null
+        creditCards:
+          isUpdated: true
+          lastUpdatedAt: '2022-03-08T22:43:04.796Z'
+        investments:
+          isUpdated: true
+          lastUpdatedAt: '2022-03-08T22:43:04.796Z'
+        transactions:
+          isUpdated: true
+          lastUpdatedAt: '2022-03-08T22:43:04.796Z'
+        paymentData: null
+        accountStatements:
+          isUpdated: true
+          lastUpdatedAt: '2022-03-08T22:43:04.796Z'
+    CursorPageResponseItems:
+      description: Cursor-based paginated response for items
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Item'
+          description: List of items for the current page
+        next:
+          type:
+          - string
+          - 'null'
+          description: 'Ready-to-use query string for the next page: append it as-is to the endpoint path (GET /v2/items{next}). Null if there are no more results.'
+      type: object
+      required:
+      - results
+      - next
+    ConnectorCredential:
+      description: Credential details for a connector
+      properties:
+        name:
+          type: string
+          description: Name of the key
+        label:
+          type: string
+          description: Label for input
+        type:
+          enum:
+          - text
+          - password
+          - number
+          - image
+          - select
+          type: string
+          description: Type of credential required
+        assistiveText:
+          type: string
+          description: Text to help the user when completing the input
+        data:
+          type: string
+          description: Used to return base64 images
+        placeholder:
+          type: string
+          description: Placeholder text for the input
+        validation:
+          type: string
+          description: Regex validation for the user's input
+        validationMessage:
+          type: string
+          description: Validation message when input doesn't match the regex
+        mfa:
+          type: boolean
+          description: Credential is an MFA parameter and must be refreshed on each execution
+        options:
+          type: array
+          items:
+            $ref: '#/components/schemas/CredentialSelectOption'
+          description: List of possible values for the input
+        optional:
+          type: boolean
+          description: Whether the credential can be left empty. Always present; defaults to false
+        instructions:
+          type: string
+          description: Instructions to help the user obtain this credential
+        expiresAt:
+          type: string
+          format: date-time
+          description: Expiration date of the credential value, when the institution sets one
+      type: object
+      required:
+      - name
+      - label
+      - type
+      - optional
+    ItemResource:
+      type: object
+      description: One resource the financial institution declared for the item's Open Finance consent, reported verbatim.
+      properties:
+        resourceId:
+          type: string
+          description: The institution's identifier for the resource.
+        type:
+          type: string
+          enum:
+          - ACCOUNT
+          - CREDIT_CARD_ACCOUNT
+          - LOAN
+          - FINANCING
+          - UNARRANGED_ACCOUNT_OVERDRAFT
+          - INVOICE_FINANCING
+          - BANK_FIXED_INCOME
+          - CREDIT_FIXED_INCOME
+          - VARIABLE_INCOME
+          - TREASURE_TITLE
+          - FUND
+          description: Open Finance resource type.
+        status:
+          type: string
+          enum:
+          - AVAILABLE
+          - UNAVAILABLE
+          - TEMPORARILY_UNAVAILABLE
+          - PENDING_AUTHORISATION
+          description: 'What the institution reports about this resource. Note the British spelling of PENDING_AUTHORISATION: it is Open Finance''s, kept verbatim.'
+  securitySchemes:
+    default:
+      type: apiKey
+      name: X-API-KEY
+      in: header

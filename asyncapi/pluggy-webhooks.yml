@@ -1,0 +1,89 @@
+generated: '2026-10-18'
+method: searched
+generator: extract-docs-artifacts.py (deepseek)
+source: https://docs.pluggy.ai/en/docs/payments/scheduled-webhooks.md
+sources:
+- https://docs.pluggy.ai/en/docs/payments/scheduled-webhooks.md
+- https://docs.pluggy.ai/en/docs/developer-tools/webhooks-ref.md
+- https://docs.pluggy.ai/en/docs/developer-tools/webhook-troubleshoot.md
+- https://docs.pluggy.ai/en/docs/developer-tools/support-ticket-webhooks.md
+description: Pluggy's webhook system for data and payment events, plus support ticket events
+events:
+- event: item/created
+  description: An item was created and finished connecting successfully.
+- event: item/updated
+  description: An item was updated and synced successfully.
+- event: item/deleted
+  description: An item was deleted successfully.
+- event: item/error
+  description: An item has encountered errors in its execution. The case of USER_AUTHORIZATION_PENDING will also trigger this event.
+- event: item/waiting_user_input
+  description: An item is blocked waiting for user input to continue.
+- event: item/waiting_user_action
+  description: An item is blocked waiting for the user to approve an action on their device (e.g., authorize access in the banking app or scan
+    a QR code).
+- event: item/login_succeeded
+  description: An item has successfully logged in to the provider and it's collecting the data.
+- event: connector/status_updated
+  description: A connector has changed status (ONLINE/UNSTABLE/OFFLINE). This event informs the affected connector ID and updated status. Check
+    the Connectors endpoint to see all connectors and their IDs.
+- event: transactions/deleted
+  description: IDs of deleted transactions after merge data on item update.
+- event: transactions/created
+  description: Receive this webhook event, and use the createdTransactionsLink page to access all the transactions available and insert them in
+    your data source.
+- event: transactions/updated
+  description: IDs of updated transactions after merge data on item update. After receiving this webhook, it's recommended to get the full transactions
+    data using the transactions endpoint with the ids parameter.
+- event: payment_intent/created
+  description: ID of payment intent created by the user, with paymentRequestId.
+- event: payment_intent/completed
+  description: ID of payment intent completed successfully by the user, with paymentRequestId.
+- event: payment_intent/waiting_payer_authorization
+  description: ID of payment intent when it needs additional authorization.
+- event: payment_intent/error
+  description: ID of payment intent when it has an error during the flow, with paymentRequestId.
+- event: payment_request/updated
+  description: Payment request status has changed.
+- event: scheduled_payment/created
+  description: IDs of the scheduled payment authorization.
+- event: scheduled_payment/completed
+  description: A single payment of the authorization has been made.
+- event: scheduled_payment/error
+  description: Payment not completed, finished with error.
+- event: scheduled_payment/canceled
+  description: Payment canceled by the user or the client.
+- event: scheduled_payment/all_created
+  description: Triggered once every schedule has been registered.
+- event: scheduled_payment/all_completed
+  description: Triggered when all schedules have finished.
+- event: automatic_pix_payment/created
+  description: A payment was scheduled for an automatic PIX payment request.
+- event: automatic_pix_payment/completed
+  description: A scheduled payment associated with an automatic PIX payment request was completed successfully.
+- event: automatic_pix_payment/error
+  description: A scheduled payment associated to an automatic PIX payment request ended with error.
+- event: automatic_pix_payment/canceled
+  description: A scheduled payment associated to an automatic PIX payment request was cancelled.
+- event: smart_transfer_preauthorization/completed
+  description: A smart transfer preauthorization was approved by a user.
+- event: smart_transfer_preauthorization/error
+  description: There was an error during the smart transfer preauthorization approval. For example, when the user rejects the consent.
+- event: smart_transfer_payment/completed
+  description: A smart transfer payment was completed.
+- event: smart_transfer_payment/error
+  description: There was an error settling the smart transfer payment. For example, when the account doesn't have enough balance.
+- event: ticket.status_changed
+  description: The ticket moved in the workflow — state, the portal status, or both.
+- event: ticket.resolved
+  description: The ticket closed.
+- event: ticket.message_added
+  description: A reply from our support team was published on the ticket.
+- event: ticket.priority_changed
+  description: The ticket's priority changed.
+delivery:
+  signature: X-Pluggy-Signature header with format t=<unix seconds>,v1=<hmac hex>
+  retries: Manual retry via dashboard, 8 second timeout, retried on failure
+note: Webhooks require HTTPS URLs, no localhost allowed. Maximum 5 webhooks per event. Support ticket webhooks have separate signing mechanism
+  with whsec_ secret.
+docs: https://docs.pluggy.ai/en/docs/developer-tools/webhooks-ref.md, https://docs.pluggy.ai/en/docs/payments/scheduled-webhooks.md, https://docs.pluggy.ai/en/docs/developer-tools/support-ticket-webhooks.md

@@ -1,0 +1,717 @@
+openapi: 3.2.0
+info:
+  title: Pluggy Loan API
+  description: Pluggy's main API to review data and execute connectors
+  license:
+    name: MIT
+  contact:
+    email: hello@pluggy.ai
+    name: Pluggy
+    url: https://pluggy.ai
+  version: 1.0.0
+servers:
+- url: https://api.pluggy.ai
+  description: Pluggy API
+tags:
+- name: Loan
+  description: Loan information and management
+paths:
+  /loans:
+    get:
+      operationId: loans-list
+      summary: List
+      description: Recovers all loans collected for the item provided
+      responses:
+        '200':
+          description: Retrieve a list of all loans
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  page:
+                    type: number
+                    format: double
+                    description: ''
+                  total:
+                    type: number
+                    format: double
+                    description: ''
+                  totalPages:
+                    type: number
+                    format: double
+                    description: ''
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Loan'
+                    description: List of loans
+              examples:
+                response:
+                  value:
+                    page: 1
+                    total: 1
+                    totalPages: 1
+                    results:
+                    - id: 05c693bf-c196-47ea-a28c-8251d6bb8a06
+                      kind: LOAN
+                      itemId: 5e9f8f8f-f8f8-4f8f-8f8f-8f8f8f8f8f8f
+                      contractNumber: 000000721792794
+                      ipocCode: '92792126019929279212650822221989319252576'
+                      productName: Crédito Pessoal Consignado
+                      type: CREDITO_PESSOAL_COM_CONSIGNACAO
+                      date: '2023-07-20T00:00:00'
+                      contractDate: '2022-08-01T00:00:00'
+                      disbursementDates:
+                      - '2018-01-15T00:00:00'
+                      settlementDate: '2018-01-15T00:00:00'
+                      contractAmount: 50000
+                      currencyCode: BRL
+                      dueDate: '2028-01-15T00:00:00'
+                      installmentPeriodicity: MONTHLY
+                      installmentPeriodicityAdditionalInfo: ''
+                      firstInstallmentDueDate: '2018-02-15T00:00:00'
+                      CET: 0.29
+                      amortizationScheduled: SAC
+                      amortizationScheduledAdditionalInfo: ''
+                      cnpjConsignee: 55.555.555/0001-55
+                      interestRates:
+                      - taxType: EFETIVA
+                        interestRateType: SIMPLES
+                        taxPeriodicity: AA
+                        calculation: 21/252
+                        referentialRateIndexerType: PRE_FIXADO
+                        referentialRateIndexerSubType: TJLP
+                        referentialRateIndexerAdditionalInfo: ''
+                        preFixedRate: 0.6
+                        postFixedRate: 0.55
+                        additionalInfo: ''
+                      contractedFees:
+                      - name: Renovação de cadastro
+                        code: CADASTRO
+                        chargeType: UNICA
+                        charge: MINIMO
+                        amount: 100000.04
+                        rate: 0.062
+                      contractedFinanceCharges:
+                      - type: JUROS_REMUNERATORIOS_POR_ATRASO
+                        additionalInfo: ''
+                        rate: 0.07
+                      warranties:
+                      - currencyCode: BRL
+                        type: CESSAO_DIREITOS_CREDITORIOS
+                        subtype: NOTAS_PROMISSORIAS_OUTROS_DIREITOS_CREDITO
+                        amount: 1000.04
+                      installments:
+                        typeNumberOfInstallments: MES
+                        totalNumberOfInstallments: 130632
+                        typeContractRemaining: DIA
+                        contractRemainingNumber: 14600
+                        paidInstallments: 73
+                        dueInstallments: 57
+                        pastDueInstallments: 73
+                        balloonPayments:
+                        - dueDate: '2021-05-21T00:00:00'
+                          amount:
+                            value: 1000.04
+                            currencyCode: BRL
+                      payments:
+                        contractOutstandingBalance: 1000.04
+                        releases:
+                        - isOverParcelPayment: true
+                          installmentId: WGx0aExYcEJMVm93TFRsZFcyRXRla0V0V2pBdE9Wd3RYWH
+                          paidDate: '2021-05-21T00:00:00'
+                          currencyCode: BRL
+                          paidAmount: 1000.04
+                          overParcel:
+                            fees:
+                            - name: Reavaliação periódica do bem
+                              code: aval_bem
+                              amount: 100000.04
+                            charges:
+                            - type: JUROS_REMUNERATORIOS_POR_ATRASO
+                              additionalInfo: ''
+                              amount: 1000.04
+      tags:
+      - Loan
+      security:
+      - default: []
+      parameters:
+      - description: Item's primary identifier
+        in: query
+        name: itemId
+        required: true
+        schema:
+          type: string
+          format: uuid
+        example: d0e8a7f0-6d86-11ea-b77f-2e728ce88125
+  /loans/{id}:
+    get:
+      operationId: loans-retrieve
+      summary: Retrieve
+      responses:
+        '200':
+          description: Retrieve a loan.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Loan'
+              examples:
+                response:
+                  value:
+                    id: 05c693bf-c196-47ea-a28c-8251d6bb8a06
+                    kind: LOAN
+                    itemId: 5e9f8f8f-f8f8-4f8f-8f8f-8f8f8f8f8f8f
+                    contractNumber: 000000721792794
+                    ipocCode: '92792126019929279212650822221989319252576'
+                    productName: Crédito Pessoal Consignado
+                    type: CREDITO_PESSOAL_COM_CONSIGNACAO
+                    date: '2023-07-20T00:00:00'
+                    contractDate: '2022-08-01T00:00:00'
+                    disbursementDates:
+                    - '2018-01-15T00:00:00'
+                    settlementDate: '2018-01-15T00:00:00'
+                    contractAmount: 50000
+                    currencyCode: BRL
+                    dueDate: '2028-01-15T00:00:00'
+                    installmentPeriodicity: MONTHLY
+                    installmentPeriodicityAdditionalInfo: ''
+                    firstInstallmentDueDate: '2018-02-15T00:00:00'
+                    CET: 0.29
+                    amortizationScheduled: SAC
+                    amortizationScheduledAdditionalInfo: ''
+                    cnpjConsignee: 55.555.555/0001-55
+                    interestRates:
+                    - taxType: EFETIVA
+                      interestRateType: SIMPLES
+                      taxPeriodicity: AA
+                      calculation: 21/252
+                      referentialRateIndexerType: PRE_FIXADO
+                      referentialRateIndexerSubType: TJLP
+                      referentialRateIndexerAdditionalInfo: ''
+                      preFixedRate: 0.6
+                      postFixedRate: 0.55
+                      additionalInfo: ''
+                    contractedFees:
+                    - name: Renovação de cadastro
+                      code: CADASTRO
+                      chargeType: UNICA
+                      charge: MINIMO
+                      amount: 100000.04
+                      rate: 0.062
+                    contractedFinanceCharges:
+                    - type: JUROS_REMUNERATORIOS_POR_ATRASO
+                      additionalInfo: ''
+                      rate: 0.07
+                    warranties:
+                    - currencyCode: BRL
+                      type: CESSAO_DIREITOS_CREDITORIOS
+                      subtype: NOTAS_PROMISSORIAS_OUTROS_DIREITOS_CREDITO
+                      amount: 1000.04
+                    installments:
+                      typeNumberOfInstallments: MES
+                      totalNumberOfInstallments: 130632
+                      typeContractRemaining: DIA
+                      contractRemainingNumber: 14600
+                      paidInstallments: 73
+                      dueInstallments: 57
+                      pastDueInstallments: 73
+                      balloonPayments:
+                      - dueDate: '2021-05-21T00:00:00'
+                        amount:
+                          value: 1000.04
+                          currencyCode: BRL
+                    payments:
+                      contractOutstandingBalance: 1000.04
+                      releases:
+                      - isOverParcelPayment: true
+                        installmentId: WGx0aExYcEJMVm93TFRsZFcyRXRla0V0V2pBdE9Wd3RYWH
+                        paidDate: '2021-05-21T00:00:00'
+                        currencyCode: BRL
+                        paidAmount: 1000.04
+                        overParcel:
+                          fees:
+                          - name: Reavaliação periódica do bem
+                            code: aval_bem
+                            amount: 100000.04
+                          charges:
+                          - type: JUROS_REMUNERATORIOS_POR_ATRASO
+                            additionalInfo: ''
+                            amount: 1000.04
+        '404':
+          description: Loan not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalErrorResponse'
+              example:
+                code: 404
+                codeDescription: LOAN_NOT_FOUND
+                message: loan not found
+      description: Recovers the loan resource by its id
+      tags:
+      - Loan
+      security:
+      - default: []
+      parameters:
+      - description: loan primary identifier
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+          format: uuid
+        example: d0e8a7f0-6d86-11ea-b77f-2e728ce88125
+components:
+  schemas:
+    LoanPaymentRelease:
+      properties:
+        isOverParcelPayment:
+          type: boolean
+          description: Identifies whether it is an agreed payment (false) or a one-time payment (true)
+        installmentId:
+          type: string
+          description: Installment identifier, responsibility of each transmitting Institution
+        paidDate:
+          type: string
+          format: date-time
+          description: Effective date of payment referring to the contract of the credit modality consulted
+        currencyCode:
+          type: string
+          description: Code referencing the currency of the payment
+          example: BRL
+        paidAmount:
+          type: number
+          description: Payment amount referring to the contract of the credit modality consulted
+        overParcel:
+          $ref: '#/components/schemas/LoanPaymentReleaseOverParcel'
+    LoanPaymentReleaseOverParcelFee:
+      properties:
+        name:
+          type: string
+          description: Denomination of the agreed rate
+        code:
+          type: string
+          description: Acronym identifying the agreed rate
+        amount:
+          type: number
+          description: Monetary value of the tariff agreed in the contract
+    LoanContractedFee:
+      properties:
+        name:
+          type: string
+          description: Agreed rate denomination
+        code:
+          type: string
+          description: Acronym identifying the agreed rate
+        chargeType:
+          type: string
+          description: Charge type for the rate agreed in the contract
+          enum:
+          - UNIQUE
+          - BY_INSTALLMENT
+        charge:
+          type: string
+          description: Billing method related to the tariff agreed in the contract
+          enum:
+          - MINIMUM
+          - MAXIMUM
+          - FIXED
+          - PERCENTAGE
+        amount:
+          type: number
+          description: Monetary value of the tariff agreed in the contract
+        rate:
+          type: number
+          description: Rate value in percentage agreed in the contract
+    LoanPayments:
+      properties:
+        contractOutstandingBalance:
+          type: number
+          description: Amount required for the customer to settle the debt
+        releases:
+          type: array
+          description: List of payments made in the period
+          items:
+            $ref: '#/components/schemas/LoanPaymentRelease'
+    LoanContractedFinanceCharge:
+      properties:
+        type:
+          type: string
+          description: Charge type agreed in the contract (https://openbanking-brasil.github.io/openapi/swagger-apis/loans/?urls.primaryName=2.0.1#model-EnumContractFinanceChargeType)
+        additionalInfo:
+          type: string
+          description: Field for additional information
+        rate:
+          type: number
+          description: Charge value in percentage agreed in the contract
+    LoanInstallmentBalloonPayment:
+      properties:
+        dueDate:
+          type: string
+          format: date-time
+          description: Expiration date of the non-regular installment to expire from the contract of the consulted credit modality
+        amount:
+          $ref: '#/components/schemas/LoanInstallmentBalloonPaymentAmount'
+    LoanPaymentReleaseOverParcelCharge:
+      properties:
+        type:
+          type: string
+          description: Charge type agreed in the contract (https://openbanking-brasil.github.io/openapi/swagger-apis/loans/?urls.primaryName=2.0.1#model-EnumContractFinanceChargeType)
+        additionalInfo:
+          type: string
+          description: Free field to fill in additional information regarding the charge
+        amount:
+          type: number
+          description: Payment amount of the charge paid outside the installment
+    Loan:
+      description: Response with information related to a loan
+      properties:
+        id:
+          type: string
+          description: Primary identifier
+        itemId:
+          type: string
+          description: Identifier of the item linked to the loan
+          format: uuid
+        contractNumber:
+          type: string
+          description: Contract number given by the contracting institution
+        ipocCode:
+          type: string
+          description: Standard contract number - IPOC (Identificação Padronizada da Operação de Crédito)
+        productName:
+          type: string
+          description: Denomination/Identification of the name of the credit operation disclosed to the customer
+        type:
+          type: string
+          description: Loan type (https://openbanking-brasil.github.io/openapi/swagger-apis/loans/?urls.primaryName=2.0.1#model-EnumContractProductSubTypeLoans)
+        kind:
+          type: string
+          description: Credit-operation family this contract belongs to.
+          enum:
+          - LOAN
+          - FINANCING
+          - INVOICE_FINANCING
+          - UNARRANGED_ACCOUNT_OVERDRAFT
+        date:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: Date when the loan data was collected
+        contractDate:
+          type: string
+          format: date-time
+          description: Date when the loan was contracted
+        disbursementDates:
+          type: array
+          items:
+            type: string
+            format: date
+            example: '2024-01-01'
+          description: Disbursement date of the contracted amount
+        settlementDate:
+          type: string
+          format: date-time
+          description: Loan settlement date
+        contractAmount:
+          type: number
+          description: Loan contracted value
+        currencyCode:
+          type: string
+          description: Code referencing the currency of the loan
+          example: BRL
+        dueDate:
+          type: string
+          format: date-time
+          description: Loan due date
+        installmentPeriodicity:
+          type: string
+          description: Installments regular frequency
+          enum:
+          - WITHOUT_REGULAR_PERIODICITY
+          - WEEKLY
+          - FORTNIGHTLY
+          - MONTHLY
+          - BIMONTHLY
+          - QUARTERLY
+          - SEMESTERLY
+          - YEARLY
+          - OTHERS
+        installmentPeriodicityAdditionalInfo:
+          type: string
+          description: Mandatory field to complement the information regarding the regular payment frequency when installmentPeriodicity has value 'OTHERS'
+        firstInstallmentDueDate:
+          type: string
+          format: date-time
+          description: First installment due date
+        CET:
+          type: number
+          description: CET - Custo Efetivo Total must be expressed as an annual percentage rate and incorporates all charges and expenses incurred in credit operations (interest rate, but also tariffs, taxes, insurance and other expenses charged)
+        amortizationScheduled:
+          type: string
+          description: Amortization system (https://openbanking-brasil.github.io/openapi/swagger-apis/loans/?urls.primaryName=2.0.1#model-EnumContractAmortizationScheduled)
+          enum:
+          - SAC
+          - PRICE
+          - SAM
+          - WITHOUT_AMORTIZATION_SYSTEM
+          - OTHERS
+        amortizationScheduledAdditionalInfo:
+          type: string
+          description: Mandatory field to complement the information regarding the scheduled amortization when it has value 'OTHERS'
+        cnpjConsignee:
+          type: string
+          description: Consignor CNPJ
+        interestRates:
+          type: array
+          items:
+            $ref: '#/components/schemas/LoanInterestRate'
+        contractedFees:
+          type: array
+          description: List that brings the information of the tariffs agreed in the contract.
+          items:
+            $ref: '#/components/schemas/LoanContractedFee'
+        contractedFinanceCharges:
+          type: array
+          description: List that brings the charges agreed in the contract
+          items:
+            $ref: '#/components/schemas/LoanContractedFinanceCharge'
+        warranties:
+          type: array
+          items:
+            $ref: '#/components/schemas/LoanWarranty'
+        installments:
+          $ref: '#/components/schemas/LoanInstallments'
+        payments:
+          allOf:
+          - $ref: '#/components/schemas/LoanPayments'
+          description: Loan contract payment data
+      type: object
+      required:
+      - id
+      - itemId
+      - date
+      - productName
+      - currencyCode
+      - kind
+      example:
+        id: 5b4f9f7e-0f22-4b0a-9c2e-0e3f1a2b3c4d
+        itemId: e062ab2b-9006-45e8-b689-defabba53647
+        contractNumber: '1324926'
+        ipocCode: '92792126019929279212650822221989319252576'
+        productName: Crédito Pessoal Consignado
+        type: CREDITO_PESSOAL_COM_CONSIGNACAO_FOLHA_PAGAMENTO
+        kind: LOAN
+        date: '2024-03-01T12:00:00.000Z'
+        contractDate: '2023-11-15T00:00:00.000Z'
+        disbursementDates:
+        - '2023-11-16'
+        settlementDate: '2026-11-15T00:00:00.000Z'
+        contractAmount: 25000
+        currencyCode: BRL
+        dueDate: '2026-11-15T00:00:00.000Z'
+        installmentPeriodicity: MONTHLY
+        firstInstallmentDueDate: '2023-12-15T00:00:00.000Z'
+        CET: 0.2932
+        amortizationScheduled: PRICE
+        cnpjConsignee: '12345678000199'
+        interestRates:
+        - taxType: EFFECTIVE
+          interestRateType: COMPOUND
+          taxPeriodicity: MONTHLY
+          calculation: 21/252
+          referentialRateIndexerType: SEM_TIPO_INDEXADOR
+          referentialRateIndexerSubType: SEM_SUB_TIPO_INDEXADOR
+          preFixedRate: 0.0175
+          postFixedRate: 0
+          additionalInfo: Taxa remuneratória pactuada no contrato
+        contractedFees:
+        - name: Tarifa de cadastro
+          code: CADASTRO
+          chargeType: UNIQUE
+          charge: FIXED
+          amount: 100
+          rate: 0
+        contractedFinanceCharges:
+        - type: JUROS_REMUNERATORIOS_POR_ATRASO
+          additionalInfo: Encargo aplicado em caso de atraso
+          rate: 0.07
+        warranties:
+        - currencyCode: BRL
+          type: GARANTIA_FIDEJUSSORIA
+          subtype: AVAL
+          amount: 25000
+        installments:
+          typeNumberOfInstallments: MONTH
+          totalNumberOfInstallments: 36
+          typeContractRemaining: MONTH
+          contractRemainingNumber: 32
+          paidInstallments: 4
+          dueInstallments: 32
+          pastDueInstallments: 0
+          balloonPayments:
+          - dueDate: '2024-12-15T00:00:00.000Z'
+            amount:
+              value: 1500
+              currencyCode: BRL
+        payments:
+          contractOutstandingBalance: 22350.75
+          releases:
+          - isOverParcelPayment: false
+            installmentId: installment-04
+            paidDate: '2024-03-15T00:00:00.000Z'
+            currencyCode: BRL
+            paidAmount: 880.42
+            overParcel:
+              fees: []
+              charges: []
+    LoanInstallmentBalloonPaymentAmount:
+      description: Monetary value of the non-regular installment due
+      properties:
+        value:
+          type: number
+          description: Monetary value of the non-regular installment due
+        currencyCode:
+          type: string
+          description: Code referencing the currency of the installment
+          example: BRL
+    GlobalErrorResponse:
+      title: Global Error Response Schema
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: number
+        message:
+          type: string
+        codeDescription:
+          type: string
+          description: Distinctive code description, useful to distinguish the error.
+        data:
+          type: object
+          description: Additional data related to the error, if any
+          properties: {}
+      example:
+        code: 500
+        codeDescription: INTERNAL_SERVER_ERROR
+        message: Internal Server Error
+    LoanInterestRate:
+      description: Object that brings the set of information necessary to demonstrate the composition of the remunerative interest rates of the Credit Type
+      properties:
+        taxType:
+          type: string
+          description: Tax type
+          enum:
+          - NOMINAL
+          - EFFECTIVE
+        interestRateType:
+          type: string
+          description: Interest rate type
+          enum:
+          - SIMPLE
+          - COMPOUND
+        taxPeriodicity:
+          type: string
+          description: Tax periodicity
+          enum:
+          - MONTHLY
+          - YEARLY
+        calculation:
+          type: string
+          description: Calculation basis
+        referentialRateIndexerType:
+          type: string
+          description: Types of benchmark rates or indexers (https://openbanking-brasil.github.io/openapi/swagger-apis/loans/?urls.primaryName=2.0.1#model-EnumContractReferentialRateIndexerType)
+        referentialRateIndexerSubType:
+          type: string
+          description: Subtypes of benchmark rates or indexers (https://openbanking-brasil.github.io/openapi/swagger-apis/loans/?urls.primaryName=2.0.1#model-EnumContractReferentialRateIndexerSubType)
+        referentialRateIndexerAdditionalInfo:
+          type: string
+          description: Free field to complement the information regarding the Type of reference rate or indexer
+        preFixedRate:
+          type: number
+          description: Pre-fixed rate applied under the credit modality contract. 1 = 100%
+        postFixedRate:
+          type: number
+          description: Post-fixed rate applied under the credit modality contract. 1 = 100%
+        additionalInfo:
+          type: string
+          description: Text with additional information on the composition of agreed interest rates
+    LoanWarranty:
+      properties:
+        currencyCode:
+          type: string
+          description: Code referencing the currency of the warranty
+          example: BRL
+        type:
+          type: string
+          description: Denomination / Identification of the type of warranty that guarantees the Type of Credit Operation contracted (https://openbanking-brasil.github.io/openapi/swagger-apis/loans/?urls.primaryName=2.0.1#model-EnumWarrantyType)
+        subtype:
+          type: string
+          description: Denomination / Identification of the subtype of warranty that guarantees the Type of Credit Operation contracted (https://openbanking-brasil.github.io/openapi/swagger-apis/loans/?urls.primaryName=2.0.1#model-EnumWarrantySubType)
+        amount:
+          type: number
+          description: Warranty original value
+    LoanPaymentReleaseOverParcel:
+      description: Object of fees and charges that were paid outside the installment
+      properties:
+        fees:
+          type: array
+          description: List of fees that were paid outside the installment, only for single payment
+          items:
+            $ref: '#/components/schemas/LoanPaymentReleaseOverParcelFee'
+        charges:
+          type: array
+          description: List of charges that were paid out of installment
+          items:
+            $ref: '#/components/schemas/LoanPaymentReleaseOverParcelCharge'
+    LoanInstallments:
+      properties:
+        typeNumberOfInstallments:
+          type: string
+          description: Type of total term of the contract referring to the type of credit informed
+          enum:
+          - DAY
+          - WEEK
+          - MONTH
+          - YEAR
+          - WITHOUT_TOTAL_PERIOD
+        totalNumberOfInstallments:
+          type: number
+          description: Total term according to the type referring to the type of credit informed
+        typeContractRemaining:
+          type: string
+          description: Type of remaining term of the contract referring to the type of credit informed
+          enum:
+          - DAY
+          - WEEK
+          - MONTH
+          - YEAR
+          - WITHOUT_TOTAL_PERIOD
+          - WITHOUT_REMAINING_PERIOD
+        contractRemainingNumber:
+          type: number
+          description: Remaining term according to the type referring to the credit type informed
+        paidInstallments:
+          type: number
+          description: Number of paid installments
+        dueInstallments:
+          type: number
+          description: Number of due installments
+        pastDueInstallments:
+          type: number
+          description: Number of overdue installments
+        balloonPayments:
+          type: array
+          description: List that brings the due dates and value of the non-regular installments of the contract of the type of credit consulted
+          items:
+            $ref: '#/components/schemas/LoanInstallmentBalloonPayment'
+  securitySchemes:
+    default:
+      type: apiKey
+      name: X-API-KEY
+      in: header

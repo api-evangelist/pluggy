@@ -1,0 +1,617 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/pluggy/main/json-schema/pluggy-item-schema.json",
+  "title": "Item",
+  "description": "Item object",
+  "x-generated": "2026-10-18",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/pluggy-api-openapi.yml#/components/schemas/Item",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Primary identifier"
+    },
+    "connector": {
+      "$ref": "#/$defs/Connector"
+    },
+    "status": {
+      "type": "string",
+      "description": "Status of the Item"
+    },
+    "executionStatus": {
+      "type": "string",
+      "description": "Status of the sync execution"
+    },
+    "error": {
+      "type": "object",
+      "description": "Detailed error message",
+      "properties": {
+        "code": {
+          "type": "string",
+          "description": "Error code"
+        },
+        "message": {
+          "type": "string",
+          "description": "Detailed error message"
+        },
+        "providerMessage": {
+          "type": "string",
+          "description": "Information provider by the institution mainly when user needs to perform an action"
+        },
+        "attributes": {
+          "type": "object",
+          "description": "'{ [key]:[value] }'. Additional information necessary for future executions, used for example in some device authorization flow"
+        }
+      },
+      "required": [
+        "code",
+        "message"
+      ]
+    },
+    "parameter": {
+      "$ref": "#/$defs/ConnectorCredential"
+    },
+    "userAction": {
+      "$ref": "#/$defs/ConnectorUserAction"
+    },
+    "webhookUrl": {
+      "type": "string",
+      "description": "Url to be notified of item changes"
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Date of creation"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Date of last modification"
+    },
+    "lastUpdatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Date of last syncronization"
+    },
+    "statusDetail": {
+      "$ref": "#/$defs/StatusDetail"
+    },
+    "nextAutoSyncAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Date of next auto-sync, or null if auto-sync is disabled for this Item"
+    },
+    "consecutiveFailedLoginAttempts": {
+      "type": "number",
+      "format": "integer",
+      "description": "Consecutives execution that ends up with a LOGIN_ERROR status"
+    },
+    "consentExpiresAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Consent expiration date"
+    },
+    "resourcesCollectedAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time",
+      "description": "Open Finance only. When the financial institution's resources list was last read for this Item, or `null` if it never was. Pairs with `GET /items/{id}/resources`: an empty list there means the institution shared nothing when this is set, and that the list was never obtained when this is `null`."
+    },
+    "hasResourcesPendingAuthorization": {
+      "type": [
+        "boolean",
+        "null"
+      ],
+      "description": "Open Finance only. Whether the financial institution declares any of this Item's resources pending authorization, meaning the user still has to approve them at their bank. Read from the same list as `GET /items/{id}/resources`, which returns them with `status=PENDING_AUTHORISATION`.\n\n- `true`: at least one resource is pending authorization.\n- `false`: the resources list was read and none is pending.\n- `null`: always for connectors other than Open Finance. For an Open Finance Item, the resources list has not been read yet (`resourcesCollectedAt` is `null`), for example while its first execution is still running. Read this field once the execution finishes (`item/created` or `item/updated` webhook)."
+    },
+    "products": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "ACCOUNTS",
+          "CREDIT_CARDS",
+          "TRANSACTIONS",
+          "PAYMENT_DATA",
+          "INVESTMENTS",
+          "INVESTMENTS_TRANSACTIONS",
+          "IDENTITY",
+          "BROKERAGE_NOTE",
+          "MOVE_SECURITY",
+          "LOANS"
+        ]
+      },
+      "description": "Products collected by the item"
+    }
+  },
+  "type": "object",
+  "required": [
+    "id",
+    "status",
+    "executionStatus"
+  ],
+  "$defs": {
+    "Connector": {
+      "description": "Connector object",
+      "properties": {
+        "id": {
+          "type": "number",
+          "format": "integer",
+          "description": "Primary identifier"
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the institution"
+        },
+        "institutionUrl": {
+          "type": "string",
+          "description": "Homepage of the institution"
+        },
+        "imageUrl": {
+          "type": "string",
+          "description": "Image of the logo hosted by Pluggy"
+        },
+        "primaryColor": {
+          "type": "string",
+          "description": "Primary color"
+        },
+        "type": {
+          "type": "string",
+          "description": "Type of institution"
+        },
+        "country": {
+          "type": "string",
+          "description": "Country located"
+        },
+        "credentials": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ConnectorCredential"
+          },
+          "description": "Parameters required to start the connection"
+        },
+        "hasMFA": {
+          "type": "boolean",
+          "description": "Does the connector require an MFA to execute?"
+        },
+        "products": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "ACCOUNTS",
+              "CREDIT_CARDS",
+              "TRANSACTIONS",
+              "PAYMENT_DATA",
+              "INVESTMENTS",
+              "INVESTMENTS_TRANSACTIONS",
+              "IDENTITY",
+              "BROKERAGE_NOTE",
+              "MOVE_SECURITY",
+              "LOANS"
+            ]
+          },
+          "description": "Products supported by the connector"
+        },
+        "productCoverage": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Which sub-products the institution serves, in the Open Finance directory's own vocabulary (for example INVESTMENTS:TREASURE_TITLES, CREDIT_OPERATIONS:INVOICE_FINANCINGS). Where products says whether the connector serves investments at all, this says which ones: a connector listing INVESTMENTS may serve one of the five investment resources or all five. Absent for direct connectors, which have no Open Finance participant."
+        },
+        "oauth": {
+          "type": "boolean",
+          "description": "If 'true', the connector requires an Oauth flow to execute"
+        },
+        "oauthUrl": {
+          "type": "string",
+          "description": "URL to perform Oauth flow if needed"
+        },
+        "resetPasswordUrl": {
+          "type": "string",
+          "description": "URL to the financial institution to reset the password"
+        },
+        "health": {
+          "$ref": "#/$defs/ConnectorHealth"
+        },
+        "isOpenFinance": {
+          "type": "boolean",
+          "description": "Indicates if the connector uses the regulated Open Finance APIs"
+        },
+        "isSandbox": {
+          "type": "boolean",
+          "description": "Indicates if the connector is a sandbox connector, meant for testing rather than a real institution"
+        },
+        "supportsPaymentInitiation": {
+          "type": "boolean",
+          "description": "Indicates if the connector supports the payment initiation API"
+        },
+        "supportsScheduledPayments": {
+          "type": "boolean",
+          "description": "Indicates if the connector supports scheduled payments"
+        },
+        "supportsSmartTransfers": {
+          "type": "boolean",
+          "description": "Indicates if the connector supports smart transfers"
+        },
+        "supportsBoletoManagement": {
+          "type": "boolean",
+          "description": "Indicates if the connector supports boleto management"
+        },
+        "supportsAutomaticPix": {
+          "type": "boolean",
+          "description": "Indicates if the connector supports automatic Pix"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Date of creation"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Date of last modification"
+        }
+      },
+      "type": "object",
+      "required": [
+        "id"
+      ]
+    },
+    "ConnectorCredential": {
+      "description": "Credential details for a connector",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name of the key"
+        },
+        "label": {
+          "type": "string",
+          "description": "Label for input"
+        },
+        "type": {
+          "enum": [
+            "text",
+            "password",
+            "number",
+            "image",
+            "select"
+          ],
+          "type": "string",
+          "description": "Type of credential required"
+        },
+        "assistiveText": {
+          "type": "string",
+          "description": "Text to help the user when completing the input"
+        },
+        "data": {
+          "type": "string",
+          "description": "Used to return base64 images"
+        },
+        "placeholder": {
+          "type": "string",
+          "description": "Placeholder text for the input"
+        },
+        "validation": {
+          "type": "string",
+          "description": "Regex validation for the user's input"
+        },
+        "validationMessage": {
+          "type": "string",
+          "description": "Validation message when input doesn't match the regex"
+        },
+        "mfa": {
+          "type": "boolean",
+          "description": "Credential is an MFA parameter and must be refreshed on each execution"
+        },
+        "options": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/CredentialSelectOption"
+          },
+          "description": "List of possible values for the input"
+        },
+        "optional": {
+          "type": "boolean",
+          "description": "Whether the credential can be left empty. Always present; defaults to false"
+        },
+        "instructions": {
+          "type": "string",
+          "description": "Instructions to help the user obtain this credential"
+        },
+        "expiresAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Expiration date of the credential value, when the institution sets one"
+        }
+      },
+      "type": "object",
+      "required": [
+        "name",
+        "label",
+        "type",
+        "optional"
+      ]
+    },
+    "ConnectorHealth": {
+      "description": "Connector health status",
+      "properties": {
+        "status": {
+          "type": "string",
+          "description": "'ONLINE' | 'OFFLINE' | 'UNSTABLE'"
+        },
+        "stage": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "incidents": {
+          "type": "array",
+          "description": "Incidents currently affecting this connector, as published on https://status.pluggy.ai. Absent when the connector has none, so a healthy connector's payload is unchanged. Ordered worst-first, so the first entry is the one to show if you only show one. Note this is about the institution, not about your own connections: use it to warn a user before they pick a bank that is known to be failing right now.",
+          "items": {
+            "$ref": "#/$defs/ConnectorIncident"
+          }
+        },
+        "details": {
+          "type": "object",
+          "description": "Statistics about your recent connections on the connector and recent connection rate (percentage of healthy connections). This field is only present if you include the parameter healthDetails=true. This will be null if there was an error obtaining health details.",
+          "properties": {
+            "connectionRateLast6Hours": {
+              "type": "number",
+              "description": "A number from 0 to 100: the percentage of executions that succesfully connect to the institution: status of CONNECTION_ERROR,ERROR,SITE_NOT_AVAILABLE decrease the percentage. Any other status (like SUCCESS/LOGIN_ERROR) increase the percentage. The value will be null if there were no connections"
+            },
+            "connectionsLast6Hours": {
+              "type": "number",
+              "description": "Amount of your connections for this connector during the last 6 hours. 0 if there were no connections"
+            }
+          }
+        }
+      }
+    },
+    "ConnectorIncident": {
+      "description": "An incident affecting a connector right now, as published on the Pluggy status page. Only incidents active at this moment are listed: a scheduled maintenance appears once its window opens, not when it is announced, and disappears when the window closes.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid",
+          "description": "Status page identifier of the incident"
+        },
+        "title": {
+          "type": "string",
+          "description": "Short, customer-facing summary, for example 'XP Banking - Compras parceladas não sendo retornadas'"
+        },
+        "description": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Longer explanation, when there is one"
+        },
+        "type": {
+          "enum": [
+            "CONNECTOR_UNAVAILABLE",
+            "CONNECTOR_DEGRADED",
+            "INSTITUTION_OUTAGE",
+            "SCHEDULED_MAINTENANCE",
+            "CONSENT_ERROR",
+            "CONNECTION_NOT_UPDATING",
+            "PARTIAL_SUCCESS",
+            "ACCOUNTS_MISSING",
+            "BALANCE_INCORRECT",
+            "TRANSACTIONS_MISSING",
+            "TRANSACTIONS_INCORRECT",
+            "TRANSACTIONS_INSTALLMENTS_ISSUE",
+            "INVESTMENTS_MISSING",
+            "INVESTMENTS_INCORRECT",
+            "IDENTITY_MISSING",
+            "HISTORICAL_DATA_MISSING",
+            "WEBHOOK_DELAY",
+            "PAYMENT_FAILURE",
+            "OTHER"
+          ],
+          "type": "string",
+          "description": "What is broken, as opposed to how badly (severity) or how far along we are (state). Use it to group the same problem across institutions, and to decide which incidents are worth showing your own users: a SCHEDULED_MAINTENANCE and a TRANSACTIONS_MISSING both read as 'degraded' otherwise. OTHER means Pluggy has not classified it, not that nothing is wrong"
+        },
+        "product": {
+          "enum": [
+            "dados",
+            "pis",
+            "pis-agendado",
+            "pixauto",
+            "smart",
+            "infra"
+          ],
+          "type": "string",
+          "description": "Which Pluggy product line the incident affects"
+        },
+        "kind": {
+          "enum": [
+            "INCIDENT",
+            "MAINTENANCE"
+          ],
+          "type": "string",
+          "description": "Whether this is an unplanned incident or a planned maintenance window"
+        },
+        "severity": {
+          "enum": [
+            "DEGRADED",
+            "PARTIAL_OUTAGE",
+            "MAJOR_OUTAGE",
+            "MAINTENANCE"
+          ],
+          "type": "string",
+          "description": "How badly the institution is affected"
+        },
+        "state": {
+          "enum": [
+            "INVESTIGATING",
+            "IDENTIFIED",
+            "MONITORING",
+            "SCHEDULED"
+          ],
+          "type": "string",
+          "description": "Where the incident is in its lifecycle. Resolved incidents are not listed"
+        },
+        "startedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When the incident began"
+        },
+        "updatedAt": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time",
+          "description": "When the incident was last updated"
+        },
+        "url": {
+          "type": "string",
+          "description": "Permalink to the incident on the status page, with its full timeline and postmortem. Safe to show to your own users"
+        }
+      },
+      "type": "object",
+      "required": [
+        "id",
+        "title",
+        "type",
+        "product",
+        "kind",
+        "severity",
+        "state",
+        "startedAt",
+        "url"
+      ]
+    },
+    "ConnectorUserAction": {
+      "description": "User action details for an item",
+      "properties": {
+        "instructions": {
+          "type": "string",
+          "description": "Instructions related to the user action"
+        },
+        "attributes": {
+          "type": "object",
+          "description": "'{ [key]:[value] }'. Additional information related to the user action, for exampke in some device authorization flow"
+        },
+        "expiresAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "User action expiration date"
+        },
+        "type": {
+          "enum": [
+            "qr",
+            "authorize-access"
+          ],
+          "type": "string",
+          "description": "Kind of action the user has to take: scan a QR code, or authorize access in the institution's app"
+        }
+      },
+      "type": "object",
+      "required": [
+        "instructions",
+        "type"
+      ]
+    },
+    "CredentialSelectOption": {
+      "description": "Option for ConnectorCredential of type select",
+      "properties": {
+        "value": {
+          "type": "string",
+          "description": "Value for the option"
+        },
+        "label": {
+          "type": "string",
+          "description": "Label for the option"
+        }
+      },
+      "type": "object",
+      "required": [
+        "value",
+        "label"
+      ]
+    },
+    "StatusDetail": {
+      "description": "Detailed status of the item. This field will be present when the status is PARTIAL_SUCCESS or when a product in the item has warnings",
+      "type": "object",
+      "properties": {
+        "accounts": {
+          "$ref": "#/$defs/StatusDetailProduct"
+        },
+        "creditCards": {
+          "$ref": "#/$defs/StatusDetailProduct"
+        },
+        "transactions": {
+          "$ref": "#/$defs/StatusDetailProduct"
+        },
+        "investments": {
+          "$ref": "#/$defs/StatusDetailProduct"
+        },
+        "identity": {
+          "$ref": "#/$defs/StatusDetailProduct"
+        },
+        "investmentsTransactions": {
+          "$ref": "#/$defs/StatusDetailProduct"
+        },
+        "paymentData": {
+          "$ref": "#/$defs/StatusDetailProduct"
+        },
+        "loans": {
+          "$ref": "#/$defs/StatusDetailProduct"
+        },
+        "accountStatements": {
+          "$ref": "#/$defs/StatusDetailProduct"
+        }
+      }
+    },
+    "StatusDetailProduct": {
+      "description": "Detailed status of the product",
+      "type": "object",
+      "properties": {
+        "lastUpdatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Date when the product was last updated"
+        },
+        "isUpdated": {
+          "type": "boolean",
+          "description": "Product was updated in the last execution"
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/StatusDetailProductWarning"
+          },
+          "description": "Warnings about the product data. For example, a warning about missing permissions for viewing a product"
+        }
+      }
+    },
+    "StatusDetailProductWarning": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string",
+          "description": "The warning code generated by Pluggy"
+        },
+        "message": {
+          "type": "string",
+          "description": "The warning message in english generated by Pluggy"
+        },
+        "providerMessage": {
+          "type": "string",
+          "description": "The warning message from the FI if provided"
+        }
+      },
+      "required": [
+        "code",
+        "message"
+      ]
+    }
+  }
+}

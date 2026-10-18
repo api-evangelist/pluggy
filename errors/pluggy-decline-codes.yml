@@ -1,0 +1,5 @@
+generated: '2026-10-18'
+method: none
+decline_codes: []
+note: No specific decline codes documentation found for Pluggy Payments API. Payment failures would return standard error responses through the GlobalErrorResponse schema with appropriate codeDescription values.
+docs: https://docs.pluggy.ai/en/docs/payments/overview.md

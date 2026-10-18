@@ -1,0 +1,459 @@
+openapi: 3.2.0
+info:
+  title: Enrichment API
+  version: 1.0.0
+  description: Pluggy Enrichment API — transaction categorization, behavior analysis, and recurring-payments detection.
+servers:
+- url: https://enrichment-api.pluggy.ai
+security:
+- sec0: []
+tags:
+- name: Enrichment
+  description: Transaction categorization, behavior analysis and recurring-payment detection. Documented on docs.pluggy.ai/reference until the v2 migration; served from enrichment-api.pluggy.ai with its own credentials.
+paths:
+  /categorize:
+    post:
+      summary: Categorize
+      description: ''
+      operationId: categorize
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                clientUserId:
+                  type: string
+                  description: _identifier for the user (ie. email or cpf)_
+                isBusiness:
+                  type: boolean
+                  description: If the holder is a Business, if not is a Person.
+                  default: false
+                accountType:
+                  type: string
+                  description: Type of the account holder of the transactions
+                  default: CHECKING
+                  enum:
+                  - CHECKING
+                  - CREDIT_CARD
+                transactions:
+                  type: array
+                  description: Transactions to enrich, max 5000
+                  items:
+                    properties:
+                      id:
+                        type: string
+                        description: Unique identifier of the transaction
+                      description:
+                        type: string
+                        description: The description of the transaction to categorize
+                      type:
+                        type: string
+                        description: Direction of the transaction. If not sent will use the amount to set it.
+                        enum:
+                        - CREDIT
+                        - DEBIT
+                      amount:
+                        type: number
+                        description: Amount of the transaction, negative represents a debit and a positive a credit.
+                        format: float
+                      date:
+                        type: string
+                        description: Date in ISO format of the transaction's date
+                      paymentData:
+                        type: object
+                        description: Payment information related to the parties involved
+                        properties:
+                          paymentMethod:
+                            type: string
+                            description: Method of the payment (PIX, BOLETO, TED, DOC)
+                          reason:
+                            type: string
+                            description: Description sent by the payer
+                          payer:
+                            type: object
+                            description: Sender information of the transaction
+                            properties:
+                              name:
+                                type: string
+                                description: Name of the Participant
+                              accountNumber:
+                                type: string
+                                description: Account number
+                              branchNumber:
+                                type: string
+                                description: Agency Number
+                              routingNumber:
+                                type: string
+                                description: Bank number (Compe code)
+                              documentNumber:
+                                type: object
+                                description: Tax document of the participant. When it is missing, the API fills `type` from `isBusiness` (CNPJ or CPF) for the account owner's side.
+                                properties:
+                                  type:
+                                    type: string
+                                    enum:
+                                    - CPF
+                                    - CNPJ
+                                    description: Document type
+                                  value:
+                                    type: string
+                                    description: Document number
+                          receiver:
+                            type: object
+                            description: Receiver of the transaction
+                            properties:
+                              name:
+                                type: string
+                                description: Name of the Participant
+                              accountNumber:
+                                type: string
+                                description: Account number
+                              branchNumber:
+                                type: string
+                                description: Agency Number
+                              routingNumber:
+                                type: string
+                                description: Bank number (Compe code)
+                              documentNumber:
+                                type: object
+                                description: Tax document of the participant. When it is missing, the API fills `type` from `isBusiness` (CNPJ or CPF) for the account owner's side.
+                                properties:
+                                  type:
+                                    type: string
+                                    enum:
+                                    - CPF
+                                    - CNPJ
+                                    description: Document type
+                                  value:
+                                    type: string
+                                    description: Document number
+                      creditCardMetadata:
+                        type: object
+                        description: Credit card metadata for the transaction.
+                        properties:
+                          payeeMCC:
+                            type: string
+                            description: MCC Code for the credit card transaction
+                    type: object
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"results\": [\n    {\n      \"id\": \"12345\",\n      \"date\": \"2022-05-01T00:00:00.000Z\",\n      \"description\": \"Mc Donalds\",\n      \"type\": \"DEBIT\",\n      \"amount\": 100,\n      \"category\": \"Eating out\",\n      \"merchant\": {\n        \"name\": \"mc donalds\",\n        \"businessName\": \"ARCOS DOURADOS COMERCIO DE ALIMENTOS LTDA\",\n        \"cnpj\": \"44.444.444/0001-44\"\n      }\n    }\n  ]\n}"
+              schema:
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: '12345'
+                        date:
+                          type: string
+                          example: '2022-05-01T00:00:00.000Z'
+                        description:
+                          type: string
+                          example: Mc Donalds
+                        type:
+                          type: string
+                          example: DEBIT
+                        amount:
+                          type: integer
+                          example: 100
+                          default: 0
+                        category:
+                          type: string
+                          example: Eating out
+                        merchant:
+                          type: object
+                          properties:
+                            name:
+                              type: string
+                              example: mc donalds
+                            businessName:
+                              type: string
+                              example: ARCOS DOURADOS COMERCIO DE ALIMENTOS LTDA
+                            cnpj:
+                              type: string
+                              example: 44.444.444/0001-44
+        '400':
+          description: '400'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"message\": \"Transaction {\\\"id\\\":\\\"12345\\\",\\\"date\\\":\\\"01/01/2022\\\",\\\"amount\\\":100} is invalid\"\n}"
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Transaction {"id":"12345","date":"01/01/2022","amount":100} is invalid
+      deprecated: false
+      tags:
+      - Enrichment
+  /behavior-analysis:
+    post:
+      summary: Behavior Analysis
+      description: Analyzes user behavior and spending patterns across categories from a Pluggy Item.
+      operationId: behavior-analysis
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                itemId:
+                  type: string
+                  description: User's item id
+            examples:
+              Request Example:
+                value:
+                  itemId: c522a61f-c9f2-49b7-b106-e9a171a9fa18
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"behaviors\": {\n    \"hasCar\": true,\n    \"homeowner\": false,\n    \"frequentTraveler\": false,\n    \"highDiningExpenditure\": false,\n    \"investmentActivity\": true,\n    \"educationExpenses\": false,\n    \"healthcareNeeds\": true,\n    \"loanCommitments\": false,\n    \"insurancePolicies\": true\n  },\n  \"metrics\": {\n    \"transportation\": {\n      \"spending\": 6862.91,\n      \"transactionCount\": 15\n    },\n    \"travel\": {\n      \"spending\": 1690.57,\n      \"transactionCount\": 4\n    },\n    \"investment\": {\n      \"spending\": 262274.43,\n      \"transactionCount\": 69\n    },\n    \"healthcare\": {\n      \"spending\": 688.49,\n      \"transactionCount\": 4\n    },\n    \"loanPayments\": {\n      \"spending\": 0,\n      \"transactionCount\": 0\n    },\n    \"dining\": {\n      \"spending\": 1200.13,\n      \"transactionCount\": 16\n    },\n    \"education\": {\n      \"spending\": 0,\n      \"transactionCount\": 0\n    },\n    \"insurance\": {\n      \"spending\": 588.5200000000001,\n      \"transactionCount\": 15\n    },\n    \"housing\": {\n      \"spending\": 5.3,\n      \"transactionCount\": 1\n    }\n  }\n}"
+              schema:
+                type: object
+                properties:
+                  behaviors:
+                    type: object
+                    properties:
+                      hasCar:
+                        type: boolean
+                        example: true
+                        default: true
+                      homeowner:
+                        type: boolean
+                        example: false
+                        default: true
+                      frequentTraveler:
+                        type: boolean
+                        example: false
+                        default: true
+                      highDiningExpenditure:
+                        type: boolean
+                        example: false
+                        default: true
+                      investmentActivity:
+                        type: boolean
+                        example: true
+                        default: true
+                      educationExpenses:
+                        type: boolean
+                        example: false
+                        default: true
+                      healthcareNeeds:
+                        type: boolean
+                        example: true
+                        default: true
+                      loanCommitments:
+                        type: boolean
+                        example: false
+                        default: true
+                      insurancePolicies:
+                        type: boolean
+                        example: true
+                        default: true
+                  metrics:
+                    type: object
+                    properties:
+                      transportation:
+                        type: object
+                        properties:
+                          spending:
+                            type: number
+                            example: 6862.91
+                            default: 0
+                          transactionCount:
+                            type: integer
+                            example: 15
+                            default: 0
+                      travel:
+                        type: object
+                        properties:
+                          spending:
+                            type: number
+                            example: 1690.57
+                            default: 0
+                          transactionCount:
+                            type: integer
+                            example: 4
+                            default: 0
+                      investment:
+                        type: object
+                        properties:
+                          spending:
+                            type: number
+                            example: 262274.43
+                            default: 0
+                          transactionCount:
+                            type: integer
+                            example: 69
+                            default: 0
+                      healthcare:
+                        type: object
+                        properties:
+                          spending:
+                            type: number
+                            example: 688.49
+                            default: 0
+                          transactionCount:
+                            type: integer
+                            example: 4
+                            default: 0
+                      loanPayments:
+                        type: object
+                        properties:
+                          spending:
+                            type: integer
+                            example: 0
+                            default: 0
+                          transactionCount:
+                            type: integer
+                            example: 0
+                            default: 0
+                      dining:
+                        type: object
+                        properties:
+                          spending:
+                            type: number
+                            example: 1200.13
+                            default: 0
+                          transactionCount:
+                            type: integer
+                            example: 16
+                            default: 0
+                      education:
+                        type: object
+                        properties:
+                          spending:
+                            type: integer
+                            example: 0
+                            default: 0
+                          transactionCount:
+                            type: integer
+                            example: 0
+                            default: 0
+                      insurance:
+                        type: object
+                        properties:
+                          spending:
+                            type: number
+                            example: 588.5200000000001
+                            default: 0
+                          transactionCount:
+                            type: integer
+                            example: 15
+                            default: 0
+                      housing:
+                        type: object
+                        properties:
+                          spending:
+                            type: number
+                            example: 5.3
+                            default: 0
+                          transactionCount:
+                            type: integer
+                            example: 1
+                            default: 0
+        '400':
+          description: '400'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"message\": \"Transaction {\\\"id\\\":\\\"12345\\\",\\\"date\\\":\\\"01/01/2022\\\",\\\"amount\\\":100} is invalid\"\n}"
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Transaction {"id":"12345","date":"01/01/2022","amount":100} is invalid
+      deprecated: false
+      tags:
+      - Enrichment
+  /recurring-payments:
+    post:
+      summary: Recurring Payments
+      description: This API allows you to analyze a list of financial transactions and identify recurring payments based on specified criteria such as frequency, amount consistency, and regularity score.
+      operationId: recurring-payments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                itemId:
+                  type: string
+                  description: User's item id
+            examples:
+              Request Example:
+                value:
+                  itemId: c522a61f-c9f2-49b7-b106-e9a171a9fa18
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"recurringPayments\": [\n    {\n      \"description\": \"debito aut conta agua e esgoto sabesp\",\n      \"averageAmount\": -76.78,\n      \"occurrences\": [\n        \"77777777-8888-9999-0000-111111111111\",\n        \"88888888-9999-0000-1111-222222222222\",\n        \"99999999-0000-1111-2222-333333333333\"\n      ],\n      \"regularityScore\": 0.997773784382727\n    },\n    {\n      \"description\": \"ebn spotify\",\n      \"averageAmount\": 21.9,\n      \"occurrences\": [\n        \"aaaaaaa1-aaaa-aaaa-aaaa-aaaaaaaaaaaa\",\n        \"bbbbbbb1-bbbb-bbbb-bbbb-bbbbbbbbbbbb\",\n        \"ccccccc1-cccc-cccc-cccc-cccccccccccc\",\n        \"ddddddd1-dddd-dddd-dddd-dddddddddddd\",\n        \"eeeeeee1-eeee-eeee-eeee-eeeeeeeeeeee\",\n        \"fffffff1-ffff-ffff-ffff-ffffffffffff\",\n        \"11111111-aaaa-aaaa-aaaa-aaaaaaaaaaaa\",\n        \"22222222-bbbb-bbbb-bbbb-bbbbbbbbbbbb\",\n        \"33333333-cccc-cccc-cccc-cccccccccccc\",\n        \"44444444-dddd-dddd-dddd-dddddddddddd\",\n        \"55555555-eeee-eeee-eeee-eeeeeeeeeeee\",\n        \"66666666-ffff-ffff-ffff-ffffffffffff\"\n      ],\n      \"regularityScore\": 0.9344445222642911\n    },\n    {\n      \"description\": \"mp camisetadepre\",\n      \"averageAmount\": 8.57,\n      \"occurrences\": [\n        \"99999999-cccc-cccc-cccc-cccccccccccc\",\n        \"00000000-dddd-dddd-dddd-dddddddddddd\",\n        \"aaaaaaa3-aaaa-aaaa-aaaa-aaaaaaaaaaaa\",\n        \"bbbbbbb3-bbbb-bbbb-bbbb-bbbbbbbbbbbb\",\n        \"ccccccc3-cccc-cccc-cccc-cccccccccccc\",\n        \"ddddddd3-dddd-dddd-dddd-dddddddddddd\"\n      ],\n      \"regularityScore\": 0.9199999999999999\n    },\n    {\n      \"description\": \"niazi chohfi textil\",\n      \"averageAmount\": 20.12,\n      \"occurrences\": [\n        \"eeeeeee3-eeee-eeee-eeee-eeeeeeeeeeee\",\n        \"fffffff3-ffff-ffff-ffff-ffffffffffff\",\n        \"11111113-aaaa-aaaa-aaaa-aaaaaaaaaaaa\",\n        \"22222222-bbbb-bbbb-bbbb-bbbbbbbbbbbb\"\n      ],\n      \"regularityScore\": 0.9528595479208968\n    }\n  ]\n}"
+              schema:
+                type: object
+                properties:
+                  recurringPayments:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        description:
+                          type: string
+                          example: debito aut conta agua e esgoto sabesp
+                        averageAmount:
+                          type: number
+                          example: -76.78
+                          default: 0
+                        occurrences:
+                          type: array
+                          items:
+                            type: string
+                            example: 77777777-8888-9999-0000-111111111111
+                        regularityScore:
+                          type: number
+                          example: 0.997773784382727
+                          default: 0
+        '400':
+          description: '400'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"message\": \"Transaction {\\\"id\\\":\\\"12345\\\",\\\"date\\\":\\\"01/01/2022\\\",\\\"amount\\\":100} is invalid\"\n}"
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Transaction {"id":"12345","date":"01/01/2022","amount":100} is invalid
+      deprecated: false
+      tags:
+      - Enrichment
+components:
+  securitySchemes:
+    sec0:
+      type: apiKey
+      name: x-api-key
+      in: header

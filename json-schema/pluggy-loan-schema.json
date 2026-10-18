@@ -1,0 +1,485 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/pluggy/main/json-schema/pluggy-loan-schema.json",
+  "title": "Loan",
+  "description": "Response with information related to a loan",
+  "x-generated": "2026-10-18",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/pluggy-api-openapi.yml#/components/schemas/Loan",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Primary identifier"
+    },
+    "itemId": {
+      "type": "string",
+      "description": "Identifier of the item linked to the loan",
+      "format": "uuid"
+    },
+    "contractNumber": {
+      "type": "string",
+      "description": "Contract number given by the contracting institution"
+    },
+    "ipocCode": {
+      "type": "string",
+      "description": "Standard contract number - IPOC (Identificação Padronizada da Operação de Crédito)"
+    },
+    "productName": {
+      "type": "string",
+      "description": "Denomination/Identification of the name of the credit operation disclosed to the customer"
+    },
+    "type": {
+      "type": "string",
+      "description": "Loan type (https://openbanking-brasil.github.io/openapi/swagger-apis/loans/?urls.primaryName=2.0.1#model-EnumContractProductSubTypeLoans)"
+    },
+    "kind": {
+      "type": "string",
+      "description": "Credit-operation family this contract belongs to.",
+      "enum": [
+        "LOAN",
+        "FINANCING",
+        "INVOICE_FINANCING",
+        "UNARRANGED_ACCOUNT_OVERDRAFT"
+      ]
+    },
+    "date": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time",
+      "description": "Date when the loan data was collected"
+    },
+    "contractDate": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Date when the loan was contracted"
+    },
+    "disbursementDates": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "format": "date"
+      },
+      "description": "Disbursement date of the contracted amount"
+    },
+    "settlementDate": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Loan settlement date"
+    },
+    "contractAmount": {
+      "type": "number",
+      "description": "Loan contracted value"
+    },
+    "currencyCode": {
+      "type": "string",
+      "description": "Code referencing the currency of the loan"
+    },
+    "dueDate": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Loan due date"
+    },
+    "installmentPeriodicity": {
+      "type": "string",
+      "description": "Installments regular frequency",
+      "enum": [
+        "WITHOUT_REGULAR_PERIODICITY",
+        "WEEKLY",
+        "FORTNIGHTLY",
+        "MONTHLY",
+        "BIMONTHLY",
+        "QUARTERLY",
+        "SEMESTERLY",
+        "YEARLY",
+        "OTHERS"
+      ]
+    },
+    "installmentPeriodicityAdditionalInfo": {
+      "type": "string",
+      "description": "Mandatory field to complement the information regarding the regular payment frequency when installmentPeriodicity has value 'OTHERS'"
+    },
+    "firstInstallmentDueDate": {
+      "type": "string",
+      "format": "date-time",
+      "description": "First installment due date"
+    },
+    "CET": {
+      "type": "number",
+      "description": "CET - Custo Efetivo Total must be expressed as an annual percentage rate and incorporates all charges and expenses incurred in credit operations (interest rate, but also tariffs, taxes, insurance and other expenses charged)"
+    },
+    "amortizationScheduled": {
+      "type": "string",
+      "description": "Amortization system (https://openbanking-brasil.github.io/openapi/swagger-apis/loans/?urls.primaryName=2.0.1#model-EnumContractAmortizationScheduled)",
+      "enum": [
+        "SAC",
+        "PRICE",
+        "SAM",
+        "WITHOUT_AMORTIZATION_SYSTEM",
+        "OTHERS"
+      ]
+    },
+    "amortizationScheduledAdditionalInfo": {
+      "type": "string",
+      "description": "Mandatory field to complement the information regarding the scheduled amortization when it has value 'OTHERS'"
+    },
+    "cnpjConsignee": {
+      "type": "string",
+      "description": "Consignor CNPJ"
+    },
+    "interestRates": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/LoanInterestRate"
+      }
+    },
+    "contractedFees": {
+      "type": "array",
+      "description": "List that brings the information of the tariffs agreed in the contract.",
+      "items": {
+        "$ref": "#/$defs/LoanContractedFee"
+      }
+    },
+    "contractedFinanceCharges": {
+      "type": "array",
+      "description": "List that brings the charges agreed in the contract",
+      "items": {
+        "$ref": "#/$defs/LoanContractedFinanceCharge"
+      }
+    },
+    "warranties": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/LoanWarranty"
+      }
+    },
+    "installments": {
+      "$ref": "#/$defs/LoanInstallments"
+    },
+    "payments": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/LoanPayments"
+        }
+      ],
+      "description": "Loan contract payment data"
+    }
+  },
+  "type": "object",
+  "required": [
+    "id",
+    "itemId",
+    "date",
+    "productName",
+    "currencyCode",
+    "kind"
+  ],
+  "$defs": {
+    "LoanContractedFee": {
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Agreed rate denomination"
+        },
+        "code": {
+          "type": "string",
+          "description": "Acronym identifying the agreed rate"
+        },
+        "chargeType": {
+          "type": "string",
+          "description": "Charge type for the rate agreed in the contract",
+          "enum": [
+            "UNIQUE",
+            "BY_INSTALLMENT"
+          ]
+        },
+        "charge": {
+          "type": "string",
+          "description": "Billing method related to the tariff agreed in the contract",
+          "enum": [
+            "MINIMUM",
+            "MAXIMUM",
+            "FIXED",
+            "PERCENTAGE"
+          ]
+        },
+        "amount": {
+          "type": "number",
+          "description": "Monetary value of the tariff agreed in the contract"
+        },
+        "rate": {
+          "type": "number",
+          "description": "Rate value in percentage agreed in the contract"
+        }
+      }
+    },
+    "LoanContractedFinanceCharge": {
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Charge type agreed in the contract (https://openbanking-brasil.github.io/openapi/swagger-apis/loans/?urls.primaryName=2.0.1#model-EnumContractFinanceChargeType)"
+        },
+        "additionalInfo": {
+          "type": "string",
+          "description": "Field for additional information"
+        },
+        "rate": {
+          "type": "number",
+          "description": "Charge value in percentage agreed in the contract"
+        }
+      }
+    },
+    "LoanInstallmentBalloonPayment": {
+      "properties": {
+        "dueDate": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Expiration date of the non-regular installment to expire from the contract of the consulted credit modality"
+        },
+        "amount": {
+          "$ref": "#/$defs/LoanInstallmentBalloonPaymentAmount"
+        }
+      }
+    },
+    "LoanInstallmentBalloonPaymentAmount": {
+      "description": "Monetary value of the non-regular installment due",
+      "properties": {
+        "value": {
+          "type": "number",
+          "description": "Monetary value of the non-regular installment due"
+        },
+        "currencyCode": {
+          "type": "string",
+          "description": "Code referencing the currency of the installment"
+        }
+      }
+    },
+    "LoanInstallments": {
+      "properties": {
+        "typeNumberOfInstallments": {
+          "type": "string",
+          "description": "Type of total term of the contract referring to the type of credit informed",
+          "enum": [
+            "DAY",
+            "WEEK",
+            "MONTH",
+            "YEAR",
+            "WITHOUT_TOTAL_PERIOD"
+          ]
+        },
+        "totalNumberOfInstallments": {
+          "type": "number",
+          "description": "Total term according to the type referring to the type of credit informed"
+        },
+        "typeContractRemaining": {
+          "type": "string",
+          "description": "Type of remaining term of the contract referring to the type of credit informed",
+          "enum": [
+            "DAY",
+            "WEEK",
+            "MONTH",
+            "YEAR",
+            "WITHOUT_TOTAL_PERIOD",
+            "WITHOUT_REMAINING_PERIOD"
+          ]
+        },
+        "contractRemainingNumber": {
+          "type": "number",
+          "description": "Remaining term according to the type referring to the credit type informed"
+        },
+        "paidInstallments": {
+          "type": "number",
+          "description": "Number of paid installments"
+        },
+        "dueInstallments": {
+          "type": "number",
+          "description": "Number of due installments"
+        },
+        "pastDueInstallments": {
+          "type": "number",
+          "description": "Number of overdue installments"
+        },
+        "balloonPayments": {
+          "type": "array",
+          "description": "List that brings the due dates and value of the non-regular installments of the contract of the type of credit consulted",
+          "items": {
+            "$ref": "#/$defs/LoanInstallmentBalloonPayment"
+          }
+        }
+      }
+    },
+    "LoanInterestRate": {
+      "description": "Object that brings the set of information necessary to demonstrate the composition of the remunerative interest rates of the Credit Type",
+      "properties": {
+        "taxType": {
+          "type": "string",
+          "description": "Tax type",
+          "enum": [
+            "NOMINAL",
+            "EFFECTIVE"
+          ]
+        },
+        "interestRateType": {
+          "type": "string",
+          "description": "Interest rate type",
+          "enum": [
+            "SIMPLE",
+            "COMPOUND"
+          ]
+        },
+        "taxPeriodicity": {
+          "type": "string",
+          "description": "Tax periodicity",
+          "enum": [
+            "MONTHLY",
+            "YEARLY"
+          ]
+        },
+        "calculation": {
+          "type": "string",
+          "description": "Calculation basis"
+        },
+        "referentialRateIndexerType": {
+          "type": "string",
+          "description": "Types of benchmark rates or indexers (https://openbanking-brasil.github.io/openapi/swagger-apis/loans/?urls.primaryName=2.0.1#model-EnumContractReferentialRateIndexerType)"
+        },
+        "referentialRateIndexerSubType": {
+          "type": "string",
+          "description": "Subtypes of benchmark rates or indexers (https://openbanking-brasil.github.io/openapi/swagger-apis/loans/?urls.primaryName=2.0.1#model-EnumContractReferentialRateIndexerSubType)"
+        },
+        "referentialRateIndexerAdditionalInfo": {
+          "type": "string",
+          "description": "Free field to complement the information regarding the Type of reference rate or indexer"
+        },
+        "preFixedRate": {
+          "type": "number",
+          "description": "Pre-fixed rate applied under the credit modality contract. 1 = 100%"
+        },
+        "postFixedRate": {
+          "type": "number",
+          "description": "Post-fixed rate applied under the credit modality contract. 1 = 100%"
+        },
+        "additionalInfo": {
+          "type": "string",
+          "description": "Text with additional information on the composition of agreed interest rates"
+        }
+      }
+    },
+    "LoanPaymentRelease": {
+      "properties": {
+        "isOverParcelPayment": {
+          "type": "boolean",
+          "description": "Identifies whether it is an agreed payment (false) or a one-time payment (true)"
+        },
+        "installmentId": {
+          "type": "string",
+          "description": "Installment identifier, responsibility of each transmitting Institution"
+        },
+        "paidDate": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Effective date of payment referring to the contract of the credit modality consulted"
+        },
+        "currencyCode": {
+          "type": "string",
+          "description": "Code referencing the currency of the payment"
+        },
+        "paidAmount": {
+          "type": "number",
+          "description": "Payment amount referring to the contract of the credit modality consulted"
+        },
+        "overParcel": {
+          "$ref": "#/$defs/LoanPaymentReleaseOverParcel"
+        }
+      }
+    },
+    "LoanPaymentReleaseOverParcel": {
+      "description": "Object of fees and charges that were paid outside the installment",
+      "properties": {
+        "fees": {
+          "type": "array",
+          "description": "List of fees that were paid outside the installment, only for single payment",
+          "items": {
+            "$ref": "#/$defs/LoanPaymentReleaseOverParcelFee"
+          }
+        },
+        "charges": {
+          "type": "array",
+          "description": "List of charges that were paid out of installment",
+          "items": {
+            "$ref": "#/$defs/LoanPaymentReleaseOverParcelCharge"
+          }
+        }
+      }
+    },
+    "LoanPaymentReleaseOverParcelCharge": {
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Charge type agreed in the contract (https://openbanking-brasil.github.io/openapi/swagger-apis/loans/?urls.primaryName=2.0.1#model-EnumContractFinanceChargeType)"
+        },
+        "additionalInfo": {
+          "type": "string",
+          "description": "Free field to fill in additional information regarding the charge"
+        },
+        "amount": {
+          "type": "number",
+          "description": "Payment amount of the charge paid outside the installment"
+        }
+      }
+    },
+    "LoanPaymentReleaseOverParcelFee": {
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Denomination of the agreed rate"
+        },
+        "code": {
+          "type": "string",
+          "description": "Acronym identifying the agreed rate"
+        },
+        "amount": {
+          "type": "number",
+          "description": "Monetary value of the tariff agreed in the contract"
+        }
+      }
+    },
+    "LoanPayments": {
+      "properties": {
+        "contractOutstandingBalance": {
+          "type": "number",
+          "description": "Amount required for the customer to settle the debt"
+        },
+        "releases": {
+          "type": "array",
+          "description": "List of payments made in the period",
+          "items": {
+            "$ref": "#/$defs/LoanPaymentRelease"
+          }
+        }
+      }
+    },
+    "LoanWarranty": {
+      "properties": {
+        "currencyCode": {
+          "type": "string",
+          "description": "Code referencing the currency of the warranty"
+        },
+        "type": {
+          "type": "string",
+          "description": "Denomination / Identification of the type of warranty that guarantees the Type of Credit Operation contracted (https://openbanking-brasil.github.io/openapi/swagger-apis/loans/?urls.primaryName=2.0.1#model-EnumWarrantyType)"
+        },
+        "subtype": {
+          "type": "string",
+          "description": "Denomination / Identification of the subtype of warranty that guarantees the Type of Credit Operation contracted (https://openbanking-brasil.github.io/openapi/swagger-apis/loans/?urls.primaryName=2.0.1#model-EnumWarrantySubType)"
+        },
+        "amount": {
+          "type": "number",
+          "description": "Warranty original value"
+        }
+      }
+    }
+  }
+}
