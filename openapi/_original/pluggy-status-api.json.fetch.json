@@ -1,0 +1,12 @@
+{
+ "url": "https://docs.pluggy.ai/openapi/status-api.json",
+ "requested_url": "https://docs.pluggy.ai/openapi/status-api.json",
+ "status": 200,
+ "content_type": "application/json",
+ "bytes": 13134,
+ "sha256": "5725c219e43346ecea33c6f25c98bbd27900041189f2ff1dfdea7e28d747128e",
+ "fetched_at": "2026-10-19",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "byte-identical",
+ "note": "Re-fetched from the provider by verify-openapi-sources.py; the archived file is byte-identical to what the provider serves."
+}
