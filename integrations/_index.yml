@@ -6,8 +6,7 @@
 - slug: pluggy-open-finance-brasil
   label: Open Finance Brasil
   partner_name: Open Finance Brasil
-  category: open finance (Brazil)
-  type: register
+  type: contract
   channel: regulator-register
   evidence: https://data.directory.openbankingbrasil.org.br/participants
   source: edge
@@ -15,18 +14,12 @@
   contract_reference:
     register: Open Finance Brasil directory (Banco Central do Brasil)
     spec_file: null
-    standard: Open Finance Brasil
     role: participant
-    regulator_roles:
-    - DADOS
-    - PAGTO
-    registrations: &id001
-    - registered_name: PLUGGY BRASIL INSTITUICAO DE PAGAMENTO LTDA
-      register_id: 24651a57-42bc-4d94-88cd-8cacf03f8c49
-      cnpj: '37943755000130'
-      matched_domain: pluggy.ai
-      matched_by: domain
-    declared_families:
+    registered_name: PLUGGY BRASIL INSTITUICAO DE PAGAMENTO LTDA
+    register_id: 24651a57-42bc-4d94-88cd-8cacf03f8c49
+    matched_domain: pluggy.ai
+    api_families:
+    - admin
     - channels_banking-agents
     - channels_branches
     - channels_electronic-channels
@@ -34,10 +27,42 @@
     - consents
     - customers-business
     - customers-personal
+    - discovery_outages
+    - discovery_status
     - resources
-    signal_note: 'participation only: declared families are context; the certification edge carries depth'
-    detected_by: sweep-latam-open-finance.py
-    detected: '2026-10-19'
+    detected_by: sweep-standard-registers.py
+    detected: '2026-10-20'
+  status: not-a-workflow
+  arazzo: null
+- slug: pluggy-npm-registry
+  label: npm registry
+  partner: npm
+  partner_name: npm registry
+  category: official SDK (JavaScript/TypeScript)
+  type: register
+  channel: package-registry
+  evidence: https://www.npmjs.com/package/pluggy-sdk
+  source: edge
+  relationship: distribution-channel
+  contract_reference:
+    register: npm registry (public registry JSON)
+    spec_file: null
+    language: JavaScript/TypeScript
+    packages:
+    - name: pluggy-sdk
+      version: 0.92.0
+      released: '2026-10-08'
+      released_field: modified
+      lapsed: false
+      page: https://www.npmjs.com/package/pluggy-sdk
+      repo_leg: github-org:pluggyai
+      publisher_leg: email:pluggy.ai
+      matched_by: domain
+    current: true
+    signal_note: 'an official package on the registry: distribution, not an integration; lapsed = no release in
+      24 months'
+    detected_by: sweep-official-sdks.py
+    detected: '2026-10-20'
   status: not-a-workflow
   arazzo: null
 - slug: pluggy-open-finance-brasil-functional-certification
@@ -54,7 +79,12 @@
     spec_file: null
     standard: Open Finance Brasil
     role: certified-participant
-    registrations: *id001
+    registrations:
+    - registered_name: PLUGGY BRASIL INSTITUICAO DE PAGAMENTO LTDA
+      register_id: 24651a57-42bc-4d94-88cd-8cacf03f8c49
+      cnpj: '37943755000130'
+      matched_domain: pluggy.ai
+      matched_by: domain
     certified_products:
     - product: customer-data
       families:
@@ -89,7 +119,7 @@
   source: edge
   relationship: standard-participant
   contract_reference:
-    register: Pix participants (Banco Central do Brasil, https://www.bcb.gov.br/content/estabilidadefinanceira/participantes_pix/lista-participantes-instituicoes-em-adesao-pix-20261019.csv)
+    register: Pix participants (Banco Central do Brasil, https://www.bcb.gov.br/content/estabilidadefinanceira/participantes_pix/lista-participantes-instituicoes-em-adesao-pix-20261020.csv)
     spec_file: null
     standard: Pix
     role: pix-participant
@@ -109,36 +139,5 @@
     signal_note: 'participation only: the domain comes from a labelled lookup (registrations[].identity)'
     detected_by: sweep-latam-open-finance.py
     detected: '2026-10-19'
-  status: not-a-workflow
-  arazzo: null
-- slug: pluggy-npm-registry
-  label: npm registry
-  partner: npm
-  partner_name: npm registry
-  category: official SDK (JavaScript/TypeScript)
-  type: register
-  channel: package-registry
-  evidence: https://www.npmjs.com/package/pluggy-sdk
-  source: edge
-  relationship: distribution-channel
-  contract_reference:
-    register: npm registry (public registry JSON)
-    spec_file: null
-    language: JavaScript/TypeScript
-    packages:
-    - name: pluggy-sdk
-      version: 0.92.0
-      released: '2026-10-08'
-      released_field: modified
-      lapsed: false
-      page: https://www.npmjs.com/package/pluggy-sdk
-      repo_leg: github-org:pluggyai
-      publisher_leg: email:pluggy.ai
-      matched_by: domain
-    current: true
-    signal_note: 'an official package on the registry: distribution, not an integration; lapsed = no release in
-      24 months'
-    detected_by: sweep-official-sdks.py
-    detected: '2026-10-20'
   status: not-a-workflow
   arazzo: null

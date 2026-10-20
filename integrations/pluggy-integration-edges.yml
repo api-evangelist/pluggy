@@ -24,114 +24,6 @@ marketplace_apps: []
 edges:
 - partner_name: Open Finance Brasil
   partner: null
-  partner_match: register
-  type: register
-  channel: regulator-register
-  relationship: standard-participant
-  direction: partner-built
-  evidence: https://data.directory.openbankingbrasil.org.br/participants
-  category: open finance (Brazil)
-  contract_reference:
-    register: Open Finance Brasil directory (Banco Central do Brasil)
-    spec_file: null
-    standard: Open Finance Brasil
-    role: participant
-    regulator_roles:
-    - DADOS
-    - PAGTO
-    registrations: &id001
-    - registered_name: PLUGGY BRASIL INSTITUICAO DE PAGAMENTO LTDA
-      register_id: 24651a57-42bc-4d94-88cd-8cacf03f8c49
-      cnpj: '37943755000130'
-      matched_domain: pluggy.ai
-      matched_by: domain
-    declared_families:
-    - channels_banking-agents
-    - channels_branches
-    - channels_electronic-channels
-    - channels_shared-automated-teller-machines
-    - consents
-    - customers-business
-    - customers-personal
-    - resources
-    signal_note: 'participation only: declared families are context; the certification edge carries depth'
-    detected_by: sweep-latam-open-finance.py
-    detected: '2026-10-19'
-  detected_by: sweep-latam-open-finance.py
-  first_seen: '2026-10-19'
-- partner_name: Open Finance Brasil functional certification
-  partner: null
-  partner_match: register
-  type: register
-  channel: regulator-register
-  relationship: standard-participant
-  direction: partner-built
-  evidence: https://data.directory.openbankingbrasil.org.br/participants
-  category: open finance conformance (Brazil)
-  contract_reference:
-    register: Open Finance Brasil directory, per-family CertificationStatus (submissions in github.com/OpenBanking-Brasil/conformance)
-    spec_file: null
-    standard: Open Finance Brasil
-    role: certified-participant
-    registrations: *id001
-    certified_products:
-    - product: customer-data
-      families:
-      - consents
-      - customers-business
-      - customers-personal
-      - resources
-      status: Self-Certified
-      expires: '2027-04-30'
-      certification_uri: https://github.com/OpenBanking-Brasil/conformance/blob/main/submissions/functional/business/2.1.0/37943755_Iniciador-SaaS-Detentora-v1.4.0_business_v2.1_06-09-2024.json
-    - product: open-data
-      families:
-      - channels_banking-agents
-      - channels_branches
-      - channels_electronic-channels
-      - channels_shared-automated-teller-machines
-      status: Self-Certified
-      expires: '2027-10-14'
-      certification_uri: https://web.conformance.directory.openbankingbrasil.org.br/plan-detail.html?plan=9BDAk1Gnky9qU&public=true
-    signal_note: one entry per PRODUCT TYPE, lapsed flagged; family counts are context, never read
-    detected_by: sweep-latam-open-finance.py
-    detected: '2026-10-19'
-  detected_by: sweep-latam-open-finance.py
-  first_seen: '2026-10-19'
-- partner_name: Pix (Banco Central do Brasil)
-  partner: null
-  partner_match: register
-  type: register
-  channel: regulator-register
-  relationship: standard-participant
-  direction: partner-built
-  evidence: https://www.bcb.gov.br/estabilidadefinanceira/participantespix
-  category: instant payments (Brazil)
-  contract_reference:
-    register: Pix participants (Banco Central do Brasil, https://www.bcb.gov.br/content/estabilidadefinanceira/participantes_pix/lista-participantes-instituicoes-em-adesao-pix-20261019.csv)
-    spec_file: null
-    standard: Pix
-    role: pix-participant
-    registrations:
-    - registered_name: PLUGGY BRASIL IP LTDA.
-      ispb: ''
-      cnpj: 37.943.755/0001-30
-      institution_type: Instituição de Pagamento
-      spi_participation: ''
-      pix_participation: Facultativa
-      pix_modality: Iniciador
-      payment_initiation: true
-      matched_domain: pluggy.ai
-      matched_by: domain
-      identity: Open Finance Brasil directory, same CNPJ 37943755000130 ('PLUGGY BRASIL INSTITUICAO DE PAGAMENTO
-        LTDA')
-    signal_note: 'participation only: the domain comes from a labelled lookup (registrations[].identity)'
-    detected_by: sweep-latam-open-finance.py
-    detected: '2026-10-19'
-  detected_by: sweep-latam-open-finance.py
-  first_seen: '2026-10-19'
-- partner_name: Open Finance Brasil
-  partner: null
   type: contract
   channel: regulator-register
   relationship: standard-participant
@@ -188,4 +80,80 @@ edges:
     detected: '2026-10-20'
   detected_by: sweep-official-sdks.py
   first_seen: '2026-10-20'
+- partner_name: Open Finance Brasil functional certification
+  partner: null
+  partner_match: register
+  type: register
+  channel: regulator-register
+  relationship: standard-participant
+  direction: partner-built
+  evidence: https://data.directory.openbankingbrasil.org.br/participants
+  category: open finance conformance (Brazil)
+  contract_reference:
+    register: Open Finance Brasil directory, per-family CertificationStatus (submissions in github.com/OpenBanking-Brasil/conformance)
+    spec_file: null
+    standard: Open Finance Brasil
+    role: certified-participant
+    registrations:
+    - registered_name: PLUGGY BRASIL INSTITUICAO DE PAGAMENTO LTDA
+      register_id: 24651a57-42bc-4d94-88cd-8cacf03f8c49
+      cnpj: '37943755000130'
+      matched_domain: pluggy.ai
+      matched_by: domain
+    certified_products:
+    - product: customer-data
+      families:
+      - consents
+      - customers-business
+      - customers-personal
+      - resources
+      status: Self-Certified
+      expires: '2027-04-30'
+      certification_uri: https://github.com/OpenBanking-Brasil/conformance/blob/main/submissions/functional/business/2.1.0/37943755_Iniciador-SaaS-Detentora-v1.4.0_business_v2.1_06-09-2024.json
+    - product: open-data
+      families:
+      - channels_banking-agents
+      - channels_branches
+      - channels_electronic-channels
+      - channels_shared-automated-teller-machines
+      status: Self-Certified
+      expires: '2027-10-14'
+      certification_uri: https://web.conformance.directory.openbankingbrasil.org.br/plan-detail.html?plan=9BDAk1Gnky9qU&public=true
+    signal_note: one entry per PRODUCT TYPE, lapsed flagged; family counts are context, never read
+    detected_by: sweep-latam-open-finance.py
+    detected: '2026-10-19'
+  detected_by: sweep-latam-open-finance.py
+  first_seen: '2026-10-19'
+- partner_name: Pix (Banco Central do Brasil)
+  partner: null
+  partner_match: register
+  type: register
+  channel: regulator-register
+  relationship: standard-participant
+  direction: partner-built
+  evidence: https://www.bcb.gov.br/estabilidadefinanceira/participantespix
+  category: instant payments (Brazil)
+  contract_reference:
+    register: Pix participants (Banco Central do Brasil, https://www.bcb.gov.br/content/estabilidadefinanceira/participantes_pix/lista-participantes-instituicoes-em-adesao-pix-20261020.csv)
+    spec_file: null
+    standard: Pix
+    role: pix-participant
+    registrations:
+    - registered_name: PLUGGY BRASIL IP LTDA.
+      ispb: ''
+      cnpj: 37.943.755/0001-30
+      institution_type: Instituição de Pagamento
+      spi_participation: ''
+      pix_participation: Facultativa
+      pix_modality: Iniciador
+      payment_initiation: true
+      matched_domain: pluggy.ai
+      matched_by: domain
+      identity: Open Finance Brasil directory, same CNPJ 37943755000130 ('PLUGGY BRASIL INSTITUICAO DE PAGAMENTO
+        LTDA')
+    signal_note: 'participation only: the domain comes from a labelled lookup (registrations[].identity)'
+    detected_by: sweep-latam-open-finance.py
+    detected: '2026-10-19'
+  detected_by: sweep-latam-open-finance.py
+  first_seen: '2026-10-19'
 templates: []
