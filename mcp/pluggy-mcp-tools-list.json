@@ -1474,6 +1474,168 @@
         }
       },
       {
+        "name": "summarize_api_calls",
+        "title": "Summarize an application's API calls",
+        "description": "How an application used the Pluggy API over a period: its calls grouped by method, endpoint and HTTP status, with the count and the p95 duration of each group. Start here for \"which endpoints do we call, how often, and with what result\" or \"what is failing\" — then drill down with list_api_calls. One application at a time (list_applications → pick). The period spans at most 7 days (default: the last 24 hours) and can go back 120 days. Only calls made with the application's own credentials are included.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "teamId": {
+              "type": "string",
+              "minLength": 1,
+              "description": "The team (from list_teams)."
+            },
+            "applicationId": {
+              "type": "string",
+              "minLength": 1,
+              "description": "The application whose calls to read (from list_applications). One at a time."
+            },
+            "from": {
+              "type": "string",
+              "description": "Start of the period, ISO 8601 (e.g. 2026-10-15T00:00:00Z). Default: 24 hours before `to`."
+            },
+            "to": {
+              "type": "string",
+              "description": "End of the period, ISO 8601, exclusive. Default: now. The period spans at most 7 days, within the last 120."
+            },
+            "itemId": {
+              "type": "string",
+              "description": "Only calls that name this item: /items/{id} and the lists filtered by ?itemId=. Calls by account or investment id are not matched."
+            }
+          },
+          "required": [
+            "teamId",
+            "applicationId"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "openWorldHint": false,
+          "destructiveHint": false,
+          "title": "Summarize an application's API calls"
+        },
+        "execution": {
+          "taskSupport": "forbidden"
+        },
+        "_meta": {
+          "securitySchemes": [
+            {
+              "type": "noauth"
+            },
+            {
+              "type": "oauth2",
+              "scopes": [
+                "openid",
+                "profile",
+                "email",
+                "offline_access"
+              ]
+            }
+          ]
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {}
+          },
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        }
+      },
+      {
+        "name": "list_api_calls",
+        "title": "List an application's API calls",
+        "description": "An application's individual calls to the Pluggy API over a period, newest first: timestamp, method, endpoint, path, HTTP status, error code, duration, the item it named (if any) and the request id (quote it to support). Use summarize_api_calls first for the overview, and this to see the calls behind a group — filter by `statusClass` (2xx / 4xx / 5xx), `endpoint` (exactly as summarize_api_calls returns it, e.g. /items/{id}) or `itemId`. Returns `limit` calls (default 100, max 500); to page back, pass the oldest `timestamp` you got as the next `to`. The period spans at most 7 days (default: the last 24 hours) and can go back 120 days.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "teamId": {
+              "type": "string",
+              "minLength": 1,
+              "description": "The team (from list_teams)."
+            },
+            "applicationId": {
+              "type": "string",
+              "minLength": 1,
+              "description": "The application whose calls to read (from list_applications). One at a time."
+            },
+            "from": {
+              "type": "string",
+              "description": "Start of the period, ISO 8601 (e.g. 2026-10-15T00:00:00Z). Default: 24 hours before `to`."
+            },
+            "to": {
+              "type": "string",
+              "description": "End of the period, ISO 8601, exclusive. Default: now. The period spans at most 7 days, within the last 120."
+            },
+            "itemId": {
+              "type": "string",
+              "description": "Only calls that name this item: /items/{id} and the lists filtered by ?itemId=. Calls by account or investment id are not matched."
+            },
+            "statusClass": {
+              "type": "string",
+              "enum": [
+                "2xx",
+                "4xx",
+                "5xx"
+              ],
+              "description": "Only calls whose HTTP status is in this class."
+            },
+            "endpoint": {
+              "type": "string",
+              "maxLength": 200,
+              "description": "Only calls to this endpoint, as summarize_api_calls returns it (e.g. /accounts, /items/{id})."
+            },
+            "limit": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 500,
+              "description": "How many calls to return (default 100, max 500)."
+            }
+          },
+          "required": [
+            "teamId",
+            "applicationId"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "openWorldHint": false,
+          "destructiveHint": false,
+          "title": "List an application's API calls"
+        },
+        "execution": {
+          "taskSupport": "forbidden"
+        },
+        "_meta": {
+          "securitySchemes": [
+            {
+              "type": "noauth"
+            },
+            {
+              "type": "oauth2",
+              "scopes": [
+                "openid",
+                "profile",
+                "email",
+                "offline_access"
+              ]
+            }
+          ]
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "result": {}
+          },
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        }
+      },
+      {
         "name": "check_incidents",
         "title": "Check Status Page incidents",
         "description": "List Pluggy's current (and recently-resolved) Status Page incidents and maintenances — the same source as status.pluggy.ai. Use it to tell a customer whether a problem is a known provider-side outage. Optionally filter by a connector id (the Pluggy institution/connector) to see only incidents affecting that bank, or by infra component (api | webhooks | connect). Pairs with debug_item: if an item is failing and its institution has an open incident, the fix is 'wait for the incident to resolve', not a reconnect.",

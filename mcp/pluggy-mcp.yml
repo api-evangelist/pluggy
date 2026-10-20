@@ -449,16 +449,16 @@ notes: Tool list is what the live server returned to an anonymous tools/list on 
   listed tools only; no tool was called. Official Agent Skills ship separately at github.com/pluggyai/agent-skills
   (saved under skills/_original/).
 tool_quality:
-  tool_count: 34
-  tokens_total: 12262
-  tokens_per_tool_median: 263
+  tool_count: 36
+  tokens_total: 13377
+  tokens_per_tool_median: 280
   heavy_tools: []
   heavy_tool_count: 0
-  params_total: 115
+  params_total: 128
   params_undescribed: 2
-  params_described_pct: 98.3
+  params_described_pct: 98.4
   tools_with_undescribed_params: 1
-  tools_annotated: 34
+  tools_annotated: 36
   annotated_pct: 100.0
   state_changing_unhinted: []
   tools_missing_schema: 0
@@ -466,7 +466,7 @@ tool_quality:
   duplicate_descriptions: 0
   duplicate_names: 0
   nonportable_names: []
-  output_schema_count: 34
+  output_schema_count: 36
   token_estimate: chars/3.6 of each compact tool definition
   source: mcp/pluggy-mcp-tools-list.json
   measured: '2026-10-20'
