@@ -17,8 +17,8 @@ deployment:
   endpoint: https://mcp.pluggy.ai/mcp
   auth: oauth
   verified: probed
-  note: Sign-in is OPTIONAL. Anonymous initialize and tools/list returned HTTP 200 on 2026-10-18; documentation tools work
-    without auth, dev-portal tools require OAuth sign-in with a Pluggy dashboard account.
+  note: Sign-in is OPTIONAL. Anonymous initialize and tools/list returned HTTP 200 on 2026-10-18; documentation
+    tools work without auth, dev-portal tools require OAuth sign-in with a Pluggy dashboard account.
 auth:
   methods:
   - none
@@ -55,8 +55,8 @@ tools_list_raw: mcp/pluggy-mcp-tools-list.json
 tools:
 - name: query
   category: docs
-  description: Ask a natural-language question about the Pluggy API and get a generated answer with citations. Combines docs,
-    changelog, recipes, and API reference. Responds in the user's question language.
+  description: Ask a natural-language question about the Pluggy API and get a generated answer with citations.
+    Combines docs, changelog, recipes, and API reference. Responds in the user's question language.
   read_only: true
   inputs:
   - question
@@ -65,8 +65,8 @@ tools:
   - includePrerelease
 - name: search_docs
   category: docs
-  description: Search the Pluggy documentation guides (concepts, quickstart, integration). Returns reranked excerpts with
-    relevance scores.
+  description: Search the Pluggy documentation guides (concepts, quickstart, integration). Returns reranked
+    excerpts with relevance scores.
   read_only: true
   inputs:
   - query
@@ -74,9 +74,10 @@ tools:
   - limit
 - name: search_changelog
   category: docs
-  description: Search the Pluggy changelog (release notes, breaking changes, migration notes). Returns reranked excerpts with
-    the entry's publication date, language and the section heading the text came from, so results can be ordered by recency
-    and cited precisely. Entries are published in English and Portuguese.
+  description: Search the Pluggy changelog (release notes, breaking changes, migration notes). Returns
+    reranked excerpts with the entry's publication date, language and the section heading the text came
+    from, so results can be ordered by recency and cited precisely. Entries are published in English and
+    Portuguese.
   read_only: true
   inputs:
   - query
@@ -85,9 +86,10 @@ tools:
   - limit
 - name: list_changelog_changes
   category: docs
-  description: Enumerate individual changelog changes — not whole months — filtered by type, breaking status, category or
-    date. Exhaustive and deterministic, so an empty result genuinely means nothing matched. Use this for 'what broke', 'what
-    shipped since X' or 'what changed in payments'; use search_changelog whe
+  description: Enumerate individual changelog changes — not whole months — filtered by type, breaking
+    status, category or date. Exhaustive and deterministic, so an empty result genuinely means nothing
+    matched. Use this for 'what broke', 'what shipped since X' or 'what changed in payments'; use search_changelog
+    whe
   read_only: true
   inputs:
   - since
@@ -101,17 +103,18 @@ tools:
   - limit
 - name: search_recipes
   category: docs
-  description: Search the Pluggy recipes (cookbook, integration patterns, code examples). Returns reranked excerpts with relevance
-    scores. Recipes are English-only.
+  description: Search the Pluggy recipes (cookbook, integration patterns, code examples). Returns reranked
+    excerpts with relevance scores. Recipes are English-only.
   read_only: true
   inputs:
   - query
   - limit
 - name: search_qa
   category: docs
-  description: Search the curated, human-verified Pluggy support Q&A (real questions answered by the team, mostly in Portuguese).
-    This is the highest-trust source for 'how do I / why does X happen' support questions — prefer it over the docs guides
-    when a question matches. Returns reranked question+answer excerpts
+  description: Search the curated, human-verified Pluggy support Q&A (real questions answered by the team,
+    mostly in Portuguese). This is the highest-trust source for 'how do I / why does X happen' support
+    questions — prefer it over the docs guides when a question matches. Returns reranked question+answer
+    excerpts
   read_only: true
   inputs:
   - query
@@ -125,40 +128,42 @@ tools:
   - locale
 - name: list_guides
   category: docs
-  description: List all available Pluggy documentation guides (slug, title, description, category) for a given locale. Optionally
-    filter by category.
+  description: List all available Pluggy documentation guides (slug, title, description, category) for
+    a given locale. Optionally filter by category.
   read_only: true
   inputs:
   - locale
   - category
 - name: get_api_endpoint
   category: docs
-  description: Retrieve full details about a specific Pluggy API endpoint by its operationId. Returns method, path, parameters,
-    request body, and responses sourced from the OpenAPI spec. Defaults to the main Pluggy API; pass `spec` for another (e.g.
-    'enrichment-api').
+  description: Retrieve full details about a specific Pluggy API endpoint by its operationId. Returns
+    method, path, parameters, request body, and responses sourced from the OpenAPI spec. Defaults to the
+    main Pluggy API; pass `spec` for another (e.g. 'enrichment-api').
   read_only: true
   inputs:
   - operationId
   - spec
 - name: list_endpoints
   category: docs
-  description: List all available Pluggy API endpoints from an OpenAPI spec. Defaults to the main Pluggy API; pass `spec`
-    to target another (see list_specs — e.g. 'enrichment-api'). Optionally filter by tag (case-insensitive).
+  description: List all available Pluggy API endpoints from an OpenAPI spec. Defaults to the main Pluggy
+    API; pass `spec` to target another (see list_specs — e.g. 'enrichment-api'). Optionally filter by
+    tag (case-insensitive).
   read_only: true
   inputs:
   - spec
   - tag
 - name: list_specs
   category: docs
-  description: 'List the available Pluggy OpenAPI specs. Use a spec''s id with list_endpoints / get_api_endpoint to browse
-    that API. There are two: the main Pluggy API and the Enrichment API (categorize / behavior-analysis / recurring-payments).'
+  description: 'List the available Pluggy OpenAPI specs. Use a spec''s id with list_endpoints / get_api_endpoint
+    to browse that API. There are two: the main Pluggy API and the Enrichment API (categorize / behavior-analysis
+    / recurring-payments).'
   read_only: true
   inputs: []
 - name: search_endpoints
   category: docs
-  description: Deep-search Pluggy API endpoints by keyword across path, operationId, summary, description, tags, and parameter
-    names — to discover the right endpoint when you don't know its operationId. Searches every spec by default; pass `spec`
-    to scope to one (see list_specs).
+  description: Deep-search Pluggy API endpoints by keyword across path, operationId, summary, description,
+    tags, and parameter names — to discover the right endpoint when you don't know its operationId. Searches
+    every spec by default; pass `spec` to scope to one (see list_specs).
   read_only: true
   inputs:
   - query
@@ -166,9 +171,10 @@ tools:
   - limit
 - name: execute_request
   category: api-proxy
-  description: 'Read from the Pluggy API with a live GET call and return the response. Provide either a full `url` or a `path`
-    (+ optional `spec` to resolve the base URL). Safe and side-effect free: this tool cannot POST, PUT, PATCH or DELETE —
-    use create_request, update_request or delete_request for those. Target '
+  description: 'Read from the Pluggy API with a live GET call and return the response. Provide either
+    a full `url` or a `path` (+ optional `spec` to resolve the base URL). Safe and side-effect free: this
+    tool cannot POST, PUT, PATCH or DELETE — use create_request, update_request or delete_request for
+    those. Target '
   read_only: true
   inputs:
   - method
@@ -179,9 +185,10 @@ tools:
   - query
 - name: create_request
   category: api-proxy
-  description: Make a live POST call to the Pluggy API — creating a resource or triggering an action (items, connect tokens,
-    webhooks, enrichment runs). This WRITES to real data, so confirm the endpoint and the body with get_api_endpoint first.
-    Reads go through execute_request; updates through update_request; dele
+  description: Make a live POST call to the Pluggy API — creating a resource or triggering an action (items,
+    connect tokens, webhooks, enrichment runs). This WRITES to real data, so confirm the endpoint and
+    the body with get_api_endpoint first. Reads go through execute_request; updates through update_request;
+    dele
   read_only: false
   inputs:
   - url
@@ -192,9 +199,10 @@ tools:
   - body
 - name: update_request
   category: api-proxy
-  description: Make a live PUT or PATCH call to the Pluggy API to modify an existing resource (e.g. updating an item's credentials
-    or a webhook). PUT replaces, PATCH merges — check get_api_endpoint for which one the endpoint expects. This WRITES to
-    real data. Reads go through execute_request; creation through crea
+  description: Make a live PUT or PATCH call to the Pluggy API to modify an existing resource (e.g. updating
+    an item's credentials or a webhook). PUT replaces, PATCH merges — check get_api_endpoint for which
+    one the endpoint expects. This WRITES to real data. Reads go through execute_request; creation through
+    crea
   read_only: false
   inputs:
   - method
@@ -206,9 +214,10 @@ tools:
   - body
 - name: delete_request
   category: api-proxy
-  description: Make a live DELETE call to the Pluggy API to remove an existing resource (e.g. an item or a webhook). This
-    is IRREVERSIBLE and destroys real customer data — confirm the exact resource id before calling. Reads go through execute_request;
-    creation through create_request; updates through update_request
+  description: Make a live DELETE call to the Pluggy API to remove an existing resource (e.g. an item
+    or a webhook). This is IRREVERSIBLE and destroys real customer data — confirm the exact resource id
+    before calling. Reads go through execute_request; creation through create_request; updates through
+    update_request
   read_only: false
   inputs:
   - url
@@ -219,29 +228,32 @@ tools:
   - body
 - name: list_teams
   category: dev-portal
-  description: 'List the teams your Pluggy dashboard account belongs to. Start here: pick a team, then use its id as `teamId`
-    in the other tools. You can switch teams anytime by using a different team''s id.'
+  description: 'List the teams your Pluggy dashboard account belongs to. Start here: pick a team, then
+    use its id as `teamId` in the other tools. You can switch teams anytime by using a different team''s
+    id.'
   read_only: true
   inputs: []
 - name: list_applications
   category: dev-portal
-  description: List the applications/environments under a team (from list_teams). Pick one and use its id as `applicationId`
-    in data tools.
+  description: List the applications/environments under a team (from list_teams). Pick one and use its
+    id as `applicationId` in data tools.
   read_only: true
   inputs:
   - teamId
 - name: select_application
   category: dev-portal
-  description: Validate an application and confirm the team + application to use. Call this after list_applications; then
-    pass the same `teamId` and `applicationId` to the data tools for the rest of the conversation (call it again to switch).
+  description: Validate an application and confirm the team + application to use. Call this after list_applications;
+    then pass the same `teamId` and `applicationId` to the data tools for the rest of the conversation
+    (call it again to switch).
   read_only: true
   inputs:
   - applicationId
 - name: get_application
   category: dev-portal
-  description: 'Read how one application is configured: its name, environment (sandbox or production), whether it is enabled,
-    its clientId, allowed origins and Connect branding (title, logo, primary color). For webhooks use list_webhooks. Use this
-    to answer questions like ''how is my app configured?'' or ''is this app'
+  description: 'Read how one application is configured: its name, environment (sandbox or production),
+    whether it is enabled, its clientId, allowed origins and Connect branding (title, logo, primary color).
+    For webhooks use list_webhooks. Use this to answer questions like ''how is my app configured?'' or
+    ''is this app'
   read_only: true
   inputs:
   - applicationId
@@ -253,9 +265,10 @@ tools:
   - teamId
 - name: get_stats
   category: dev-portal
-  description: 'The core monitoring tool: the same stats the Pluggy dashboard shows, over any date range and filters, so you
-    can answer ''how are my connections doing'', compare periods, and spot anomalies proactively. Kinds: `items` (item counts
-    by execution status), `items-by-connector` (the same split per connecto'
+  description: 'The core monitoring tool: the same stats the Pluggy dashboard shows, over any date range
+    and filters, so you can answer ''how are my connections doing'', compare periods, and spot anomalies
+    proactively. Kinds: `items` (item counts by execution status), `items-by-connector` (the same split
+    per connecto'
   read_only: true
   inputs:
   - teamId
@@ -278,18 +291,20 @@ tools:
   - teamId
 - name: debug_item
   category: dev-portal
-  description: Diagnose why a connected item is failing. Fetches the item's current status and its recent executions (sync
-    attempts, error codes, timestamps) plus any open incident on its institution, so you can explain the root cause and the
-    next step for the end user — e.g. expired credentials → reconnect / upda
+  description: Diagnose why a connected item is failing. Fetches the item's current status and its recent
+    executions (sync attempts, error codes, timestamps) plus any open incident on its institution, so
+    you can explain the root cause and the next step for the end user — e.g. expired credentials → reconnect
+    / upda
   read_only: true
   inputs:
   - itemId
   - teamId
 - name: get_execution_reports
   category: dev-portal
-  description: 'Per-execution breakdown of what a connected item''s recent syncs actually brought. Use it when an item looks
-    healthy (debug_item shows no error) but the user says data is missing. For each execution, newest first: its status, and
-    a `report` with the products that came back with data, empty, or failed'
+  description: 'Per-execution breakdown of what a connected item''s recent syncs actually brought. Use
+    it when an item looks healthy (debug_item shows no error) but the user says data is missing. For each
+    execution, newest first: its status, and a `report` with the products that came back with data, empty,
+    or failed'
   read_only: true
   inputs:
   - itemId
@@ -298,9 +313,10 @@ tools:
   - limit
 - name: check_incidents
   category: dev-portal
-  description: List Pluggy's current (and recently-resolved) Status Page incidents and maintenances — the same source as status.pluggy.ai.
-    Use it to tell a customer whether a problem is a known provider-side outage. Optionally filter by a connector id (the
-    Pluggy institution/connector) to see only incidents affect
+  description: List Pluggy's current (and recently-resolved) Status Page incidents and maintenances —
+    the same source as status.pluggy.ai. Use it to tell a customer whether a problem is a known provider-side
+    outage. Optionally filter by a connector id (the Pluggy institution/connector) to see only incidents
+    affect
   read_only: true
   inputs:
   - connectorId
@@ -314,8 +330,8 @@ tools:
   - teamId
 - name: get_reports
   category: dev-portal
-  description: Get the team's transaction-ingestion report — a daily time series or a summary — over a date range, to understand
-    data volume and ingestion health over time (and compare periods).
+  description: Get the team's transaction-ingestion report — a daily time series or a summary — over a
+    date range, to understand data volume and ingestion health over time (and compare periods).
   read_only: true
   inputs:
   - teamId
@@ -333,8 +349,8 @@ tools:
   - applicationId
 - name: list_webhook_events
   category: dev-portal
-  description: List recent webhook delivery events for a team/application — useful to debug 'did my webhook fire / did it
-    fail'. Optionally scope by application.
+  description: List recent webhook delivery events for a team/application — useful to debug 'did my webhook
+    fire / did it fail'. Optionally scope by application.
   read_only: true
   inputs:
   - teamId
@@ -347,15 +363,16 @@ tools:
   - eventId
 - name: dev_portal_tools_introduction
   category: dev-portal
-  description: 'Guidance for these authenticated tools: what they do and the recommended order. Call this when unsure how
-    to answer a question about the user''s Pluggy integration.'
+  description: 'Guidance for these authenticated tools: what they do and the recommended order. Call this
+    when unsure how to answer a question about the user''s Pluggy integration.'
   read_only: true
   inputs: []
 - name: create_support_ticket
   category: dev-portal
-  description: Open a support ticket for a connector/data problem on one of your teams. Only enabled for teams with the partner
-    ticket integration turned on. Use it for a REPRODUCIBLE problem on a specific item — one ticket per problem, not per affected
-    end user. Always pass externalId (your own issue id) so retri
+  description: Open a support ticket for a connector/data problem on one of your teams. Only enabled for
+    teams with the partner ticket integration turned on. Use it for a REPRODUCIBLE problem on a specific
+    item — one ticket per problem, not per affected end user. Always pass externalId (your own issue id)
+    so retri
   read_only: false
   inputs:
   - teamId
@@ -370,8 +387,34 @@ tools:
   - externalId
   - priority
   - dryRun
-notes: Tool list is what the live server returned to an anonymous tools/list on 2026-10-18 (33 tools; full schemas saved verbatim
-  in mcp/pluggy-mcp-tools-list.json). The docs page documents 9 docs tools and 17 dev-portal tools; the live server additionally
-  exposes list_changelog_changes, list_specs, search_endpoints and four live API proxy tools (execute_request, create_request,
-  update_request, delete_request). We listed tools only; no tool was called. Official Agent Skills ship separately at github.com/pluggyai/agent-skills
+notes: Tool list is what the live server returned to an anonymous tools/list on 2026-10-18 (33 tools;
+  full schemas saved verbatim in mcp/pluggy-mcp-tools-list.json). The docs page documents 9 docs tools
+  and 17 dev-portal tools; the live server additionally exposes list_changelog_changes, list_specs, search_endpoints
+  and four live API proxy tools (execute_request, create_request, update_request, delete_request). We
+  listed tools only; no tool was called. Official Agent Skills ship separately at github.com/pluggyai/agent-skills
   (saved under skills/_original/).
+tool_quality:
+  tool_count: 34
+  tokens_total: 12262
+  tokens_per_tool_median: 263
+  heavy_tools: []
+  heavy_tool_count: 0
+  params_total: 115
+  params_undescribed: 2
+  params_described_pct: 98.3
+  tools_with_undescribed_params: 1
+  tools_annotated: 34
+  annotated_pct: 100.0
+  state_changing_unhinted: []
+  tools_missing_schema: 0
+  short_descriptions: 0
+  duplicate_descriptions: 0
+  duplicate_names: 0
+  nonportable_names: []
+  output_schema_count: 34
+  token_estimate: chars/3.6 of each compact tool definition
+  source: mcp/pluggy-mcp-tools-list.json
+  measured: '2026-10-20'
+  scored: false
+  note: Facts from the saved tools/list capture (mcp_tool_quality.py); recorded, not scored. Checks learned
+    from Glimind's agent-readiness audit.
