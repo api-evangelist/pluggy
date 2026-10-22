@@ -25,6 +25,7 @@ checked:
 - https://officialskills.sh/sitemap.xml
 - https://skillsmp.com/sitemap.xml
 - https://www.skills.sh/sitemap.xml
+- https://openid.net/foundation/sponsoring-members/
 summary: null
 marketplace_apps: []
 edges:
@@ -226,4 +227,30 @@ edges:
     detected: '2026-10-20'
   detected_by: sweep-agent-skills.py
   first_seen: '2026-10-20'
+- partner_name: OpenID Foundation
+  partner: null
+  partner_match: register
+  type: register
+  channel: standard-directory
+  relationship: standard-participant
+  direction: partner-built
+  evidence: https://openid.net/foundation/sponsoring-members/
+  category: identity standards body membership
+  partner_tier: Corporate
+  contract_reference:
+    register: OpenID Foundation members (openid.net/foundation/sponsoring-members/)
+    standard: OpenID Foundation specifications (OpenID Connect, FAPI, CIBA, OpenID4VC, Shared Signals, AuthZEN)
+    spec_file: null
+    role: oidf-member
+    registered_name: Pluggy
+    register_id: https://www.pluggy.ai/en
+    matched_domain: pluggy.ai
+    matched_by: domain
+    signal_note: 'participation only: corporate membership of the OpenID Foundation (level in partner_tier); the
+      logo links the member''s website (the link is the identity). Membership is not certification: OIDF certification
+      edges are written by sweep-identity.py and reused, not re-read'
+    detected_by: sweep-openid-certified-implementations.py
+    detected: '2026-10-22'
+  detected_by: sweep-openid-certified-implementations.py
+  first_seen: '2026-10-22'
 templates: []
