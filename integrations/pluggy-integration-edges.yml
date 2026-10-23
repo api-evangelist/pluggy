@@ -30,6 +30,9 @@ checked:
 - https://olinda.bcb.gov.br/olinda/servico/BcBase/versao/v2/odata/
 - https://olinda.bcb.gov.br/olinda/servico/Informes_ListaTarifasPorInstituicaoFinanceira/versao/v1/odata/
 - https://olinda.bcb.gov.br/olinda/servico/Instituicoes_em_funcionamento/versao/v1/odata/
+- https://hex.pm/api
+- https://packagist.org/packages
+- https://pub.dev/api
 summary: null
 marketplace_apps: []
 edges:
@@ -291,5 +294,35 @@ edges:
     detected_by: sweep-brazil-bcb-authorized-institutions.py
     detected: '2026-10-22'
   detected_by: sweep-brazil-bcb-authorized-institutions.py
+  first_seen: '2026-10-22'
+- partner_name: pub.dev
+  partner: pub-dev
+  partner_match: register
+  type: register
+  direction: provider-built
+  category: official SDK (Dart/Flutter)
+  evidence: https://pub.dev/packages/flutter_pluggy_connect
+  channel: package-registry
+  relationship: distribution-channel
+  contract_reference:
+    register: pub.dev (public registry JSON)
+    spec_file: null
+    language: Dart/Flutter
+    packages:
+    - name: flutter_pluggy_connect
+      version: 3.0.1
+      released: '2024-11-21'
+      released_field: published
+      lapsed: false
+      page: https://pub.dev/packages/flutter_pluggy_connect
+      repo_leg: not required (verified publisher)
+      publisher_leg: verified-publisher:pluggy.ai
+      matched_by: domain
+    current: true
+    signal_note: 'an official package on the registry: distribution, not an integration; lapsed = no release in
+      24 months'
+    detected_by: sweep-php-dart-elixir-package-registries.py
+    detected: '2026-10-22'
+  detected_by: sweep-php-dart-elixir-package-registries.py
   first_seen: '2026-10-22'
 templates: []
