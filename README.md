@@ -64,5 +64,73 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Pluggy is a company surfaced via the API Evangelist harvest backlog (source: kin-score-markets) and added to the network as a stub for full-pipeline profiling.
-- https://pluggy.ai
+Pluggy is a Brazilian Open Finance infrastructure company (pluggy.ai) offering APIs to connect bank data, collect payments and move money across Brazilian financial institutions. Its platform aggregates accounts, transactions, investments, credit card bills and identity data through direct and regulated Open Finance connectors, with the Pluggy Connect drop-in widget, a sandbox environment, a developer dashboard and an MCP server for developer tooling.
+
+**Areas:** Company · Open Finance · Banking · Financial Data · Payments · Brazil · Fintech
+
+## Pluggy on APIs.io
+
+Everything profiled for Pluggy is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/pluggy/](https://apis.io/providers/pluggy/)** — or go straight to one of the APIs or properties below.
+
+### APIs (24)
+
+- Pluggy Enrichment API — Pluggy Enrichment API -- transaction categorization, behavior analysis, and recurring-payments detection.
+- Pluggy Status API — Read the health of every Pluggy connector, product and infrastructure component plus open and past incidents (the data behind status.pluggy.ai); no…
+- Pluggy Account API — Bank account information and management
+- Pluggy Auth API — Authentication endpoints for API key generation and connect tokens
+- Pluggy Automatic PIX API — Automatic PIX payment scheduling and management
+- Pluggy Bill API — Credit card bill information
+- Pluggy Boleto Management API — Boleto payment management
+- Pluggy Category API — Transaction categorization and rules
+- Pluggy Connector API — Financial institution connector management
+- Pluggy Consent API — User consent management for data access
+- Pluggy Identity API — User identity verification and data
+- Pluggy Investment API — Investment portfolio and asset management
+- Pluggy Items API — Item management for syncing financial data
+- Pluggy Loan API — Loan information and management
+- Pluggy Merchant API — Merchant and company information by CNPJ
+- Pluggy Payment Customer API — Payment customer management
+- Pluggy Payment Intent API — Payment intent processing
+- Pluggy Payment Recipient API — Payment recipient management
+- Pluggy Payment Request API — Payment request creation and management
+- Pluggy Payment Schedule API — Payment scheduling operations
+- Pluggy SCR API — Bacen's credit information system, consulted through a connected Open Finance item
+- Pluggy Smart Transfer API — Smart transfer functionality
+- Pluggy Transaction API — Financial transaction data and operations
+- Pluggy Webhook API — Webhook configuration and management
+
+_These APIs get their own pages on APIs.io at the next catalog build, and this README is re-rendered with links when they do._
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://www.pluggy.ai)
+- [Documentation](https://docs.pluggy.ai/en)
+- [Getting started](https://docs.pluggy.ai/en/docs/quickstart)
+- [API reference](https://docs.pluggy.ai/en/reference)
+- [Pricing](https://www.pluggy.ai/en/pricing)
+- [Support](https://docs.pluggy.ai/en/docs/get-started/contact)
+- [Changelog](https://docs.pluggy.ai/en/changelog)
+- [Blog](https://www.pluggy.ai/blog)
+- [Compliance](https://www.pluggy.ai/legal)
+- [Terms of service](https://www.pluggy.ai/docs/termos-e-condicoes-de-uso.pdf)
+- [Privacy policy](https://www.pluggy.ai/docs/politica-de-privacidade.pdf)
+- [GitHub](https://github.com/pluggyai)
+- [Status](https://status.pluggy.ai/)
+
+## API Evangelist rating
+
+Not yet rated. See [apis.io/providers/pluggy/](https://apis.io/providers/pluggy/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Pluggy: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/pluggy/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
